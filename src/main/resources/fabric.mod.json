@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "rinvenium",
+  "version": "${version}",
+  "name": "Rinvenium",
+  "description": "Me when Riva chugs phone batteries",
+  "authors": [
+    "Chemthunder",
+    "RivaSlugCat"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/rinvenium/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "silly.chemthunder.rinvenium.Rinvenium"
+    ],
+    "fabric-datagen": [
+      "silly.chemthunder.rinvenium.data.RinveniumDataGenerator"
+    ],
+    "cardinal-components": [
+      "silly.chemthunder.rinvenium.cca.RinveniumComponents"
+    ]
+  },
+  "mixins": [
+    "rinvenium.mixins.json"
+  ],
+  "custom": {
+    "cardinal-components": [
+      "rinvenium:spear",
+      "rinvenium:dash"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
