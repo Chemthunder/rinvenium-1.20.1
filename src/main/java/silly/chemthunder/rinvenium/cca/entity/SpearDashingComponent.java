@@ -6,9 +6,10 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 
 public class SpearDashingComponent implements AutoSyncedComponent, CommonTickingComponent {
     public static final ComponentKey<SpearDashingComponent> KEY = ComponentRegistry.getOrCreate(Rinvenium.id("dash"), SpearDashingComponent.class);
@@ -33,7 +34,22 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
     }
 
     private void spawnParticles(PlayerEntity player, World world) {
+        double x = player.getX();
+        double y = player.getY();
+        double z = player.getZ();
 
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticleTypes.END_ROD,
+                    x,
+                    y + 0.1f,
+                    z,
+                    2,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.09
+            );
+        }
     }
 
     @Override

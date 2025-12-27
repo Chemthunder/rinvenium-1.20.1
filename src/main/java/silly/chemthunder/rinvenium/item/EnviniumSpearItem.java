@@ -17,6 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 
 import java.util.UUID;
@@ -46,6 +47,12 @@ public class EnviniumSpearItem extends SwordItem {
                     l *= n / m;
                     user.addVelocity(h, k, l);
                     user.useRiptide(20);
+                    SpearDashingComponent dashingComponent = SpearDashingComponent.KEY.get(user);
+
+                    dashingComponent.dashTicks = 20;
+                    dashingComponent.sync();
+
+                    if (!user.isCreative()) spear.setCharge(spear.getCharge() - 1);
                 }
         }
 
@@ -81,7 +88,7 @@ public class EnviniumSpearItem extends SwordItem {
             if (player.isSneaking() && player.getMainHandStack().isOf(this)) {
                 EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
-                if (spear.getCharge() < 11) {
+                if (spear.getCharge() < 10) {
                     spear.setCharge(spear.getCharge() + 1);
                     player.getHungerManager().addExhaustion(1.5f);
                 }

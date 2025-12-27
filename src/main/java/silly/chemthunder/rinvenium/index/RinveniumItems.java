@@ -1,6 +1,10 @@
 package silly.chemthunder.rinvenium.index;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -22,7 +26,13 @@ public interface RinveniumItems {
 
     static <T extends Item> T create(String name, T item) {
         ITEMS.put(item, Rinvenium.id(name));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(RinveniumItems::addCombatEntries);
         return item;
+    }
+
+
+    private static void addCombatEntries(FabricItemGroupEntries fabricItemGroupEntries) {
+        fabricItemGroupEntries.addAfter(Items.TOTEM_OF_UNDYING, ENVINIUM_SPEAR);
     }
 
     static void index() {
