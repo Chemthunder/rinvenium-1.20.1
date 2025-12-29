@@ -15,6 +15,9 @@
     "main": [
       "silly.chemthunder.rinvenium.Rinvenium"
     ],
+    "client": [
+      "silly.chemthunder.rinvenium.client.RinveniumClient"
+    ],
     "fabric-datagen": [
       "silly.chemthunder.rinvenium.data.RinveniumDataGenerator"
     ],
@@ -28,7 +31,8 @@
   "custom": {
     "cardinal-components": [
       "rinvenium:spear",
-      "rinvenium:dash"
+      "rinvenium:dash",
+      "rinvenium:riva_ascent"
     ]
   },
   "depends": {

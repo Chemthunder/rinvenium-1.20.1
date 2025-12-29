@@ -1,5 +1,17 @@
 {
   "item.rinvenium.envinium_spear": "Envinium Spear",
 
-  "enchantment.rinvenium.rush": "Rush"
+  "enchantment.rinvenium.rush": "Rush",
+  "enchantment.rinvenium.rush.desc": "While crouching, the Envinium Spear will consume hunger to recharge itself, \nallowing the user to rush forward at great speeds on right-click.",
+
+  "death.attack.niki": "fuck you",
+  "death.attack.niki.player": "fuck you",
+  "death.attack.niki.item": "fuck you",
+
+  "effect.rinvenium.sparked": "Sparked",
+
+  "desc.spear.unenchanted_1": "Holding right-click allows the Envinium Spear to parry attacks,",
+  "desc.spear.unenchanted_2": "knocking entities back and damaging them.",
+  "desc.spear.enchanted_1": "While crouching, the Envinium Spear will consume hunger to recharge itself,",
+  "desc.spear.enchanted_2": "allowing the user to rush forward at great speeds on right-click."
 }

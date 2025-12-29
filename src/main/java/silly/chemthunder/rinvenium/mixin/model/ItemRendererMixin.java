@@ -1,4 +1,4 @@
-package silly.chemthunder.rinvenium.mixin.item;
+package silly.chemthunder.rinvenium.mixin.model;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;

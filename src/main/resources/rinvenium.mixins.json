@@ -3,7 +3,8 @@
   "package": "silly.chemthunder.rinvenium.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -12,8 +13,10 @@
     "requireAnnotations": true
   },
   "client": [
-    "item.ItemRendererAccessor",
-    "item.ItemRendererMixin",
-    "item.ModelLoaderMixin"
+    "client.PlayerEntityRendererMixin",
+    "client.TridentFeatureRendererMixin",
+    "model.ItemRendererAccessor",
+    "model.ItemRendererMixin",
+    "model.ModelLoaderMixin"
   ]
 }

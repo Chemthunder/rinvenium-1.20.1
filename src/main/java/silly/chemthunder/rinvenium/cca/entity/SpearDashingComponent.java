@@ -39,6 +39,17 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
         double z = player.getZ();
 
         if (world instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(ParticleTypes.ELECTRIC_SPARK,
+                    x,
+                    y + 0.1f,
+                    z,
+                    2,
+                    0.08,
+                    0.08,
+                    0.08,
+                    0.09
+            );
+
             serverWorld.spawnParticles(ParticleTypes.END_ROD,
                     x,
                     y + 0.1f,

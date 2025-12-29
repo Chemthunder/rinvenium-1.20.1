@@ -3,10 +3,10 @@ package silly.chemthunder.rinvenium.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,15 +14,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EnviniumSpearItem extends SwordItem {
@@ -39,16 +42,25 @@ public class EnviniumSpearItem extends SwordItem {
         if (user.getMainHandStack().isOf(this)) {
             if (hasRush) {
                 rush(user, stack);
+            } else {
+                if (!user.getItemCooldownManager().isCoolingDown(stack.getItem())) {
+                    user.setCurrentHand(hand);
+                    return TypedActionResult.consume(stack);
+                }
             }
         }
-
-
         return super.use(world, user, hand);
     }
 
+    // public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    //        ItemStack itemStack = user.getStackInHand(hand);
+    //        user.setCurrentHand(hand);
+    //        return TypedActionResult.consume(itemStack);
+    //    }
+
     public void rush(PlayerEntity user, ItemStack stack) {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
-        float j = 4;
+        float j = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack);
         if (spear.getCharge() > 0) {
             float f = user.getYaw();
             float g = user.getPitch();
@@ -67,7 +79,10 @@ public class EnviniumSpearItem extends SwordItem {
             dashingComponent.dashTicks = 20;
             dashingComponent.sync();
 
-            if (!user.isCreative()) spear.setCharge(spear.getCharge() - 1);
+            if (!user.isCreative()) {
+                spear.setCharge(spear.getCharge() - 1);
+                user.getItemCooldownManager().set(this, 50);
+            }
         }
     }
 
@@ -80,17 +95,26 @@ public class EnviniumSpearItem extends SwordItem {
     public int getItemBarStep(ItemStack stack) {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
-        return Math.round((float) spear.getCharge() / 10 * 13);
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+            return Math.round((float) spear.getCharge() / 10 * 13);
+        }
+        return Math.round((float) spear.getParry() / 5 * 13);
     }
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return EnviniumSpearItemComponent.KEY.get(stack).getCharge() > 0;
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0 && EnviniumSpearItemComponent.KEY.get(stack).getCharge() > 0) {
+            return true;
+        }
+        return EnviniumSpearItemComponent.KEY.get(stack).getParry() > 0;
     }
 
     @Override
     public int getItemBarColor(ItemStack stack) {
-        return 0x9cfdff;
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+            return 0x9cfdff;
+        }
+        return 0x7a1c8c;
     }
 
     @Override
@@ -98,11 +122,12 @@ public class EnviniumSpearItem extends SwordItem {
         if (entity instanceof PlayerEntity player) {
             if (player.isSneaking() && player.getMainHandStack().isOf(this)) {
                 if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+                    int j = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack);
                     EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
                     if (spear.getCharge() < 10) {
                         spear.setCharge(spear.getCharge() + 1);
-                        player.getHungerManager().addExhaustion(1.5f);
+                        player.getHungerManager().addExhaustion(1.5f * j);
                     }
                 }
             }
@@ -132,13 +157,24 @@ public class EnviniumSpearItem extends SwordItem {
     }
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        super.usageTick(world, user, stack, remainingUseTicks);
-        user.setCurrentHand(Hand.MAIN_HAND);
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.BLOCK;
+    }
+
+    public int getMaxUseTime(ItemStack stack) {
+        return 72000;
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.SPEAR;
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+            tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+            tooltip.add(Text.translatable("desc.spear.enchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+        } else {
+            tooltip.add(Text.translatable("desc.spear.unenchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+            tooltip.add(Text.translatable("desc.spear.unenchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+        }
+
+        super.appendTooltip(stack, world, tooltip, context);
     }
 }
