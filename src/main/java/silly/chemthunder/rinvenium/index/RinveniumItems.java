@@ -13,6 +13,7 @@ import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.item.AscentaItem;
 import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
 import silly.chemthunder.rinvenium.item.EvicruxItem;
+import silly.chemthunder.rinvenium.item.HotGItem;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,6 +32,10 @@ public interface RinveniumItems {
     ));
 
     Item DESCENTO_ASTRUM_EVICRUX = create("descento_astrum_evicrux", new EvicruxItem(new Item.Settings()
+            .maxCount(1)
+    ));
+
+    Item HAIL_OF_THE_GODS = create("hail_of_the_gods", new HotGItem(new Item.Settings()
             .maxCount(1)
     ));
 

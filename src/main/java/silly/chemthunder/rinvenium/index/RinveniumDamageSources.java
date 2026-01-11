@@ -10,24 +10,18 @@ import silly.chemthunder.rinvenium.Rinvenium;
 
 public interface RinveniumDamageSources {
     RegistryKey<DamageType> BAP = of("bap");
-
     static DamageSource bap(Entity entity) {
         return entity.getDamageSources().create(BAP); }
 
     RegistryKey<DamageType> BOOP = of("boop");
-
-    static DamageSource boop(LivingEntity entity) {
+    static DamageSource boop(Entity entity) {
         return entity.getDamageSources().create(BOOP); }
 
-
-
     RegistryKey<DamageType> ELECTRICITY = of("electricity");
-
     static DamageSource electricity(LivingEntity entity) {
         return entity.getDamageSources().create(ELECTRICITY); }
 
     RegistryKey<DamageType> NIKI = of("niki");
-
     static DamageSource niki(LivingEntity entity) {
         return entity.getDamageSources().create(NIKI); }
 
