@@ -4,17 +4,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
-import org.joml.Vector3f;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
-import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class GunshotEntity extends ThrownItemEntity {
 
@@ -24,7 +21,7 @@ public class GunshotEntity extends ThrownItemEntity {
 
     @Override
     protected Item getDefaultItem() {
-        return RinveniumItems.HAIL_OF_THE_GODS;
+        return Items.AIR;
     }
 
     @Override

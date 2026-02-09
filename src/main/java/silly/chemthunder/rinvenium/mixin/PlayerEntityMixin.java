@@ -42,7 +42,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
         if (!player.getItemCooldownManager().isCoolingDown(stack.getItem())) {
             if (stack.isOf(RinveniumItems.ENVINIUM_SPEAR) && noRush && player.isUsingItem()) {
-                attacker.setVelocity(0, 5, 0);
                 attacker.velocityModified = true;
 
                 if (component.getParry() < 5) {

@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -11,7 +12,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
-import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class AscentaShotEntity extends ThrownItemEntity {
     public AscentaShotEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
@@ -80,7 +80,7 @@ public class AscentaShotEntity extends ThrownItemEntity {
 
     @Override
     protected Item getDefaultItem() {
-        return RinveniumItems.ASCENTA_DE_RIVULETA;
+        return Items.AIR;
     }
 
     @Override

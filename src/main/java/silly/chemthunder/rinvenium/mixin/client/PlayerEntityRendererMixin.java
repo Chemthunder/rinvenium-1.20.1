@@ -27,8 +27,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
         }
 
-        if (player.getStackInHand(hand).isOf(RinveniumItems.HAIL_OF_THE_GODS) && player.isUsingItem()) {
-            cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);
-        }
+//        if (player.getStackInHand(hand).isOf(RinveniumItems.HAIL_OF_THE_GODS) && player.isUsingItem()) {
+//            cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);
+//        }
     }
 }

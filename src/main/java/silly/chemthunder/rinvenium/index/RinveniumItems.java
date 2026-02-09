@@ -10,10 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.item.AscentaItem;
 import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
-import silly.chemthunder.rinvenium.item.EvicruxItem;
-import silly.chemthunder.rinvenium.item.HotGItem;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,17 +24,17 @@ public interface RinveniumItems {
             .maxCount(1)
     ));
 
-    Item ASCENTA_DE_RIVULETA = create("ascenta_de_rivuleta", new AscentaItem(new Item.Settings()
-            .maxCount(1)
-    ));
-
-    Item DESCENTO_ASTRUM_EVICRUX = create("descento_astrum_evicrux", new EvicruxItem(new Item.Settings()
-            .maxCount(1)
-    ));
-
-    Item HAIL_OF_THE_GODS = create("hail_of_the_gods", new HotGItem(new Item.Settings()
-            .maxCount(1)
-    ));
+//    Item ASCENTA_DE_RIVULETA = create("ascenta_de_rivuleta", new AscentaItem(new Item.Settings()
+//            .maxCount(1)
+//    ));
+//
+//    Item DESCENTO_ASTRUM_EVICRUX = create("descento_astrum_evicrux", new EvicruxItem(new Item.Settings()
+//            .maxCount(1)
+//    ));
+//
+//    Item HAIL_OF_THE_GODS = create("hail_of_the_gods", new HotGItem(new Item.Settings()
+//            .maxCount(1)
+//    ));
 
     // Descento Astrum Evicrux
 
@@ -50,8 +47,8 @@ public interface RinveniumItems {
 
     private static void addCombatEntries(FabricItemGroupEntries fabricItemGroupEntries) {
         fabricItemGroupEntries.addAfter(Items.TOTEM_OF_UNDYING, ENVINIUM_SPEAR);
-        fabricItemGroupEntries.addAfter(ENVINIUM_SPEAR, ASCENTA_DE_RIVULETA);
-        fabricItemGroupEntries.addAfter(ASCENTA_DE_RIVULETA, DESCENTO_ASTRUM_EVICRUX);
+//        fabricItemGroupEntries.addAfter(ENVINIUM_SPEAR, ASCENTA_DE_RIVULETA);
+//        fabricItemGroupEntries.addAfter(ASCENTA_DE_RIVULETA, DESCENTO_ASTRUM_EVICRUX);
     }
 
     static void index() {
