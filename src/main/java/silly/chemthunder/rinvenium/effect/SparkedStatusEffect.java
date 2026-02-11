@@ -16,14 +16,14 @@ public class SparkedStatusEffect extends StatusEffect {
         if (Rinvenium.haters.contains(entity.getUuid())) {
             entity.damage(RinveniumDamageSources.niki(entity), 6.0f);
         } else {
-            entity.damage(RinveniumDamageSources.electricity(entity), 1.5f);
+            entity.damage(RinveniumDamageSources.electricity(entity), 0.5f);
         }
         super.applyUpdateEffect(entity, amplifier);
     }
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        int i = 20;
+        int i = 2;
         return duration % i == 0;
     }
 }

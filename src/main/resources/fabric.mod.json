@@ -6,7 +6,8 @@
   "description": "A devious slug chugs nineteen batteries to systematically wipe out all of the continental United States",
   "authors": [
     "Chemthunder",
-    "RivaSlugCat"
+    "RivaSlugCat",
+    "Midget807"
   ],
   "license": "CC0-1.0",
   "icon": "assets/rinvenium/icon.png",
@@ -32,7 +33,8 @@
     "cardinal-components": [
       "rinvenium:spear",
       "rinvenium:dash",
-      "rinvenium:riva_ascent"
+      "rinvenium:riva_ascent",
+      "rinvenium:spear_parry"
     ]
   },
   "depends": {

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
@@ -32,4 +33,5 @@ public abstract class ItemRendererMixin {
         }
         return value;
     }
+
 }

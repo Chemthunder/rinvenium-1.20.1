@@ -5,8 +5,8 @@ import com.google.common.collect.Multimap;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,11 +17,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
+import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 
@@ -38,25 +38,39 @@ public class EnviniumSpearItem extends SwordItem {
         ItemStack stack = user.getStackInHand(hand);
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
         boolean hasRush = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0;
+        SpearParryComponent spearParryComponent = SpearParryComponent.get(user);
 
-        if (user.getMainHandStack().isOf(this)) {
-            if (hasRush) {
+        if (hand == Hand.OFF_HAND) {
+            return TypedActionResult.fail(stack);
+        } else {
+            user.setCurrentHand(hand);
+            if (hasRush && !user.isSneaking()) {
                 rush(user, stack);
+                return TypedActionResult.consume(stack);
             } else {
-                if (!user.getItemCooldownManager().isCoolingDown(stack.getItem())) {
-                    user.setCurrentHand(hand);
-                    return TypedActionResult.consume(stack);
+                if (user.getItemCooldownManager().isCoolingDown(this)) {
+                    user.stopUsingItem();
+                    return TypedActionResult.fail(stack);
+                } else {
+                    if (spearParryComponent.getDoubleBoolValue1()) {
+                        user.setCurrentHand(hand);
+                        spearParryComponent.setDoubleBoolValue2(true);
+                        return TypedActionResult.consume(stack);
+                    } else {
+                        return TypedActionResult.fail(stack);
+                    }
                 }
             }
         }
-        return super.use(world, user, hand);
     }
 
-    // public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-    //        ItemStack itemStack = user.getStackInHand(hand);
-    //        user.setCurrentHand(hand);
-    //        return TypedActionResult.consume(itemStack);
-    //    }
+    @Override
+    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        if (user instanceof PlayerEntity player) {
+            SpearParryComponent.get(player).setDoubleBoolValue2(false);
+        }
+        super.onStoppedUsing(stack, world, user, remainingUseTicks);
+    }
 
     public void rush(PlayerEntity user, ItemStack stack) {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
@@ -80,8 +94,11 @@ public class EnviniumSpearItem extends SwordItem {
             dashingComponent.sync();
 
             if (!user.isCreative()) {
+                if (!spear.getFinalRush() && spear.getCharge() == 1) {
+                    spear.setFinalRush(true);
+                }
                 spear.setCharge(spear.getCharge() - 1);
-                user.getItemCooldownManager().set(this, 50);
+                user.getItemCooldownManager().set(this, spear.getFinalRush() ? 200 : 10);
             }
         }
     }
@@ -96,17 +113,19 @@ public class EnviniumSpearItem extends SwordItem {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
         if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
-            return Math.round((float) spear.getCharge() / 10 * 13);
+            return Math.round((float) spear.getCharge() / 4 * 13);
+        } else {
+            if (spear.isInDamageState()) {
+                return (int) Math.ceil((float) spear.getDamageWindow() / SpearParryComponent.MAX_DAMAGE_WINDOW * 13);
+            } else {
+                return (int) Math.ceil((float) spear.getParryWindow() / SpearParryComponent.MAX_PARRY_WINDOW * 13);
+            }
         }
-        return Math.round((float) spear.getParry() / 5 * 13);
     }
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0 && EnviniumSpearItemComponent.KEY.get(stack).getCharge() > 0) {
-            return true;
-        }
-        return EnviniumSpearItemComponent.KEY.get(stack).getParry() > 0;
+        return true;
     }
 
     @Override
@@ -118,21 +137,29 @@ public class EnviniumSpearItem extends SwordItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if (entity instanceof PlayerEntity player) {
-            if (player.isSneaking() && player.getMainHandStack().isOf(this)) {
-                if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        if (user instanceof PlayerEntity player) {
+            if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+                if (player.isSneaking() && player.getMainHandStack().isOf(this) && player.isUsingItem() && player.getActiveItem().isOf(this)) {
                     int j = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack);
                     EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
-                    if (spear.getCharge() < 10) {
+                    if (spear.getCharge() < 4) {
+                        spear.setFinalRush(false);
                         spear.setCharge(spear.getCharge() + 1);
-                        player.getHungerManager().addExhaustion(1.5f * j);
+                        player.getHungerManager().addExhaustion(3.0f * j);
+                    }
+                }
+            } else {
+                if (!player.getWorld().isClient) {
+                    SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
+                    if (spearParryComponent.getDoubleIntValue1() > 0) {
+                        spearParryComponent.decrementDoubleIntValue1();
                     }
                 }
             }
         }
-        super.inventoryTick(stack, world, entity, slot, selected);
+        super.usageTick(world, user, stack, remainingUseTicks);
     }
 
     @Override
@@ -154,11 +181,6 @@ public class EnviniumSpearItem extends SwordItem {
         }
 
         return super.getAttributeModifiers(slot);
-    }
-
-    @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BLOCK;
     }
 
     public int getMaxUseTime(ItemStack stack) {

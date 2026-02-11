@@ -13,6 +13,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "client.DrawContextMixin",
     "client.PlayerEntityRendererMixin",
     "client.TridentFeatureRendererMixin",
     "model.ItemRendererAccessor",
