@@ -80,5 +80,4 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         }
         return base;
     }
-
 }

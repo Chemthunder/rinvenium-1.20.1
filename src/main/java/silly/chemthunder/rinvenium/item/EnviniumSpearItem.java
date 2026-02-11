@@ -33,7 +33,6 @@ public class EnviniumSpearItem extends SwordItem {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
-    @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
@@ -64,7 +63,6 @@ public class EnviniumSpearItem extends SwordItem {
         }
     }
 
-    @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (user instanceof PlayerEntity player) {
             SpearParryComponent.get(player).setDoubleBoolValue2(false);
@@ -103,12 +101,10 @@ public class EnviniumSpearItem extends SwordItem {
         }
     }
 
-    @Override
     public Text getName(ItemStack stack) {
         return super.getName(stack).copy().styled(style -> style.withColor(0xf58442));
     }
 
-    @Override
     public int getItemBarStep(ItemStack stack) {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
 
@@ -123,20 +119,17 @@ public class EnviniumSpearItem extends SwordItem {
         }
     }
 
-    @Override
     public boolean isItemBarVisible(ItemStack stack) {
         return true;
     }
 
-    @Override
     public int getItemBarColor(ItemStack stack) {
         if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
-            return 0x9cfdff;
+            return 0x9cfdff; // blue for rush
         }
-        return 0x7a1c8c;
+        return 0x7a1c8c; // purple for max parries
     }
 
-    @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (user instanceof PlayerEntity player) {
             if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
@@ -162,7 +155,6 @@ public class EnviniumSpearItem extends SwordItem {
         super.usageTick(world, user, stack, remainingUseTicks);
     }
 
-    @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -176,10 +168,8 @@ public class EnviniumSpearItem extends SwordItem {
                             EntityAttributeModifier.Operation.ADDITION
                     )
             );
-
             return builder.build();
         }
-
         return super.getAttributeModifiers(slot);
     }
 
@@ -187,7 +177,6 @@ public class EnviniumSpearItem extends SwordItem {
         return 72000;
     }
 
-    @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
             tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
@@ -196,7 +185,6 @@ public class EnviniumSpearItem extends SwordItem {
             tooltip.add(Text.translatable("desc.spear.unenchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
             tooltip.add(Text.translatable("desc.spear.unenchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
-
         super.appendTooltip(stack, world, tooltip, context);
     }
 }

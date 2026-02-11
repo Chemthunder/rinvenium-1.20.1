@@ -15,6 +15,7 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
     public static final ComponentKey<SpearDashingComponent> KEY = ComponentRegistry.getOrCreate(Rinvenium.id("dash"), SpearDashingComponent.class);
     public int dashTicks = 0;
     private final PlayerEntity player;
+    
     public void sync() {
         KEY.sync(this.player);
     }
@@ -22,7 +23,6 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
         this.player = player;
     }
 
-    @Override
     public void tick() {
         if (dashTicks > 0) {
             dashTicks--;

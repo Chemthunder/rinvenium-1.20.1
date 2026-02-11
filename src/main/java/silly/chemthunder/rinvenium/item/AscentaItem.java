@@ -17,12 +17,10 @@ public class AscentaItem extends Item {
         super(settings);
     }
 
-    @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         float f = 2.0f;
         if (world instanceof ServerWorld serverWorld) {
             for (int i = 1; i <= 15; i++) {
-
                 AscentaShotEntity shot = new AscentaShotEntity(RinveniumEntities.ASCENTA_SHOT, serverWorld);
                 shot.updatePosition(user.getX(), user.getY() + 1.0f, user.getZ());
                 shot.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, f * 3.0f, 5.0f);

@@ -13,12 +13,10 @@ public class RinveniumModelProvider extends FabricModelProvider {
         super(output);
     }
 
-    @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 
     }
 
-    @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         itemModelGenerator.register(RinveniumItems.DEBUGGER, Items.STICK, Models.HANDHELD);
     }

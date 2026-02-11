@@ -6,7 +6,7 @@ import silly.chemthunder.rinvenium.datagen.RinveniumModelProvider;
 import silly.chemthunder.rinvenium.datagen.RinveniumRecipeProvider;
 
 public class RinveniumDataGenerator implements DataGeneratorEntrypoint {
-	@Override
+	
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 

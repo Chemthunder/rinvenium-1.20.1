@@ -15,6 +15,7 @@ public class EnviniumSpearItemComponent extends ItemComponent {
     private static final String PARRY_WINDOW = "parry_window";
     private static final String DAMAGE_WINDOW = "damage_window";
     private static final String IS_IN_DAMAGE_STATE = "is_in_damage_state";
+    
     public EnviniumSpearItemComponent(ItemStack stack) {
         super(stack);
     }

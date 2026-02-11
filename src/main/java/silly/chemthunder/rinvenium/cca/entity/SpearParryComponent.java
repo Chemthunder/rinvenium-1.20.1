@@ -36,67 +36,56 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
     }
 
     /**Returns {@link #parryWindow}.*/
-    @Override
     public int getDoubleIntValue1() {
         return this.parryWindow;
     }
 
     /**Returns {@link #damageWindow}.*/
-    @Override
     public int getDoubleIntValue2() {
         return this.damageWindow;
     }
 
-    @Override
     public void setDoubleIntValue1(int value) {
         this.parryWindow = value;
         this.sync();
     }
 
-    @Override
     public void setDoubleIntValue2(int value) {
         this.damageWindow = value;
         this.sync();
     }
 
-    @Override
     public void addToDoubleIntValue1(int count) {
         this.parryWindow += count;
         this.sync();
     }
 
-    @Override
     public void addToDoubleIntValue2(int count) {
         this.damageWindow += count;
         this.sync();
     }
 
-    @Override
     public void incrementDoubleIntValue1() {
         this.parryWindow++;
         this.sync();
     }
 
-    @Override
     public void incrementDoubleIntValue2() {
         this.damageWindow++;
         this.sync();
     }
 
-    @Override
     public void decrementDoubleIntValue1() {
         this.parryWindow--;
         this.sync();
     }
 
-    @Override
     public void decrementDoubleIntValue2() {
         this.damageWindow--;
         this.sync();
     }
 
     /**Returns {@link #canParry}.*/
-    @Override
     public boolean getDoubleBoolValue1() {
         if (this.parryWindow > 0 && this.damageWindow <= 0) {
             this.setDoubleBoolValue1(true);
@@ -106,8 +95,8 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
         }
         return this.canParry;
     }
+
     /**Returns {@link #isBlocking}.*/
-    @Override
     public boolean getDoubleBoolValue2() {
         if (!this.player.getWorld().isClient && (!this.player.getMainHandStack().isOf(RinveniumItems.ENVINIUM_SPEAR) || !this.player.isUsingItem())) {
             this.setDoubleBoolValue2(false);
@@ -115,19 +104,16 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
         return this.isBlocking;
     }
 
-    @Override
     public void setDoubleBoolValue1(boolean value) {
         this.canParry = value;
         this.sync();
     }
 
-    @Override
     public void setDoubleBoolValue2(boolean value) {
         this.isBlocking = value;
         this.sync();
     }
 
-    @Override
     public void tick() {
         if (this.parryWindow < MAX_PARRY_WINDOW && !this.isBlocking) {
             this.incrementDoubleIntValue1();
@@ -141,19 +127,19 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
         }
     }
 
-
-    @Override
+    // nbt ====
     public void readFromNbt(NbtCompound nbtCompound) {
         this.parryWindow = nbtCompound.getInt(PARRY_WINDOW_KEY);
         this.damageWindow = nbtCompound.getInt(DAMAGE_WINDOW_KEY);
+
         this.canParry = nbtCompound.getBoolean(CAN_PARRY_KEY);
         this.isBlocking = nbtCompound.getBoolean(IS_BLOCKING_KEY);
     }
 
-    @Override
     public void writeToNbt(NbtCompound nbtCompound) {
         nbtCompound.putInt(PARRY_WINDOW_KEY, this.parryWindow);
         nbtCompound.putInt(DAMAGE_WINDOW_KEY, this.damageWindow);
+        
         nbtCompound.putBoolean(CAN_PARRY_KEY, this.canParry);
         nbtCompound.putBoolean(IS_BLOCKING_KEY, this.isBlocking);
     }

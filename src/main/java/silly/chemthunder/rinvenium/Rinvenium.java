@@ -20,17 +20,14 @@ public class Rinvenium implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final ArrayList<UUID> haters = new ArrayList<>();
 
-	@Override
 	public void onInitialize() {
-        RinveniumItems.index();
-        RinveniumEnchantments.index();
-        RinveniumStatusEffects.index();
-        RinveniumEntities.index();
+        RinveniumItems.init();
+        RinveniumEnchantments.init();
+        RinveniumStatusEffects.init();
+        RinveniumEntities.init();
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");
-
-
 
         // haters
         haters.add(UUID.fromString("c2fd27cf-5931-462b-8d7d-7f11adb7998b"));

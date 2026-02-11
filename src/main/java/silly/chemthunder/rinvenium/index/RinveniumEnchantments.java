@@ -21,7 +21,7 @@ public interface RinveniumEnchantments {
         return enchantment;
     }
 
-    static void index() {
+    static void init() {
         ENCHANTMENTS.keySet().forEach(enchantment -> Registry.register(Registries.ENCHANTMENT, ENCHANTMENTS.get(enchantment), enchantment));
     }
 }

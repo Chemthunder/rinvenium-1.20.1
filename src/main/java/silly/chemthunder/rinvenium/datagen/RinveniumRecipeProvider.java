@@ -11,7 +11,6 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
         super(output);
     }
 
-    @Override
     public void generate(Consumer<RecipeJsonProvider> consumer) {
 
     }

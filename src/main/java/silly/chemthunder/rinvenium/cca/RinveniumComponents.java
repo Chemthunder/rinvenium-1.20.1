@@ -17,13 +17,12 @@ import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
 
 public class RinveniumComponents implements ItemComponentInitializer, EntityComponentInitializer {
     public static final ComponentKey<SpearParryComponent> SPEAR_PARRY = ComponentRegistry.getOrCreate(Rinvenium.id("spear_parry"), SpearParryComponent.class);
+    // either move to SpearParryComponent.class or move all Component Keys here for consistency :p
 
-    @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(item -> item instanceof EnviniumSpearItem, EnviniumSpearItemComponent.KEY, EnviniumSpearItemComponent::new);
     }
 
-    @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.beginRegistration(PlayerEntity.class, SPEAR_PARRY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearParryComponent::new);
         registry.beginRegistration(PlayerEntity.class, SpearDashingComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearDashingComponent::new);

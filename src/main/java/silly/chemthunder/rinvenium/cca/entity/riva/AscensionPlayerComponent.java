@@ -21,19 +21,17 @@ public class AscensionPlayerComponent implements AutoSyncedComponent, CommonTick
     }
 
 
-    @Override
     public void tick() {
         if (isAscented) {
 
         }
     }
 
-    @Override
+    // nbt =======
     public void readFromNbt(NbtCompound nbtCompound) {
         this.isAscented = nbtCompound.getBoolean("isAscented");
     }
 
-    @Override
     public void writeToNbt(NbtCompound nbtCompound) {
         nbtCompound.putBoolean("isAscented", isAscented);
     }

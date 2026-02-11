@@ -15,11 +15,10 @@ public class DebuggerItem extends Item {
         super(settings);
     }
 
-    @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isSneaking()) {
-            if (world.isClient) {
+            if (world.isClient) { // if (!world.isClient) instead? idfk
 
             } else {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 20, 10));

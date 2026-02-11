@@ -16,18 +16,14 @@ public class HotGItem extends Item {
         super(settings);
     }
 
-    @Override
     public Text getName(ItemStack stack) {
         return super.getName(stack).copy().styled(style -> style.withColor(0xf58442));
     }
 
-    @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         float f = 2.0f;
 
         if (world instanceof ServerWorld serverWorld) {
-
-
             GunshotEntity bullet = new GunshotEntity(RinveniumEntities.GUNSHOT, world);
             bullet.updatePosition(user.getX(), user.getY() + 0.5f, user.getZ());
             bullet.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, f * 3.0f, 0.0f);

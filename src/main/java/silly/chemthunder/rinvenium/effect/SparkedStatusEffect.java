@@ -11,7 +11,6 @@ public class SparkedStatusEffect extends StatusEffect {
         super(category, color);
     }
 
-    @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (Rinvenium.haters.contains(entity.getUuid())) {
             entity.damage(RinveniumDamageSources.niki(entity), 6.0f);
@@ -21,7 +20,6 @@ public class SparkedStatusEffect extends StatusEffect {
         super.applyUpdateEffect(entity, amplifier);
     }
 
-    @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
         int i = 2;
         return duration % i == 0;

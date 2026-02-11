@@ -27,32 +27,26 @@ public enum  EnviniumToolMaterial implements ToolMaterial {
         this.repairIngredient = new Lazy<>(repairIngredient);
     }
 
-    @Override
     public int getDurability() {
         return this.itemDurability;
     }
 
-    @Override
     public float getMiningSpeedMultiplier() {
         return this.miningSpeed;
     }
 
-    @Override
     public float getAttackDamage() {
         return this.attackDamage;
     }
 
-    @Override
     public int getMiningLevel() {
         return this.miningLevel;
     }
 
-    @Override
     public int getEnchantability() {
         return this.enchantability;
     }
 
-    @Override
     public Ingredient getRepairIngredient() {
         return this.repairIngredient.get();
     }

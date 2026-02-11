@@ -33,5 +33,4 @@ public abstract class ItemRendererMixin {
         }
         return value;
     }
-
 }

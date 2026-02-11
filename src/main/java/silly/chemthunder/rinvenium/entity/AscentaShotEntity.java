@@ -19,9 +19,7 @@ public class AscentaShotEntity extends ThrownItemEntity {
     }
 
 
-    @Override
     public void tick() {
-
         if (getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.spawnParticles(
                     ParticleTypes.END_ROD,
@@ -74,28 +72,22 @@ public class AscentaShotEntity extends ThrownItemEntity {
             var dust = new DustParticleEffect(new Vector3f((float) 252 / 256, (float) 3 / 256, (float) 78 / 256), 1.0f);
             serverWorld.addParticle(dust, this.getX(), this.getY(), this.getZ(), 1, 1, 1);
         }
-
         super.tick();
     }
 
-    @Override
     protected Item getDefaultItem() {
         return Items.AIR;
     }
 
-    @Override
     public boolean hasNoGravity() {
         return true;
     }
 
 
-    @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         Entity target = entityHitResult.getEntity();
 
         target.damage(RinveniumDamageSources.bap(target), 8.0f);
-
-
         super.onEntityHit(entityHitResult);
     }
 }

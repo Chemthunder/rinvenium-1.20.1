@@ -16,7 +16,7 @@ public interface RinveniumStatusEffects {
 
     StatusEffect SPARKED = create("sparked", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff));
 
-    static void index() {
+    static void init() {
         EFFECTS.keySet().forEach(effect -> Registry.register(Registries.STATUS_EFFECT, EFFECTS.get(effect), effect));
     }
 

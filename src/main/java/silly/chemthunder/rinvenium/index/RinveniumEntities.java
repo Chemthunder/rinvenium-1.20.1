@@ -20,8 +20,6 @@ import java.util.Map;
 public interface RinveniumEntities {
     Map<EntityType<? extends Entity>, Identifier> ENTITIES = new LinkedHashMap<>();
 
-    //  Item WEAPON_RACK = create("weapon_rack", new WeaponRackItem(new Item.Settings()));
-
     EntityType<AscentaShotEntity> ASCENTA_SHOT = createEntity("ascenta_shot", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AscentaShotEntity::new).disableSaving().dimensions(EntityDimensions.changing(2.0f, 2.0f)).build());
     EntityType<GunshotEntity> GUNSHOT = createEntity("gunshot", FabricEntityTypeBuilder.create(SpawnGroup.MISC, GunshotEntity::new).disableSaving().dimensions(EntityDimensions.changing(2.0f, 2.0f)).build());
 
@@ -30,11 +28,11 @@ public interface RinveniumEntities {
         return entity;
     }
 
-    static void index() {
+    static void init() {
         ENTITIES.keySet().forEach(entityType -> Registry.register(Registries.ENTITY_TYPE, ENTITIES.get(entityType), entityType));
     }
 
-    static void clientIndex() {
+    static void clientInit() {
         EntityRendererRegistry.register(ASCENTA_SHOT, EmptyEntityRenderer::new);
         EntityRendererRegistry.register(GUNSHOT, EmptyEntityRenderer::new);
     }

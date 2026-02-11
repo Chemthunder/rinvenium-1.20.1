@@ -14,17 +14,14 @@ import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 
 public class GunshotEntity extends ThrownItemEntity {
-
     public GunshotEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    @Override
     protected Item getDefaultItem() {
         return Items.AIR;
     }
 
-    @Override
     public void tick() {
         if (getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.spawnParticles(
@@ -51,7 +48,6 @@ public class GunshotEntity extends ThrownItemEntity {
                     0.07
             );
 
-
             serverWorld.spawnParticles(
                     ParticleTypes.SOUL_FIRE_FLAME,
                     this.getX(),
@@ -68,7 +64,6 @@ public class GunshotEntity extends ThrownItemEntity {
         super.tick();
     }
 
-    @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         Entity target = entityHitResult.getEntity();
 
@@ -76,7 +71,6 @@ public class GunshotEntity extends ThrownItemEntity {
         super.onEntityHit(entityHitResult);
     }
 
-    @Override
     protected void onBlockCollision(BlockState state) {
         if (!state.isOf(Blocks.AIR)) {
             this.discard();

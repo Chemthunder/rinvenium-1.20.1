@@ -8,26 +8,14 @@ import net.minecraft.item.Items;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class RushEnchantment extends Enchantment {
+    public int getMinPower(int level) {return 20;}
+    public int getMaxPower(int level) {return 50;}
+    public int getMaxLevel() {return 3;}
+
     public RushEnchantment(Rarity weight, EquipmentSlot... slot) {
         super(weight, EnchantmentTarget.WEAPON, slot);
     }
 
-    @Override
-    public int getMinPower(int level) {
-        return 20;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return 50;
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 3;
-    }
-
-    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return stack.isOf(RinveniumItems.ENVINIUM_SPEAR) || stack.isOf(Items.BOOK) || stack.isOf(Items.ENCHANTED_BOOK);
     }
