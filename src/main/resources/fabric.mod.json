@@ -16,10 +16,10 @@
       "silly.chemthunder.rinvenium.Rinvenium"
     ],
     "client": [
-      "silly.chemthunder.rinvenium.client.RinveniumClient"
+      "silly.chemthunder.rinvenium.RinveniumClient"
     ],
     "fabric-datagen": [
-      "silly.chemthunder.rinvenium.data.RinveniumDataGenerator"
+      "silly.chemthunder.rinvenium.RinveniumDataGenerator"
     ],
     "cardinal-components": [
       "silly.chemthunder.rinvenium.cca.RinveniumComponents"

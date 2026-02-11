@@ -28,6 +28,7 @@ public class Rinvenium implements ModInitializer {
         RinveniumEntities.index();
 
 		LOGGER.info("Hello Fabric world!");
+        LOGGER.info("balls");
 
 
 
