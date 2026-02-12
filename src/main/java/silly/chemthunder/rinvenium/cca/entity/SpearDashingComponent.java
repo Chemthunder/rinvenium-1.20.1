@@ -4,14 +4,18 @@ import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
+import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
+import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class SpearDashingComponent implements IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final ComponentKey<SpearDashingComponent> KEY = ComponentRegistry.getOrCreate(Rinvenium.id("dash"), SpearDashingComponent.class);

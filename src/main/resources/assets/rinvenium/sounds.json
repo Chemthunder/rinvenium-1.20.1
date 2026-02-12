@@ -1,0 +1,18 @@
+{
+  "spear_dash": {
+    "subtitle": "sound.rinvenium.spear_dash",
+    "sounds": ["rinvenium:env_dash"]
+  },
+  "spear_dash_impact": {
+    "subtitle": "sound.rinvenium.spear_dash_impact",
+    "sounds": ["rinvenium:env_dash_impact"]
+  },
+  "spear_parry": {
+    "subtitle": "sound.rinvenium.spear_parry",
+    "sounds": ["rinvenium:env_parry"]
+  },
+  "spear_slash": {
+    "subtitle": "sound.rinvenium.spear_slash",
+    "sounds": ["rinvenium:env_slash"]
+  }
+}

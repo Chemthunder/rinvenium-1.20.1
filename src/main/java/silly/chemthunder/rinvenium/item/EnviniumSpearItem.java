@@ -9,10 +9,13 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -24,6 +27,7 @@ import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 
 import java.util.List;
 import java.util.UUID;
@@ -104,6 +108,9 @@ public class EnviniumSpearItem extends SwordItem {
                 dashingComponent.addValueToInt(-55);
                 user.getItemCooldownManager().set(this, 5);
             }
+            if (!user.getWorld().isClient) {
+                user.playSound(RinveniumSoundEvents.SPEAR_DASH, SoundCategory.PLAYERS, 0.8f, 1.0f + user.getEntityWorld().random.nextFloat() * 0.2f);
+            }
         }
     }
 
@@ -166,11 +173,28 @@ public class EnviniumSpearItem extends SwordItem {
         super.usageTick(world, user, stack, remainingUseTicks);
     }
 
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            builder.putAll(super.getAttributeModifiers(slot));
-
+            if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+                builder.put(
+                        EntityAttributes.GENERIC_ATTACK_DAMAGE,
+                        new EntityAttributeModifier(
+                                Item.ATTACK_DAMAGE_MODIFIER_ID,
+                                "Rush reduced damage",
+                                this.getAttackDamage() - 2.0f,
+                                EntityAttributeModifier.Operation.ADDITION
+                        )
+                );
+                for (var entry : super.getAttributeModifiers(stack, slot).entries()) {
+                    if (entry.getKey() != EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+                        builder.put(entry);
+                    }
+                }
+            } else {
+                builder.putAll(super.getAttributeModifiers(stack, slot));
+            }
             builder.put(ReachEntityAttributes.ATTACK_RANGE,
                     new EntityAttributeModifier(
                             UUID.fromString("a67e3cc0-45d5-4e8e-9d64-7421e1b5fe3e"),
@@ -181,7 +205,7 @@ public class EnviniumSpearItem extends SwordItem {
             );
             return builder.build();
         }
-        return super.getAttributeModifiers(slot);
+        return super.getAttributeModifiers(stack, slot);
     }
 
     public int getMaxUseTime(ItemStack stack) {

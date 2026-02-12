@@ -22,6 +22,7 @@ import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                                     serverWorld.spawnEntity(bolt);
                                 }
                             }
-                            player.playSound(SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, 1, 1);
+                            player.playSound(RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
                         }
                     }
                 }

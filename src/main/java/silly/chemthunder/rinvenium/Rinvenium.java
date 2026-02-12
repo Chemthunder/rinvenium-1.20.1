@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Rinvenium implements ModInitializer {
         RinveniumEnchantments.init();
         RinveniumStatusEffects.init();
         RinveniumEntities.init();
+        RinveniumSoundEvents.registerRinveniumSoundEvents();
 
 		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");

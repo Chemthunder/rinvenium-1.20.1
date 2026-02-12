@@ -16,5 +16,9 @@
   "desc.spear.unenchanted_1": "Holding right-click allows the Envinium Spear to parry attacks,",
   "desc.spear.unenchanted_2": "knocking entities back and damaging them.",
   "desc.spear.enchanted_1": "While crouching, the Envinium Spear will consume hunger to recharge itself,",
-  "desc.spear.enchanted_2": "allowing the user to rush forward at great speeds on right-click."
+  "desc.spear.enchanted_2": "allowing the user to rush forward at great speeds on right-click.",
+  "sound.rinvenium.spear_dash": "Spear rushes",
+  "sound.rinvenium.spear_dash_impact": "Spear rush hits",
+  "sound.rinvenium.spear_parry": "Spear parries",
+  "sound.rinvenium.spear_slash": "Spear slashes"
 }
