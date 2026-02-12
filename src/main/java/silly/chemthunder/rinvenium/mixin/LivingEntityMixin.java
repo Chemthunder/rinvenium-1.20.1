@@ -46,9 +46,9 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                         var hasSpear = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0;
                         if (hasChanneling || hasSpear) {
                             if (!Rinvenium.haters.contains(player.getUuid())) {
-                                living.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 20));
+                                living.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10));
                             } else {
-                                player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 40));
+                                player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 20));
 
                                 if (player.getWorld() instanceof ServerWorld serverWorld) {
                                     LightningEntity bolt = new LightningEntity(EntityType.LIGHTNING_BOLT, serverWorld);
@@ -71,7 +71,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         float base = original.call(entity, source, amount);
         if (source.getAttacker() instanceof PlayerEntity player && player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
             SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
-            if (spearParryComponent.getDoubleIntValue2() > 0) {
+            if (spearParryComponent.getDoubleIntValue2() > 0 && EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, player.getStackInHand(Hand.MAIN_HAND)) <= 0) {
                 spearParryComponent.setDoubleIntValue2(0);
                 spearParryComponent.setDoubleIntValue1(SpearParryComponent.MAX_PARRY_WINDOW);
                 spearParryComponent.setDoubleBoolValue1(true);

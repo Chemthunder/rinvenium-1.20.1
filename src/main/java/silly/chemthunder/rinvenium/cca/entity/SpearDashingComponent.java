@@ -9,11 +9,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
 
-public class SpearDashingComponent implements AutoSyncedComponent, CommonTickingComponent {
+public class SpearDashingComponent implements IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final ComponentKey<SpearDashingComponent> KEY = ComponentRegistry.getOrCreate(Rinvenium.id("dash"), SpearDashingComponent.class);
+    public static final String DASH_COOLDOWN_KEY = "dashCooldown";
+    public static final int MAX_COOLDOWN = 200;
     public int dashTicks = 0;
+    public int dashCooldown = 0;
     private final PlayerEntity player;
     
     public void sync() {
@@ -23,7 +28,16 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
         this.player = player;
     }
 
+    public static SpearDashingComponent get(@NotNull PlayerEntity player) {
+        return KEY.get(player);
+    }
+
     public void tick() {
+        if (this.dashCooldown < MAX_COOLDOWN) {
+            this.incrementInt();
+        } else if (this.dashCooldown > MAX_COOLDOWN) {
+            this.setInt(MAX_COOLDOWN);
+        }
         if (dashTicks > 0) {
             dashTicks--;
             spawnParticles(player, player.getWorld());
@@ -64,12 +78,48 @@ public class SpearDashingComponent implements AutoSyncedComponent, CommonTicking
     }
 
     @Override
+    public int getInt() {
+        return this.dashCooldown;
+    }
+
+    @Override
+    public void setInt(int value) {
+        this.dashCooldown = value;
+        this.sync();
+    }
+
+    @Override
+    public void addValueToInt(int count) {
+        this.dashCooldown += count;
+        this.sync();
+    }
+
+    @Override
+    public void incrementInt() {
+        this.dashCooldown++;
+        this.sync();
+    }
+
+    @Override
+    public void decrementInt() {
+        this.dashCooldown--;
+        this.sync();
+    }
+
+    public float getChargePercent() {
+        return (float) this.dashCooldown / MAX_COOLDOWN;
+    }
+
+    @Override
     public void readFromNbt(NbtCompound nbtCompound) {
         this.dashTicks = nbtCompound.getInt("dashTicks");
+        this.dashCooldown = nbtCompound.getInt(DASH_COOLDOWN_KEY);
     }
 
     @Override
     public void writeToNbt(NbtCompound nbtCompound) {
         nbtCompound.putInt("dashTicks", dashTicks);
+        nbtCompound.putInt(DASH_COOLDOWN_KEY, this.dashCooldown);
     }
+
 }

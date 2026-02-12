@@ -89,7 +89,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
         if (source.getAttacker() instanceof PlayerEntity attacker && attacker.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
             SpearParryComponent attackerSpearParryComponent = SpearParryComponent.get(attacker);
-            if (attackerSpearParryComponent.getDoubleIntValue2() > 0) {
+            if (attackerSpearParryComponent.getDoubleIntValue2() > 0 && EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, attacker.getStackInHand(Hand.MAIN_HAND)) <= 0) {
                 attackerSpearParryComponent.setDoubleIntValue2(0);
                 attackerSpearParryComponent.setDoubleBoolValue1(true);
                 return base * 1.5f;

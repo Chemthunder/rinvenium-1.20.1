@@ -18,16 +18,17 @@ public class DebuggerItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isSneaking()) {
-            if (world.isClient) { // if (!world.isClient) instead? idfk
+            if (world.isClient) { // if (!world.isClient) instead? idfk     nah i dont really care. Its all the same
 
             } else {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 20, 10));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 20, 20));
             }
         } else {
             if (world.isClient) {
 
             } else {
-                player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 30, 0));
+                player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10, 0));
             }
 
         }

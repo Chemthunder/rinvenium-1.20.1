@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
@@ -31,7 +32,12 @@ public abstract class DrawContextMixin {
             int k2 = x + 2;
             int l2 = y + 13;
             SpearParryComponent spearParryComponent = SpearParryComponent.get(this.client.player);
-            if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) <= 0) {
+            SpearDashingComponent spearDashingComponent = SpearDashingComponent.get(this.client.player);
+            if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+                int m = (int) (spearDashingComponent.getChargePercent() * 13);
+                this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
+                this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + m, l2 + 1, 0x9cfdff | 0xFF000000);
+            } else {
                 int i = (int) Math.ceil(spearParryComponent.getDoubleIntValue2() > 0 ? spearParryComponent.getDamageWindowPercentage() * 13 : spearParryComponent.getParryWindowPercentage() * 13);
                 int j = spearParryComponent.getDoubleIntValue2() > 0 ? 0x7a1c8c : 0xfdc211;
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
