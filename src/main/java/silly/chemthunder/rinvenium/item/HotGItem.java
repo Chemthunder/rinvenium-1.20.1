@@ -115,7 +115,7 @@ public class HotGItem extends Item {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (entity instanceof PlayerEntity player) {
             HailOfTheGodComponent hailOfTheGodComponent = HailOfTheGodComponent.get(player);
-            player.sendMessage(Text.literal("use time: " + hailOfTheGodComponent.getDoubleIntValue1() + "   overheat: " + hailOfTheGodComponent.getDoubleIntValue2()), true);
+            //player.sendMessage(Text.literal("use time: " + hailOfTheGodComponent.getDoubleIntValue1() + "   overheat: " + hailOfTheGodComponent.getDoubleIntValue2()), true);
         }
     }
 
