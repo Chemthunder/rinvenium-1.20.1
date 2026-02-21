@@ -21,10 +21,15 @@ public interface RinveniumEntities {
     Map<EntityType<? extends Entity>, Identifier> ENTITIES = new LinkedHashMap<>();
 
     EntityType<AscentaShotEntity> ASCENTA_SHOT = createEntity("ascenta_shot", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AscentaShotEntity::new).disableSaving().dimensions(EntityDimensions.changing(2.0f, 2.0f)).build());
-    EntityType<GunshotEntity> GUNSHOT = createEntity("gunshot", FabricEntityTypeBuilder.create(SpawnGroup.MISC, GunshotEntity::new).disableSaving().dimensions(EntityDimensions.changing(2.0f, 2.0f)).build());
+    EntityType<GunshotEntity> GUNSHOT = createEntityVanilla("gunshot", EntityType.Builder.<GunshotEntity>create(GunshotEntity::new, SpawnGroup.MISC).disableSaving().setDimensions(2.0f, 2.0f).trackingTickInterval(40).maxTrackingRange(8).build("gunshot"));
 
     private static <T extends EntityType<? extends Entity>> T createEntity(String name, T entity) {
         ENTITIES.put(entity, new Identifier(Rinvenium.MOD_ID, name));
+        return entity;
+    }
+    private static <T extends EntityType<? extends Entity>> T createEntityVanilla(String name, T entity) {
+        Identifier id = new Identifier(Rinvenium.MOD_ID, name);
+        ENTITIES.put(entity, id);
         return entity;
     }
 

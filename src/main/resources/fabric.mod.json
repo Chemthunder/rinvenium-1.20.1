@@ -36,9 +36,11 @@
       "rinvenium:spear",
       "rinvenium:dash",
       "rinvenium:riva_ascent",
-      "rinvenium:spear_parry"
+      "rinvenium:spear_parry",
+      "rinvenium:hail_of_the_gods"
     ]
   },
+  "accessWidener": "rinvenium.accesswidener",
   "depends": {
     "fabricloader": ">=0.18.4",
     "minecraft": "~1.20.1",

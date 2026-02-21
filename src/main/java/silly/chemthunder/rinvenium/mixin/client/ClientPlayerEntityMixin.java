@@ -18,6 +18,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     private boolean gitsnshiggles$noMovementSlowWhenSwordBlocking(ClientPlayerEntity player, Operation<Boolean> original) {
-        return original.call(player) && !player.getActiveItem().isOf(RinveniumItems.ENVINIUM_SPEAR);
+        return original.call(player) && (!player.getActiveItem().isOf(RinveniumItems.ENVINIUM_SPEAR) || !player.getActiveItem().isOf(RinveniumItems.HAIL_OF_THE_GODS));
     }
 }

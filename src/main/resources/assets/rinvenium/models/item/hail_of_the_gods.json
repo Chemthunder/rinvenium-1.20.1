@@ -6,6 +6,7 @@
 		"0": "rinvenium:item/hail",
 		"particle": "rinvenium:item/hail"
 	},
+    "gui_light": "front",
 	"elements": [
 		{
 			"from": [6, 0, 15],
@@ -373,28 +374,32 @@
 			"translation": [4.5, -8, -13.5]
 		},
 		"firstperson_righthand": {
-			"translation": [0, 8, -5.75]
+			"translation": [-9, 8, -5.75]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 8, -5.75]
+			"translation": [-9, 8, -5.75]
 		},
 		"ground": {
-			"translation": [0, 11.25, 0]
+			"translation": [0, 11.25, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"gui": {
-			"rotation": [90, -47.25, 90],
-			"translation": [0.75, 4.25, 0],
+			"rotation": [-150, -45.5, 180],
+			"translation": [3, 1, 0],
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"head": {
 			"translation": [0, 14.25, -20.25]
 		},
 		"fixed": {
-			"translation": [0, 15.5, -80],
-			"scale": [2, 4, 4]
+			"rotation": [-180, 90, 180],
+			"translation": [-4, 3.5, 0],
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"on_shelf": {
-			"rotation": [-180, 8.25, -180]
+			"rotation": [-180, -90, -180],
+			"translation": [3.75, 0, 0],
+			"scale": [0.45, 0.45, 0.45]
 		}
 	},
 	"groups": [
