@@ -15,6 +15,8 @@ public class RinveniumSoundEvents {
     public static final SoundEvent SPEAR_DASH_IMPACT = registerSound("spear_dash_impact");
     public static final SoundEvent SPEAR_PARRY = registerSound("spear_parry");
     public static final SoundEvent SPEAR_SLASH = registerSound("spear_slash");
+    public static final SoundEvent HAIL_OF_THE_GODS_SHOOT = registerSound("hail_of_the_gods_shoot");
+    public static final SoundEvent HAIL_OF_THE_GODS_OVERHEAT = registerSound("overheat");
 
     private static SoundEvent registerSound(String name) {
         Identifier identifier = Rinvenium.id(name);

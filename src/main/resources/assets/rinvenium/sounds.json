@@ -14,5 +14,13 @@
   "spear_slash": {
     "subtitle": "sound.rinvenium.spear_slash",
     "sounds": ["rinvenium:env_slash"]
+  },
+  "hail_of_the_gods_shoot": {
+    "subtitle": "sound.rinvenium.hail_of_the_gods.shoot",
+    "sounds": ["rinvenium:gun_fire"]
+  },
+  "overheat": {
+    "subtitle": "sound.rinvenium.hail_of_the_gods.overheat",
+    "sounds": ["rinvenium:overheat"]
   }
 }

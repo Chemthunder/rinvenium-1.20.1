@@ -13,7 +13,7 @@ public class SpawnFlashParticleS2CPacket {
         double x = buf.readDouble();
         double y = buf.readDouble();
         double z = buf.readDouble();
-        int k = DyeColor.YELLOW.getFireworkColor();
+        int k = buf.readInt();
         float f = ((k & 0xFF0000) >> 16) / 255.0F;
         float g = ((k & 0xFF00) >> 8) / 255.0F;
         float h = ((k & 0xFF) >> 0) / 255.0F;

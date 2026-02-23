@@ -20,5 +20,7 @@
   "sound.rinvenium.spear_dash": "Spear rushes",
   "sound.rinvenium.spear_dash_impact": "Spear rush hits",
   "sound.rinvenium.spear_parry": "Spear parries",
-  "sound.rinvenium.spear_slash": "Spear slashes"
+  "sound.rinvenium.spear_slash": "Spear slashes",
+  "sound.rinvenium.hail_of_the_gods.shoot": "Hail of the Gods goes BBRRRTT",
+  "sound.rinvenium.hail_of_the_gods.overheat": "Hail of the Gods overheats"
 }

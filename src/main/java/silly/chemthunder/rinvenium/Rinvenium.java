@@ -8,6 +8,7 @@ import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
+import silly.chemthunder.rinvenium.index.RinveniumParticles;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 
@@ -29,6 +30,7 @@ public class Rinvenium implements ModInitializer {
         RinveniumEntities.init();
         RinveniumSoundEvents.registerRinveniumSoundEvents();
         RinveniumPackets.registerC2SPackets();
+        RinveniumParticles.init();
 
 		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");
