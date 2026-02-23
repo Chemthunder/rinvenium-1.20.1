@@ -10,7 +10,7 @@ base {
 	archivesName = project.archives_base_name
 }
 loom {
-    accessWidenerPath = file("src/main/resources/rinvenium.accessWidener")
+    accessWidenerPath = file("src/main/resources/rinvenium.accesswidener")
 }
 
 repositories {
