@@ -8,6 +8,9 @@ import net.minecraft.data.client.Models;
 import net.minecraft.item.Items;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 
+import static net.minecraft.data.client.Models.*;
+import static silly.chemthunder.rinvenium.index.RinveniumItems.*;
+
 public class RinveniumModelProvider extends FabricModelProvider {
     public RinveniumModelProvider(FabricDataOutput output) {
         super(output);
@@ -18,6 +21,12 @@ public class RinveniumModelProvider extends FabricModelProvider {
     }
 
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        itemModelGenerator.register(RinveniumItems.DEBUGGER, Items.STICK, Models.HANDHELD);
+        itemModelGenerator.register(DEBUGGER, Items.STICK, HANDHELD);
+        itemModelGenerator.register(AURIO_INGOT, GENERATED);
+        itemModelGenerator.register(ENVINIA_INGOT, GENERATED);
+        itemModelGenerator.register(ENVIXIUS_INGOT, GENERATED);
+        itemModelGenerator.register(SUPERHEATED_AURIO_INGOT, GENERATED);
+        itemModelGenerator.register(SUPERHEATED_ENVINIA_INGOT, GENERATED);
+        //itemModelGenerator.register(SUPERHEATED_ENVIXIA_INGOT, GENERATED);
     }
 }

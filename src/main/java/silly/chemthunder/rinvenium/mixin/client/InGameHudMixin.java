@@ -21,19 +21,20 @@ public class InGameHudMixin {
     @Final
     private MinecraftClient client;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderCrosshair(Lnet/minecraft/client/gui/DrawContext;)V"))
+    @SuppressWarnings("DiscouragedShift")
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (this.client != null && this.client.player != null && this.client.options.getPerspective().isFirstPerson()) {
             if (this.client.player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.HAIL_OF_THE_GODS)) {
                 int i = context.getScaledWindowWidth() / 2;
                 int j = context.getScaledWindowHeight() / 2;
-                context.drawTexture(RinveniumTextureUtils.HAIL_OF_THE_GODS_CROSSHAIR, i - 8, j + 8, 0, 0, 15, 15);
+                context.drawTexture(RinveniumTextureUtils.HAIL_OF_THE_GODS_CROSSHAIR, i - 7, j - 8, 0, 0, 0, 15, 15, 15, 15);
             }
         }
     }
 
     @WrapWithCondition(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 0))
     private boolean rinvenium$derenderCrosshair(DrawContext instance, Identifier texture, int x, int y, int u, int v, int width, int height) {
-        return this.client != null && this.client.player != null && this.client.player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.HAIL_OF_THE_GODS);
+        return this.client != null && this.client.player != null && !this.client.player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.HAIL_OF_THE_GODS);
     }
 }

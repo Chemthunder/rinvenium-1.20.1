@@ -1,7 +1,9 @@
 package silly.chemthunder.rinvenium.util;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
@@ -55,6 +57,7 @@ public class RinveniumUtil {
                 endPos.squaredDistanceTo(camPos)
         );
     }
+
     public static EntityHitResult raycastWithDivergence(Entity entity, Vec3d start, Vec3d rot, double maxDistance, float tickDelta, float divergence, double radius) {
         Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
 
@@ -141,5 +144,28 @@ public class RinveniumUtil {
                 world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
             }
         }
+    }
+
+
+    public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack, boolean creativeOverride) {
+        boolean bl = player.isCreative();
+        int count = inputStack.getCount();
+        outputStack.setCount(count);
+        if (creativeOverride && bl) {
+            player.getInventory().insertStack(outputStack);
+        } else {
+            if (!player.getInventory().insertStack(outputStack)) {
+                player.dropItem(outputStack, false);
+                if (!player.isCreative()) {
+                    inputStack.decrement(count);
+                }
+                return inputStack;
+            }
+            return outputStack;
+        }
+        return inputStack;
+    }
+    public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack) {
+        return exchangeWholeStack(inputStack, player, outputStack, true);
     }
 }

@@ -32,4 +32,5 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
         registry.beginRegistration(PlayerEntity.class, SpearDashingComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearDashingComponent::new);
         registry.beginRegistration(PlayerEntity.class, AscensionPlayerComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(AscensionPlayerComponent::new);
     }
+
 }

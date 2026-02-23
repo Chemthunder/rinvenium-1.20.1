@@ -14,6 +14,7 @@ import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.item.DebuggerItem;
 import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
 import silly.chemthunder.rinvenium.item.HotGItem;
+import silly.chemthunder.rinvenium.item.HotItem;
 import silly.chemthunder.rinvenium.item.tool.EnviniumToolMaterial;
 
 import java.util.LinkedHashMap;
@@ -26,6 +27,13 @@ public interface RinveniumItems {
     Item DEBUGGER = create("debugger", new DebuggerItem(new Item.Settings().maxCount(1).fireproof()));
     Item ENVINIUM_SPEAR = create("envinium_spear", new EnviniumSpearItem(EnviniumToolMaterial.ENVINIUM, 5, -2.4f, new Item.Settings().maxCount(1)));
     Item HAIL_OF_THE_GODS = create("hail_of_the_gods", new HotGItem(new FabricItemSettings().maxCount(1)));
+
+    Item AURIO_INGOT = create("aurio_ingot", new Item(new FabricItemSettings()));
+    Item ENVINIA_INGOT = create("envinia_ingot", new Item(new FabricItemSettings()));
+    Item ENVIXIUS_INGOT = create("envixius_ingot", new Item(new FabricItemSettings().fireproof()));
+    Item SUPERHEATED_AURIO_INGOT = create("superheated_aurio_ingot", new HotItem(new FabricItemSettings(), AURIO_INGOT));
+    Item SUPERHEATED_ENVINIA_INGOT = create("superheated_envinia_ingot", new HotItem(new FabricItemSettings(), ENVINIA_INGOT));
+    //Item SUPERHEATED_ENVIXIA_INGOT = create("superheated_envixia_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT));
 
     static <T extends Item> T create(String name, T item) {
         ITEMS.put(item, Rinvenium.id(name));
