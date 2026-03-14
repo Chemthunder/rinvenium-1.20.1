@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.index;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
@@ -33,7 +34,12 @@ public interface RinveniumItems {
     Item ENVIXIUS_INGOT = create("envixius_ingot", new Item(new FabricItemSettings().fireproof()));
     Item SUPERHEATED_AURIO_INGOT = create("superheated_aurio_ingot", new HotItem(new FabricItemSettings(), AURIO_INGOT));
     Item SUPERHEATED_ENVINIA_INGOT = create("superheated_envinia_ingot", new HotItem(new FabricItemSettings(), ENVINIA_INGOT));
-    //Item SUPERHEATED_ENVIXIA_INGOT = create("superheated_envixia_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT));
+    //Item SUPERHEATED_ENVIXIUS_INGOT = create("superheated_envixius_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT));
+
+    Item ENVIXIA_HELMET = create("envixia_helmet", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.HELMET, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_CHESTPLATE = create("envixia_chestplate", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.CHESTPLATE, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_LEGGINGS = create("envixia_leggings", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.LEGGINGS, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_BOOTS = create("envixia_boots", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.BOOTS, new FabricItemSettings().maxCount(1).fireproof()));
 
     static <T extends Item> T create(String name, T item) {
         ITEMS.put(item, Rinvenium.id(name));
@@ -42,7 +48,14 @@ public interface RinveniumItems {
     }
 
     private static void addCombatEntries(FabricItemGroupEntries fabricItemGroupEntries) {
-        fabricItemGroupEntries.addAfter(Items.TOTEM_OF_UNDYING, ENVINIUM_SPEAR, HAIL_OF_THE_GODS);
+        fabricItemGroupEntries.addAfter(Items.TOTEM_OF_UNDYING,
+                ENVINIUM_SPEAR,
+                HAIL_OF_THE_GODS,
+                ENVIXIA_HELMET,
+                ENVIXIA_CHESTPLATE,
+                ENVIXIA_LEGGINGS,
+                ENVIXIA_BOOTS
+        );
     }
 
     static void init() {

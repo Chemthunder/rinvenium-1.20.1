@@ -28,5 +28,9 @@ public class RinveniumModelProvider extends FabricModelProvider {
         itemModelGenerator.register(SUPERHEATED_AURIO_INGOT, GENERATED);
         itemModelGenerator.register(SUPERHEATED_ENVINIA_INGOT, GENERATED);
         //itemModelGenerator.register(SUPERHEATED_ENVIXIA_INGOT, GENERATED);
+        itemModelGenerator.register(ENVIXIA_HELMET, GENERATED);
+        itemModelGenerator.register(ENVIXIA_CHESTPLATE, GENERATED);
+        itemModelGenerator.register(ENVIXIA_LEGGINGS, GENERATED);
+        itemModelGenerator.register(ENVIXIA_BOOTS, GENERATED);
     }
 }

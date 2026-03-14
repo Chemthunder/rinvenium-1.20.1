@@ -109,7 +109,7 @@ public class EnviniumSpearItem extends SwordItem {
                 user.getItemCooldownManager().set(this, 5);
             }
             if (!user.getWorld().isClient) {
-                user.playSound(RinveniumSoundEvents.SPEAR_DASH, SoundCategory.PLAYERS, 0.8f, 1.0f + user.getEntityWorld().random.nextFloat() * 0.2f);
+                user.getWorld().playSound(null, user.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH, SoundCategory.PLAYERS, 0.8f, 1.0f + user.getEntityWorld().random.nextFloat() * 0.2f);
             }
         }
     }
@@ -213,12 +213,12 @@ public class EnviniumSpearItem extends SwordItem {
     }
 
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
-            tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
-            tooltip.add(Text.translatable("desc.spear.enchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
-        } else {
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) <= 0) {
             tooltip.add(Text.translatable("desc.spear.unenchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
             tooltip.add(Text.translatable("desc.spear.unenchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+            tooltip.add(Text.translatable("desc.spear.unenchanted_3").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+        } else {
+            tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

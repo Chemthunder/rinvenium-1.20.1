@@ -1,7 +1,9 @@
 package silly.chemthunder.rinvenium.mixin;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -20,7 +22,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
+import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
+import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
@@ -59,7 +63,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                                     serverWorld.spawnEntity(bolt);
                                 }
                             }
-                            player.playSound(RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
+                            player.getWorld().playSound(null, player.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
                         }
                     }
                 }
@@ -80,5 +84,10 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             }
         }
         return base;
+    }
+
+    @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
+    private boolean rinvenium$knockbacknt(LivingEntity instance, double strength, double x, double z, @Local(argsOnly = true) DamageSource damageSource) {
+        return !damageSource.isOf(RinveniumDamageSources.BOOP) && !damageSource.isOf(RinveniumDamageSources.ELECTRICITY);
     }
 }

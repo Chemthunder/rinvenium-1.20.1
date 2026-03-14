@@ -5,11 +5,12 @@
   "name": "Rinvenium",
   "description": "A devious slug chugs nineteen batteries to systematically wipe out all of the continental United States",
   "authors": [
-    "RivaSlugCat",
-    "Midget807"
+    "RivaSlugCat - Author",
+    "Midget807 - Dev"
   ],
   "contributors": [
-    "Chemthunder"
+    "Chemthunder - Previous Dev",
+    "HStar - Artist"
   ],
   "license": "CC0-1.0",
   "icon": "assets/rinvenium/icon.png",

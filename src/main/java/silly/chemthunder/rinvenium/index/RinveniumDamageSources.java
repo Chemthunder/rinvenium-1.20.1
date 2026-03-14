@@ -16,10 +16,17 @@ public interface RinveniumDamageSources {
     RegistryKey<DamageType> BOOP = of("boop");
     static DamageSource boop(Entity entity) {
         return entity.getDamageSources().create(BOOP); }
+    static DamageSource boop(Entity entity, LivingEntity attacker) {
+        return entity.getDamageSources().create(BOOP, attacker);
+    }
 
     RegistryKey<DamageType> ELECTRICITY = of("electricity");
     static DamageSource electricity(LivingEntity entity) {
-        return entity.getDamageSources().create(ELECTRICITY); }
+        return entity.getDamageSources().create(ELECTRICITY);
+    }
+    static DamageSource electricity(LivingEntity entity, LivingEntity attacker) {
+        return entity.getDamageSources().create(ELECTRICITY, attacker);
+    }
 
     RegistryKey<DamageType> NIKI = of("niki");
     static DamageSource niki(LivingEntity entity) {

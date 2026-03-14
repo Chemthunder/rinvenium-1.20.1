@@ -16,6 +16,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -78,15 +79,15 @@ public class HotGItem extends Item {
             //shootAsProjectile(world, user, player, hailOfTheGodComponent);
             if (hailOfTheGodComponent.getDoubleIntValue2() > 0) {
                 if (hailOfTheGodComponent.getDoubleIntValue2() >= 1 && hailOfTheGodComponent.getDoubleIntValue2() <= 5) {
-                    player.playSound(RinveniumSoundEvents.HAIL_OF_THE_GODS_OVERHEAT, 0.9f, 1.0f);
+                    world.playSound(null, player.getBlockPos(), RinveniumSoundEvents.HAIL_OF_THE_GODS_OVERHEAT, SoundCategory.PLAYERS,0.9f, 1.0f);
                 }
                 if (player.getItemUseTime() % 10 == 0) {
                     shootAsRaycastBuckshot(world, user, player, hailOfTheGodComponent);
-                    player.playSound(RinveniumSoundEvents.HAIL_OF_THE_GODS_SHOOT, 0.5f, 0.9f);
+                    world.playSound(null, player.getBlockPos(), RinveniumSoundEvents.HAIL_OF_THE_GODS_SHOOT, SoundCategory.PLAYERS,0.5f, 0.9f);
                 }
             } else {
                 shootAsRaycast(world, user, player, hailOfTheGodComponent);
-                player.playSound(RinveniumSoundEvents.HAIL_OF_THE_GODS_SHOOT, 0.5f, 0.9f);
+                world.playSound(null, player.getBlockPos(), RinveniumSoundEvents.HAIL_OF_THE_GODS_SHOOT, SoundCategory.PLAYERS, 0.5f, 0.9f);
             }
             if (!world.isClient) {
                 if (hailOfTheGodComponent.getDoubleIntValue1() < HailOfTheGodComponent.MAX_USE_TIME && hailOfTheGodComponent.getDoubleIntValue2() <= 0) {
@@ -125,7 +126,7 @@ public class HotGItem extends Item {
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
-                    if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
+                    if (target != null && target.damage(RinveniumDamageSources.boop(target, user), 0.1f)) {
                         ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                         if (serverPlayerEntity != null) {
                             PacketByteBuf buf = PacketByteBufs.create();
@@ -163,7 +164,7 @@ public class HotGItem extends Item {
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
-                    if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
+                    if (target != null && target.damage(RinveniumDamageSources.boop(target, user), 0.1f)) {
                         ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                         if (serverPlayerEntity != null) {
                             PacketByteBuf buf = PacketByteBufs.create();
