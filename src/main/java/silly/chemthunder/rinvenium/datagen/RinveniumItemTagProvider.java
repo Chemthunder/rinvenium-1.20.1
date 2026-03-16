@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
@@ -14,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public static TagKey<Item> BIG_ITEM_RENDERING = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("big_item_renderer"));
+    public static TagKey<Item> ENVIXIA_CORE_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("envixia_core_ingredients"));
 
     public RinveniumItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -24,6 +26,12 @@ public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider 
         this.getOrCreateTagBuilder(BIG_ITEM_RENDERING)
                 .add(
                         RinveniumItems.ENVINIUM_SPEAR
+                );
+        this.getOrCreateTagBuilder(ENVIXIA_CORE_INGREDIENTS)
+                .add(
+                        RinveniumItems.ION_CELL,
+                        RinveniumItems.ENVIXIUS_PLATE,
+                        Items.BEACON
                 );
     }
 }

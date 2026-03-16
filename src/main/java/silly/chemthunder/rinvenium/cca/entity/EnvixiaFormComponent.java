@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import silly.chemthunder.rinvenium.cca.RinveniumComponents;
 import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
 import silly.chemthunder.rinvenium.cca.primitive.TripleBoolComponent;
+import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final String IS_IN_ENVIXIA_KEY = "isInEnvixia";
@@ -18,6 +19,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
     private boolean isInEnvixia = false;
     private boolean canFly = false;
     private boolean shouldStartDeathSeq = false;
+    private int death_seq_animation_time = 0;
 
     public EnvixiaFormComponent(PlayerEntity player) {
         this.player = player;
@@ -32,72 +34,109 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
 
     @Override
     public int getInt() {
-        return 0;
+        return this.death_seq_animation_time;
     }
 
     @Override
     public void setInt(int value) {
+        this.death_seq_animation_time = value;
         this.sync();
     }
 
     @Override
     public void addValueToInt(int count) {
-
+        this.death_seq_animation_time += count;
+        this.sync();
     }
 
     @Override
     public void incrementInt() {
-
+        this.death_seq_animation_time++;
+        this.sync();
     }
 
     @Override
     public void decrementInt() {
-
+        this.death_seq_animation_time--;
+        this.sync();
     }
 
     @Override
     public boolean getTripleBoolValue1() {
-
-        return false;
+        if (!EnvixiaArmorItem.hasFullSuit(this.player)) {
+            this.isInEnvixia = false;
+        }
+        return this.isInEnvixia;
     }
 
     @Override
     public boolean getTripleBoolValue2() {
-        return false;
+        if (!this.isInEnvixia || !EnvixiaArmorItem.hasFullSuit(this.player)) {
+            this.canFly = false;
+        }
+        return this.canFly;
     }
 
     @Override
     public boolean getTripleBoolValue3() {
-        return false;
+        if (!this.isInEnvixia || player.getHealth() > 0) {
+            this.shouldStartDeathSeq = false;
+        }
+        return this.shouldStartDeathSeq;
     }
 
     @Override
     public void setTripleBoolValue1(boolean value) {
-
+        this.isInEnvixia = value;
+        this.sync();
     }
 
     @Override
     public void setTripleBoolValue2(boolean value) {
-
+        this.canFly = value;
+        this.sync();
     }
 
     @Override
     public void setTripleBoolValue3(boolean value) {
-
+        this.shouldStartDeathSeq = value;
+        this.sync();
     }
 
     @Override
     public void tick() {
+        if (this.shouldStartDeathSeq) {
+            startDeathSequence();
+        }
+        if (!player.isSpectator()) {
+            if (!player.getAbilities().allowFlying && this.isInEnvixia) {
+                player.getAbilities().allowFlying = true;
+                this.setTripleBoolValue2(true);
+            }
+            if (!this.isInEnvixia && !player.getAbilities().creativeMode) {
+                player.getAbilities().allowFlying = false;
+            }
+        }
+
+    }
+
+    private void startDeathSequence() {
 
     }
 
     @Override
     public void readFromNbt(NbtCompound nbtCompound) {
-
+        this.isInEnvixia = nbtCompound.getBoolean(IS_IN_ENVIXIA_KEY);
+        this.canFly = nbtCompound.getBoolean(CAN_FLY_KEY);
+        this.shouldStartDeathSeq = nbtCompound.getBoolean(SHOULD_START_DEATH_SEQ_KEY);
+        this.death_seq_animation_time = nbtCompound.getInt(DEATH_SEQ_ANIMATION_TIME_KEY);
     }
 
     @Override
     public void writeToNbt(NbtCompound nbtCompound) {
-
+        nbtCompound.putBoolean(IS_IN_ENVIXIA_KEY, this.isInEnvixia);
+        nbtCompound.putBoolean(CAN_FLY_KEY, this.canFly);
+        nbtCompound.putBoolean(SHOULD_START_DEATH_SEQ_KEY, this.shouldStartDeathSeq);
+        nbtCompound.putInt(DEATH_SEQ_ANIMATION_TIME_KEY, this.death_seq_animation_time);
     }
 }

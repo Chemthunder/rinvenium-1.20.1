@@ -12,10 +12,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.item.DebuggerItem;
-import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
-import silly.chemthunder.rinvenium.item.HotGItem;
-import silly.chemthunder.rinvenium.item.HotItem;
+import silly.chemthunder.rinvenium.item.*;
 import silly.chemthunder.rinvenium.item.tool.EnviniumToolMaterial;
 
 import java.util.LinkedHashMap;
@@ -32,10 +29,15 @@ public interface RinveniumItems {
     Item AURIO_INGOT = create("aurio_ingot", new Item(new FabricItemSettings()));
     Item ENVINIA_INGOT = create("envinia_ingot", new Item(new FabricItemSettings()));
     Item ENVIXIUS_INGOT = create("envixius_ingot", new Item(new FabricItemSettings().fireproof()));
+    Item ENVIXIUS_PLATE = create("envixius_plate", new Item(new FabricItemSettings().fireproof()));
     Item SUPERHEATED_AURIO_INGOT = create("superheated_aurio_ingot", new HotItem(new FabricItemSettings(), AURIO_INGOT));
     Item SUPERHEATED_ENVINIA_INGOT = create("superheated_envinia_ingot", new HotItem(new FabricItemSettings(), ENVINIA_INGOT));
-    //Item SUPERHEATED_ENVIXIUS_INGOT = create("superheated_envixius_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT));
+    Item SUPERHEATED_ENVIXIUS_INGOT = create("superheated_envixius_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT));
+    Item SUPERHEATED_ENVIXIUS_PLATE = create("superheated_envixius_plate", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_PLATE));
+    Item BATTERY = create("battery", new Item(new FabricItemSettings()));
+    Item ION_CELL = create("ion_cell", new Item(new FabricItemSettings()));
 
+    Item ENVIXIA_CORE = create("envixia_core", new EnvixiaCoreItem(new FabricItemSettings().maxCount(1).fireproof()));
     Item ENVIXIA_HELMET = create("envixia_helmet", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.HELMET, new FabricItemSettings().maxCount(1).fireproof()));
     Item ENVIXIA_CHESTPLATE = create("envixia_chestplate", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.CHESTPLATE, new FabricItemSettings().maxCount(1).fireproof()));
     Item ENVIXIA_LEGGINGS = create("envixia_leggings", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.LEGGINGS, new FabricItemSettings().maxCount(1).fireproof()));
