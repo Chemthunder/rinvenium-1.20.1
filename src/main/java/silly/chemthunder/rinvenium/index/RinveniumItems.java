@@ -38,10 +38,10 @@ public interface RinveniumItems {
     Item ION_CELL = create("ion_cell", new Item(new FabricItemSettings()));
 
     Item ENVIXIA_CORE = create("envixia_core", new EnvixiaCoreItem(new FabricItemSettings().maxCount(1).fireproof()));
-    Item ENVIXIA_HELMET = create("envixia_helmet", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.HELMET, new FabricItemSettings().maxCount(1).fireproof()));
-    Item ENVIXIA_CHESTPLATE = create("envixia_chestplate", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.CHESTPLATE, new FabricItemSettings().maxCount(1).fireproof()));
-    Item ENVIXIA_LEGGINGS = create("envixia_leggings", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.LEGGINGS, new FabricItemSettings().maxCount(1).fireproof()));
-    Item ENVIXIA_BOOTS = create("envixia_boots", new ArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.BOOTS, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_HELMET = create("envixia_helmet", new EnvixiaArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.HELMET, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_CHESTPLATE = create("envixia_chestplate", new EnvixiaArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.CHESTPLATE, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_LEGGINGS = create("envixia_leggings", new EnvixiaArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.LEGGINGS, new FabricItemSettings().maxCount(1).fireproof()));
+    Item ENVIXIA_BOOTS = create("envixia_boots", new EnvixiaArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.BOOTS, new FabricItemSettings().maxCount(1).fireproof()));
 
     static <T extends Item> T create(String name, T item) {
         ITEMS.put(item, Rinvenium.id(name));

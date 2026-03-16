@@ -14,7 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.index.client.RinveniumEntityModelLayers;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 public class EnvixiaArmorRenderer implements ArmorRenderer {
@@ -33,8 +32,8 @@ public class EnvixiaArmorRenderer implements ArmorRenderer {
 
             contextModel.copyBipedStateTo(model);
             model.setVisible(true);
-            model.head.visible = slot == EquipmentSlot.HEAD;
-            model.body.visible = slot == EquipmentSlot.CHEST;
+            model.headpiece.visible = slot == EquipmentSlot.HEAD;
+            model.bodysuit.visible = slot == EquipmentSlot.CHEST;
             model.rightArm.visible = slot == EquipmentSlot.CHEST;
             model.leftArm.visible = slot == EquipmentSlot.CHEST;
             model.rightLeg.visible = slot == EquipmentSlot.LEGS;
