@@ -15,14 +15,12 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
@@ -82,7 +80,7 @@ public class EnvixiaCoreItem extends Item {
                     0.0,
                     1,
                     100,
-                    0.1,
+                    1.0,
                     ParticleTypes.ELECTRIC_SPARK
             );
         }
