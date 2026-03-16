@@ -1,10 +1,12 @@
 package silly.chemthunder.rinvenium.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,6 +21,7 @@ import silly.chemthunder.rinvenium.entity.client.EnvixiaArmorModel;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.client.RinveniumEntityModelLayers;
+import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -36,4 +39,25 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
         }
     }
+
+    /*@Inject(method = "setModelPose", at = @At(value = "TAIL"))
+    private void rinvenium$derenderPlayerModel(AbstractClientPlayerEntity player, CallbackInfo ci, @Local PlayerEntityModel<AbstractClientPlayerEntity> model) {
+        *//*if (!player.isSpectator()) {
+            if (player.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
+                model.body.visible = false;
+                model.jacket.visible = false;
+                model.rightSleeve.visible = false;
+                model.leftSleeve.visible = false;
+            }
+            if (player.getInventory().getArmorStack(1).isOf(RinveniumItems.ENVIXIA_LEGGINGS) || player.getInventory().getArmorStack(0).isOf(RinveniumItems.ENVIXIA_BOOTS)) {
+                model.rightPants.visible = false;
+                model.leftPants.visible = false;
+                if (player.getInventory().getArmorStack(1).isOf(RinveniumItems.ENVIXIA_LEGGINGS) && player.getInventory().getArmorStack(0).isOf(RinveniumItems.ENVIXIA_BOOTS)) {
+                    model.rightLeg.visible = false;
+                    model.leftLeg.visible = false;
+                }
+            }
+        }*//*
+    }*/
+
 }
