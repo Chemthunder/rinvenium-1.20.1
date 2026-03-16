@@ -1,5 +1,71 @@
 package silly.chemthunder.rinvenium.datagen;
 
-public class RinveniumLanguageProvider {
-    // lang provider
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.sound.SoundEvent;
+import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
+import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
+import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+
+public class RinveniumLanguageProvider extends FabricLanguageProvider {
+    public RinveniumLanguageProvider(FabricDataOutput dataOutput) {
+        super(dataOutput, "en_us");
+    }
+
+    @Override
+    public void generateTranslations(TranslationBuilder translationBuilder) {
+        translationBuilder.add(RinveniumItems.DEBUGGER, "Debugger");
+
+        translationBuilder.add(RinveniumItems.ENVINIUM_SPEAR, "Envinium Spear");
+        translationBuilder.add(RinveniumItems.HAIL_OF_THE_GODS, "Hail of the Gods");
+
+        translationBuilder.add(RinveniumItems.AURIO_INGOT, "Aurio Ingot");
+        translationBuilder.add(RinveniumItems.ENVINIA_INGOT, "Envinia Ingot");
+        translationBuilder.add(RinveniumItems.ENVIXIUS_INGOT, "Envixius Ingot");
+        translationBuilder.add(RinveniumItems.ENVIXIUS_PLATE, "Envixius Plate");
+        translationBuilder.add(RinveniumItems.SUPERHEATED_AURIO_INGOT, "Superheated Aurio Ingot");
+        translationBuilder.add(RinveniumItems.SUPERHEATED_ENVINIA_INGOT, "Superheated Envinia Ingot");
+        translationBuilder.add(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT, "Superheated Envixius Ingot");
+        translationBuilder.add(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE, "Superheated Envixius Plate");
+        translationBuilder.add(RinveniumItems.BATTERY, "Battery");
+        translationBuilder.add(RinveniumItems.ION_CELL, "Ion Cell");
+
+        translationBuilder.add(RinveniumItems.ENVIXIA_CORE, "Envixia Core");
+        translationBuilder.add(RinveniumItems.ENVIXIA_HELMET, "Envixia Helmet");
+        translationBuilder.add(RinveniumItems.ENVIXIA_CHESTPLATE, "Envixia Chestplate");
+        translationBuilder.add(RinveniumItems.ENVIXIA_LEGGINGS, "Envixia Leggings");
+        translationBuilder.add(RinveniumItems.ENVIXIA_BOOTS, "Envixia Boots");
+
+        translationBuilder.add(RinveniumEnchantments.RUSH, "Rush");
+        translationBuilder.add("enchantment.rinvenium.rush.desc", "The Envinium Spear will charge over time, \nallowing the user to rush forward at great speeds on right-click.");
+        translationBuilder.add("desc.spear.unenchanted_1", "Holding right-click allows the Envinium Spear to parry attacks,");
+        translationBuilder.add("desc.spear.unenchanted_2", "knocking entities back and gives the user an attack buff.");
+        translationBuilder.add("desc.spear.unenchanted_3", "Attacking in a certain time frame will increase the damage by 50%.");
+        translationBuilder.add("desc.spear.enchanted_1", "[Debug] If the dash does not work, right-click while sneaking to reset the timers.");
+
+
+        translationBuilder.add("death.attack.niki", "fuck you");
+        translationBuilder.add("death.attack.niki.player", "fuck you");
+        translationBuilder.add("death.attack.niki.item", "fuck you");
+        translationBuilder.add("death.attack.electricity", "%s was electrocuted");
+        translationBuilder.add("death.attack.electricity.player", "%s was electrocuted by %s");
+        translationBuilder.add("death.attack.boop", "%s was peppered a thousand times");
+        translationBuilder.add("death.attack.boop.player", "%s was peppered a thousand times by %s");
+
+        translationBuilder.add(RinveniumStatusEffects.SPARKED, "Sparked");
+        translationBuilder.add("effect.rinvenium.sparked.desc", "Deals low damage rapidly and can chain to nearby players if they are wet.");
+
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH), "Spear rushes");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH_IMPACT), "Spear rush hits");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_PARRY), "Spear parries");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_SLASH), "Spear slashes");
+        translationBuilder.add("sound.rinvenium.hail_of_the_gods.shoot", "Hail of the Gods goes BRRRTT");
+        translationBuilder.add("sound.rinvenium.hail_of_the_gods.overheat", "Hail of the Gods overheats");
+
+    }
+
+    public static String getSoundTranslationKey(SoundEvent sound) {
+        return "sound." + sound.getId().getNamespace() + "." + sound.getId().getPath();
+    }
 }

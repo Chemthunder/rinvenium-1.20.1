@@ -2,10 +2,7 @@ package silly.chemthunder.rinvenium;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import silly.chemthunder.rinvenium.datagen.RinveniumBlockTagProvider;
-import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
-import silly.chemthunder.rinvenium.datagen.RinveniumModelProvider;
-import silly.chemthunder.rinvenium.datagen.RinveniumRecipeProvider;
+import silly.chemthunder.rinvenium.datagen.*;
 
 public class RinveniumDataGenerator implements DataGeneratorEntrypoint {
 	
@@ -16,5 +13,6 @@ public class RinveniumDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(RinveniumBlockTagProvider::new);
         pack.addProvider(RinveniumRecipeProvider::new);
         pack.addProvider(RinveniumModelProvider::new);
+        pack.addProvider(RinveniumLanguageProvider::new);
 	}
 }

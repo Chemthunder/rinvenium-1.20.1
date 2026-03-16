@@ -46,6 +46,7 @@ public interface RinveniumItems {
     static <T extends Item> T create(String name, T item) {
         ITEMS.put(item, Rinvenium.id(name));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(RinveniumItems::addCombatEntries);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(RinveniumItems::addIngredientEntries);
         return item;
     }
 
@@ -53,10 +54,26 @@ public interface RinveniumItems {
         fabricItemGroupEntries.addAfter(Items.TOTEM_OF_UNDYING,
                 ENVINIUM_SPEAR,
                 HAIL_OF_THE_GODS,
+                ENVIXIA_CORE,
                 ENVIXIA_HELMET,
                 ENVIXIA_CHESTPLATE,
                 ENVIXIA_LEGGINGS,
                 ENVIXIA_BOOTS
+        );
+    }
+
+    private static void addIngredientEntries(FabricItemGroupEntries fabricItemGroupEntries) {
+        fabricItemGroupEntries.addAfter(Items.NETHERITE_INGOT,
+                AURIO_INGOT,
+                SUPERHEATED_AURIO_INGOT,
+                ENVINIA_INGOT,
+                SUPERHEATED_ENVINIA_INGOT,
+                ENVIXIUS_INGOT,
+                SUPERHEATED_ENVIXIUS_INGOT,
+                ENVIXIUS_PLATE,
+                SUPERHEATED_ENVIXIUS_PLATE,
+                BATTERY,
+                ION_CELL
         );
     }
 

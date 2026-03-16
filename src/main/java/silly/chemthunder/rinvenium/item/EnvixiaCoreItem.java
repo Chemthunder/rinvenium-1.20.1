@@ -60,6 +60,7 @@ public class EnvixiaCoreItem extends Item {
             });
             if (ingredientMap.equals(INGREDIENT_GOAL)) {
                 activateEnvixiaTransformation(world, user);
+                stack.decrement(1);
                 return TypedActionResult.success(stack);
             }
         }
@@ -67,10 +68,10 @@ public class EnvixiaCoreItem extends Item {
     }
 
     private void activateEnvixiaTransformation(World world, PlayerEntity player) {
-        player.getInventory().setStack(PlayerInventory.ARMOR_SLOTS[3], new ItemStack(RinveniumItems.ENVIXIA_HELMET));
-        player.getInventory().setStack(PlayerInventory.ARMOR_SLOTS[2], new ItemStack(RinveniumItems.ENVIXIA_CHESTPLATE));
-        player.getInventory().setStack(PlayerInventory.ARMOR_SLOTS[1], new ItemStack(RinveniumItems.ENVIXIA_LEGGINGS));
-        player.getInventory().setStack(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
+        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[3], new ItemStack(RinveniumItems.ENVIXIA_HELMET));
+        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[2], new ItemStack(RinveniumItems.ENVIXIA_CHESTPLATE));
+        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[1], new ItemStack(RinveniumItems.ENVIXIA_LEGGINGS));
+        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
         envixiaFormComponent.setTripleBoolValue1(true);
 
@@ -135,7 +136,6 @@ public class EnvixiaCoreItem extends Item {
             } else {
                 NbtList ingredientList = nbtCompound.getList(INGREDIENTS_KEY, NbtElement.COMPOUND_TYPE);
                 Optional<NbtCompound> optional = canMergeStack(stack, ingredientList);
-                System.out.println("optional present: " + optional.isPresent());
                 if (optional.isPresent()) {
                     NbtCompound optionalCompound = (NbtCompound) optional.get();
                     ItemStack optionalStack = ItemStack.fromNbt(optionalCompound);
@@ -217,8 +217,8 @@ public class EnvixiaCoreItem extends Item {
                 beaconCount = ingredients.get(ingredientItems.indexOf(Items.BEACON)).getCount();
             }
         }
-        tooltip.add(Text.literal("").append(RinveniumItems.ION_CELL.getName()).append(Text.literal(": " + cellCount + "/" + INGREDIENT_GOAL.get(RinveniumItems.ION_CELL))).formatted(cellCount == INGREDIENT_GOAL.get(RinveniumItems.ION_CELL) ? Formatting.GREEN : Formatting.RED));
-        tooltip.add(Text.literal("").append(RinveniumItems.ENVIXIUS_PLATE.getName()).append(Text.literal(": " + plateCount + "/" + INGREDIENT_GOAL.get(RinveniumItems.ENVIXIUS_PLATE))).formatted(cellCount == INGREDIENT_GOAL.get(RinveniumItems.ENVIXIUS_PLATE) ? Formatting.GREEN : Formatting.RED));
-        tooltip.add(Text.literal("").append(Items.BEACON.getName()).append(Text.literal(": " + beaconCount + "/" + INGREDIENT_GOAL.get(Items.BEACON))).formatted(cellCount == INGREDIENT_GOAL.get(Items.BEACON) ? Formatting.GREEN : Formatting.RED));
+        tooltip.add(Text.literal("- ").append(RinveniumItems.ION_CELL.getName()).append(Text.literal(": " + cellCount + "/" + INGREDIENT_GOAL.get(RinveniumItems.ION_CELL))).formatted(cellCount == INGREDIENT_GOAL.get(RinveniumItems.ION_CELL) ? Formatting.GREEN : Formatting.RED));
+        tooltip.add(Text.literal("- ").append(RinveniumItems.ENVIXIUS_PLATE.getName()).append(Text.literal(": " + plateCount + "/" + INGREDIENT_GOAL.get(RinveniumItems.ENVIXIUS_PLATE))).formatted(plateCount == INGREDIENT_GOAL.get(RinveniumItems.ENVIXIUS_PLATE) ? Formatting.GREEN : Formatting.RED));
+        tooltip.add(Text.literal("- ").append(Items.BEACON.getName()).append(Text.literal(": " + beaconCount + "/" + INGREDIENT_GOAL.get(Items.BEACON))).formatted(beaconCount == INGREDIENT_GOAL.get(Items.BEACON) ? Formatting.GREEN : Formatting.RED));
     }
 }

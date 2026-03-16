@@ -110,14 +110,13 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
         }
         if (!player.isSpectator()) {
             if (!player.getAbilities().allowFlying && this.isInEnvixia) {
-                player.getAbilities().allowFlying = true;
                 this.setTripleBoolValue2(true);
             }
-            if (!this.isInEnvixia && !player.getAbilities().creativeMode) {
-                player.getAbilities().allowFlying = false;
+            if ((!this.isInEnvixia || !EnvixiaArmorItem.hasFullSuit(this.player)) && !player.getAbilities().creativeMode) {
+                this.setTripleBoolValue2(false);
             }
         }
-
+        player.getAbilities().allowFlying = this.getTripleBoolValue2();
     }
 
     private void startDeathSequence() {
