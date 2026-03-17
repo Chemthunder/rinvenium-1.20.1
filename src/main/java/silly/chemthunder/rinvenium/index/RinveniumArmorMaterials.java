@@ -18,7 +18,7 @@ public enum RinveniumArmorMaterials implements StringIdentifiable, ArmorMaterial
         map.put(ArmorItem.Type.LEGGINGS, 12);
         map.put(ArmorItem.Type.CHESTPLATE, 14);
         map.put(ArmorItem.Type.HELMET, 7);
-    }), 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 8.0f, 0.15f, () -> Ingredient.ofItems(RinveniumItems.ENVINIA_INGOT));
+    }), 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0f, 0.15f, () -> Ingredient.ofItems(RinveniumItems.ENVINIA_INGOT));
 
 
     public static final StringIdentifiable.Codec<RinveniumArmorMaterials> CODEC = StringIdentifiable.createCodec(RinveniumArmorMaterials::values);
