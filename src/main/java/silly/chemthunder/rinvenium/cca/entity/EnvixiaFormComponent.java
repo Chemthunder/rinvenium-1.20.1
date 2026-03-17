@@ -11,10 +11,10 @@ import silly.chemthunder.rinvenium.cca.primitive.TripleBoolComponent;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, AutoSyncedComponent, CommonTickingComponent {
-    public static final String IS_IN_ENVIXIA_KEY = "isInEnvixia";
-    public static final String CAN_FLY_KEY = "canFly";
-    public static final String SHOULD_START_DEATH_SEQ_KEY = "shouldStartDeathSeq";
-    public static final String DEATH_SEQ_ANIMATION_TIME_KEY = "deathSeqAnimationTime";
+    public static final String IS_IN_ENVIXIA_KEY = "IsInEnvixia";
+    public static final String CAN_FLY_KEY = "CanFly";
+    public static final String SHOULD_START_DEATH_SEQ_KEY = "ShouldStartDeathSeq";
+    public static final String DEATH_SEQ_ANIMATION_TIME_KEY = "DeathSeqAnimationTime";
     private final PlayerEntity player;
     private boolean isInEnvixia = false;
     private boolean canFly = false;

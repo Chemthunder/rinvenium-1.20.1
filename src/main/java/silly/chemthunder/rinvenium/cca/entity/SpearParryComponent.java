@@ -11,10 +11,10 @@ import silly.chemthunder.rinvenium.cca.primitive.DoubleIntComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class SpearParryComponent implements DoubleIntComponent, DoubleBoolComponent, AutoSyncedComponent, CommonTickingComponent {
-    public static final String PARRY_WINDOW_KEY = "parryWindow";
-    public static final String DAMAGE_WINDOW_KEY = "damageWindow";
-    public static final String CAN_PARRY_KEY = "canParryKey";
-    public static final String IS_BLOCKING_KEY = "isBlocking";
+    public static final String PARRY_WINDOW_KEY = "ParryWindow";
+    public static final String DAMAGE_WINDOW_KEY = "DamageWindow";
+    public static final String CAN_PARRY_KEY = "CanParryKey";
+    public static final String IS_BLOCKING_KEY = "IsBlocking";
     public static final int MAX_PARRY_WINDOW = 10;
     public static final int MAX_DAMAGE_WINDOW = 100;
     private final PlayerEntity player;
