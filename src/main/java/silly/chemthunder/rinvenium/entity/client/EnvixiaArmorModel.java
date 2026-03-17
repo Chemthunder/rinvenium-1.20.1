@@ -51,7 +51,7 @@ public class EnvixiaArmorModel<T extends LivingEntity> extends BipedEntityModel<
 		.uv(60, 69).cuboid(-1.0F, 11.0F, -2.2F, 2.0F, 3.0F, 3.0F, new Dilation(0.07F))
 		.uv(64, 40).cuboid(-1.0F, 11.0F, 0.2F, 2.0F, 3.0F, 2.0F, new Dilation(0.07F)), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
 
-		ModelPartData cube_r2 = chestplate.addChild("cube_r2", ModelPartBuilder.create().uv(24, 36).cuboid(-4.0F, 1.75F, -3.75F, 8.0F, 5.0F, 4.0F, new Dilation(-0.25F)), ModelTransform.of(0.0F, -1.75F, -2.25F, 0.6981F, 0.0F, 0.0F));
+		ModelPartData cube_r2 = chestplate.addChild("cube_r2", ModelPartBuilder.create().uv(24, 36).cuboid(-4.0F, 1.75F, -4.75F, 8.0F, 5.0F, 4.0F, new Dilation(-0.25F)), ModelTransform.of(0.0F, -1.75F, -2.25F, 0.6981F, 0.0F, 0.0F));
 
 		ModelPartData jetpack = chestplate.addChild("jetpack", ModelPartBuilder.create().uv(52, 52).cuboid(-3.0F, -21.0F, 2.0F, 6.0F, 7.0F, 3.0F, new Dilation(0.25F)), ModelTransform.pivot(0.0F, 21.0F, 0.0F));
 

@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import silly.chemthunder.rinvenium.index.RinveniumCauldronBehavior;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
@@ -31,6 +32,7 @@ public class Rinvenium implements ModInitializer {
         RinveniumSoundEvents.registerRinveniumSoundEvents();
         RinveniumPackets.registerC2SPackets();
         RinveniumParticles.init();
+        RinveniumCauldronBehavior.registerCauldronBehaviors();
 
 		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");

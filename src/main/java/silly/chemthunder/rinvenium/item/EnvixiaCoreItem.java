@@ -49,9 +49,9 @@ public class EnvixiaCoreItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         if (isComplete(stack)) {
-            if (armorSlotsEmpty(user)) {
+            if (armorSlotsEmpty(user) || EnvixiaArmorItem.hasFullSuit(user)) {
                 activateEnvixiaTransformation(world, user);
-                user.getItemCooldownManager().set(this, 100);
+                user.getItemCooldownManager().set(this, 10);
                 return TypedActionResult.success(stack);
             }
         }
@@ -73,15 +73,7 @@ public class EnvixiaCoreItem extends Item {
         return false;
     }
 
-    private boolean armorSlotsEmpty(PlayerEntity user) {
-        if (
-                user.getInventory().getArmorStack(3).isOf(RinveniumItems.ENVIXIA_HELMET)
-                        && user.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)
-                        && user.getInventory().getArmorStack(1).isOf(RinveniumItems.ENVIXIA_LEGGINGS)
-                        && user.getInventory().getArmorStack(0).isOf(RinveniumItems.ENVIXIA_BOOTS)
-        ) {
-            return true;
-        }
+    public static boolean armorSlotsEmpty(PlayerEntity user) {
         return user.getInventory().getArmorStack(0).isEmpty()
                 && user.getInventory().getArmorStack(1).isEmpty()
                 && user.getInventory().getArmorStack(2).isEmpty()
@@ -89,24 +81,25 @@ public class EnvixiaCoreItem extends Item {
     }
 
     private void activateEnvixiaTransformation(World world, PlayerEntity player) {
-        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[3], new ItemStack(RinveniumItems.ENVIXIA_HELMET));
-        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[2], new ItemStack(RinveniumItems.ENVIXIA_CHESTPLATE));
-        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[1], new ItemStack(RinveniumItems.ENVIXIA_LEGGINGS));
-        player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
-        EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
-        envixiaFormComponent.setTripleBoolValue1(true);
-
-        if (world.isClient) {
-            ModParticleUtil.addExpandingRingOfParticles(
-                    world,
-                    player.getPos().add(0, player.getHeight() / 2, 0),
-                    0.0,
-                    1,
-                    100,
-                    1.0,
-                    ParticleTypes.ELECTRIC_SPARK
-            );
+        if (armorSlotsEmpty(player)) {
+            player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[3], new ItemStack(RinveniumItems.ENVIXIA_HELMET));
+            player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[2], new ItemStack(RinveniumItems.ENVIXIA_CHESTPLATE));
+            player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[1], new ItemStack(RinveniumItems.ENVIXIA_LEGGINGS));
+            player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
         }
+        EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+        if (player.getAbilities().flying && envixiaFormComponent.getTripleBoolValue1()) player.getAbilities().flying = false;
+        envixiaFormComponent.setTripleBoolValue1(!envixiaFormComponent.getTripleBoolValue1());
+
+        ModParticleUtil.addExpandingRingOfParticles(
+                world,
+                player.getPos().add(0, player.getHeight() / 2, 0),
+                0.0,
+                1,
+                100,
+                1.0,
+                ParticleTypes.ELECTRIC_SPARK
+        );
     }
 
     @Override
