@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "rinvenium:item/envixia_core"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "activated": 1.0
+      },
+      "model": "rinvenium:item/envixia_core_activated"
+    }
+  ]
+}

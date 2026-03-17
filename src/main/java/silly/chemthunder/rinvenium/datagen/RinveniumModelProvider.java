@@ -33,7 +33,7 @@ public class RinveniumModelProvider extends FabricModelProvider {
         itemModelGenerator.register(BATTERY, GENERATED);
         itemModelGenerator.register(ION_CELL, GENERATED);
 
-        itemModelGenerator.register(ENVIXIA_CORE, GENERATED);
+        //itemModelGenerator.register(ENVIXIA_CORE, GENERATED);
         itemModelGenerator.register(ENVIXIA_HELMET, GENERATED);
         itemModelGenerator.register(ENVIXIA_CHESTPLATE, GENERATED);
         itemModelGenerator.register(ENVIXIA_LEGGINGS, GENERATED);

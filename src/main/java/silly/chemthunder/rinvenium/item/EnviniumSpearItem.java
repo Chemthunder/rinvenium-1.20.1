@@ -183,7 +183,7 @@ public class EnviniumSpearItem extends SwordItem {
                         new EntityAttributeModifier(
                                 Item.ATTACK_DAMAGE_MODIFIER_ID,
                                 "Rush reduced damage",
-                                this.getAttackDamage() - 2.0f,
+                                this.getAttackDamage() - 1.0f,
                                 EntityAttributeModifier.Operation.ADDITION
                         )
                 );

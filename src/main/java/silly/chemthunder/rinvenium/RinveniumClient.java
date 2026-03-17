@@ -9,7 +9,7 @@ import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.index.RinveniumParticles;
-import silly.chemthunder.rinvenium.index.client.RinveniumEntityModelLayers;
+import silly.chemthunder.rinvenium.index.client.RinveniumModelPredicateProvider;
 
 public class RinveniumClient implements ClientModInitializer {
     
@@ -17,8 +17,9 @@ public class RinveniumClient implements ClientModInitializer {
         RinveniumEntities.clientInit();
         RinveniumPackets.registerS2CPackets();
         RinveniumParticles.clientInit();
+        RinveniumModelPredicateProvider.registerModelPredicates();
 
-        EntityModelLayerRegistry.registerModelLayer(EnvixiaArmorRenderer.MODEL_LAYER, EnvixiaArmorModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(EnvixiaArmorRenderer.ENVIXIA_ARMOR, EnvixiaArmorModel::getTexturedModelData);
         ArmorRenderer.register(new EnvixiaArmorRenderer(), RinveniumItems.ENVIXIA_HELMET, RinveniumItems.ENVIXIA_CHESTPLATE, RinveniumItems.ENVIXIA_LEGGINGS, RinveniumItems.ENVIXIA_BOOTS);
     }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "rinvenium:item/envixia_core"
+    "layer0": "rinvenium:item/envixia_core_activated"
   }
 }

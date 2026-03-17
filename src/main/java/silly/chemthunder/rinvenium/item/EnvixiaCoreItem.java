@@ -48,6 +48,18 @@ public class EnvixiaCoreItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
+        if (isComplete(stack)) {
+            if (armorSlotsEmpty(user)) {
+                activateEnvixiaTransformation(world, user);
+                user.getItemCooldownManager().set(this, 100);
+                return TypedActionResult.success(stack);
+            }
+        }
+        return TypedActionResult.fail(stack);
+    }
+
+    public boolean isComplete(ItemStack stack) {
+        if (!stack.isOf(this)) return false;
         NbtCompound nbtCompound = stack.getNbt();
         if (nbtCompound != null) {
             NbtList nbtList = nbtCompound.getList(INGREDIENTS_KEY, NbtElement.COMPOUND_TYPE);
@@ -56,13 +68,24 @@ public class EnvixiaCoreItem extends Item {
             ingredients.forEach(stack1 -> {
                 ingredientMap.put(stack1.getItem(), stack1.getCount());
             });
-            if (ingredientMap.equals(INGREDIENT_GOAL)) {
-                activateEnvixiaTransformation(world, user);
-                stack.decrement(1);
-                return TypedActionResult.success(stack);
-            }
+            return ingredientMap.equals(INGREDIENT_GOAL);
         }
-        return TypedActionResult.fail(stack);
+        return false;
+    }
+
+    private boolean armorSlotsEmpty(PlayerEntity user) {
+        if (
+                user.getInventory().getArmorStack(3).isOf(RinveniumItems.ENVIXIA_HELMET)
+                        && user.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)
+                        && user.getInventory().getArmorStack(1).isOf(RinveniumItems.ENVIXIA_LEGGINGS)
+                        && user.getInventory().getArmorStack(0).isOf(RinveniumItems.ENVIXIA_BOOTS)
+        ) {
+            return true;
+        }
+        return user.getInventory().getArmorStack(0).isEmpty()
+                && user.getInventory().getArmorStack(1).isEmpty()
+                && user.getInventory().getArmorStack(2).isEmpty()
+                && user.getInventory().getArmorStack(3).isEmpty();
     }
 
     private void activateEnvixiaTransformation(World world, PlayerEntity player) {

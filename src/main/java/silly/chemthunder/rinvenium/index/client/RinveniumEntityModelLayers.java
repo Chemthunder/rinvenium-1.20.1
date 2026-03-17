@@ -12,8 +12,6 @@ import java.util.Set;
 public class RinveniumEntityModelLayers {
     private static final Set<EntityModelLayer> LAYERS = Sets.newHashSet();
 
-    public static final EntityModelLayer ENVIXIA_ARMOR = registerMain("envixia_armor");
-
     public static EntityModelLayer register(String name, String layer) {
         EntityModelLayer entityModelLayer = new EntityModelLayer(Rinvenium.id(name), layer);
         if (!LAYERS.add(entityModelLayer)) {

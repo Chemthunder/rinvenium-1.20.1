@@ -40,9 +40,9 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         }
     }
 
-    /*@Inject(method = "setModelPose", at = @At(value = "TAIL"))
+    @Inject(method = "setModelPose", at = @At(value = "TAIL"))
     private void rinvenium$derenderPlayerModel(AbstractClientPlayerEntity player, CallbackInfo ci, @Local PlayerEntityModel<AbstractClientPlayerEntity> model) {
-        *//*if (!player.isSpectator()) {
+        if (!player.isSpectator()) {
             if (player.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
                 model.body.visible = false;
                 model.jacket.visible = false;
@@ -57,7 +57,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
                     model.leftLeg.visible = false;
                 }
             }
-        }*//*
-    }*/
+        }
+    }
 
 }

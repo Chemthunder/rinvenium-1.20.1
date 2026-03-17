@@ -14,34 +14,40 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 public class EnvixiaArmorRenderer implements ArmorRenderer {
-    public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Rinvenium.id("envixia_armor"), "main");
+    public static final EntityModelLayer ENVIXIA_ARMOR = new EntityModelLayer(Rinvenium.id("envixia_armor"), "main");
     public static final Identifier TEXTURE = Rinvenium.id("textures/entity/envixia_armor.png");
     private final MinecraftClient client = MinecraftClient.getInstance();
     private EnvixiaArmorModel<LivingEntity> model;
 
+
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> contextModel) {
         if (model == null) {
-            model = new EnvixiaArmorModel<>(client.getEntityModelLoader().getModelPart(MODEL_LAYER));
+            model = new EnvixiaArmorModel<>(client.getEntityModelLoader().getModelPart(ENVIXIA_ARMOR));
         }
 
-        if (stack.getItem() instanceof EnvixiaArmorItem) {
+        contextModel.copyBipedStateTo(model);
+        model.headpiece.copyTransform(contextModel.head);
+        model.chestplate.copyTransform(contextModel.body);
+        model.right_arm.copyTransform(contextModel.rightArm);
+        model.left_arm.copyTransform(contextModel.leftArm);
+        model.right_leg.copyTransform(contextModel.rightLeg);
+        model.left_leg.copyTransform(contextModel.leftLeg);
+        model.right_boot.copyTransform(contextModel.rightLeg);
+        model.left_boot.copyTransform(contextModel.leftLeg);
+        model.setVisible(true);
+        model.headpiece.visible = slot == EquipmentSlot.HEAD;
+        model.chestplate.visible = slot == EquipmentSlot.CHEST;
+        model.right_arm.visible = slot == EquipmentSlot.CHEST;
+        model.left_arm.visible = slot == EquipmentSlot.CHEST;
+        model.right_leg.visible = slot == EquipmentSlot.LEGS;
+        model.left_leg.visible = slot == EquipmentSlot.LEGS;
+        model.right_boot.visible = slot == EquipmentSlot.FEET;
+        model.left_boot.visible = slot == EquipmentSlot.FEET;
 
-            contextModel.copyBipedStateTo(model);
-            model.setVisible(true);
-            model.headpiece.visible = slot == EquipmentSlot.HEAD;
-            model.bodysuit.visible = slot == EquipmentSlot.CHEST;
-            model.rightArm.visible = slot == EquipmentSlot.CHEST;
-            model.leftArm.visible = slot == EquipmentSlot.CHEST;
-            model.rightLeg.visible = slot == EquipmentSlot.LEGS;
-            model.leftLeg.visible = slot == EquipmentSlot.LEGS;
-            model.right_boot.visible = slot == EquipmentSlot.FEET;
-            model.left_boot.visible = slot == EquipmentSlot.FEET;
+        model.render(matrices, ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(TEXTURE), true, false), light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
 
-            model.render(matrices, ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(TEXTURE), true, false), light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
-        }
     }
 }

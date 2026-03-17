@@ -38,7 +38,12 @@ public class SpearDashingComponent implements IntComponent, AutoSyncedComponent,
 
     public void tick() {
         if (this.dashCooldown < MAX_COOLDOWN) {
-            this.incrementInt();
+            EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(this.player);
+            if (envixiaFormComponent.getTripleBoolValue1()) {
+                this.addValueToInt(2);
+            } else {
+                this.incrementInt();
+            }
         } else if (this.dashCooldown > MAX_COOLDOWN) {
             this.setInt(MAX_COOLDOWN);
         }

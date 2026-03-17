@@ -116,7 +116,12 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
 
     public void tick() {
         if (this.parryWindow < MAX_PARRY_WINDOW && !this.isBlocking) {
-            this.incrementDoubleIntValue1();
+            EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(this.player);
+            if (envixiaFormComponent.getTripleBoolValue1()) {
+                this.addToDoubleIntValue1(2);
+            } else {
+                this.incrementDoubleIntValue1();
+            }
         } else if (this.parryWindow > MAX_PARRY_WINDOW) {
             this.setDoubleIntValue1(MAX_PARRY_WINDOW);
         }
