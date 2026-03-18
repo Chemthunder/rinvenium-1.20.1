@@ -11,13 +11,10 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -33,7 +30,6 @@ import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
-import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
@@ -54,6 +50,18 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    @WrapOperation(method = "tickRiptide", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Box;union(Lnet/minecraft/util/math/Box;)Lnet/minecraft/util/math/Box;"))
+    private Box rinvenium$envixiaLargerHitbox(Box instance, Box box, Operation<Box> original) {
+        LivingEntity user = (LivingEntity) (Object) this;
+        if (user instanceof PlayerEntity player) {
+            EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+            if (envixiaFormComponent.getTripleBoolValue1()) {
+                return original.call(instance, box).expand(1);
+            }
+        }
+        return original.call(instance, box);
     }
 
     @Inject(method = "tickRiptide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;attackLivingEntity(Lnet/minecraft/entity/LivingEntity;)V"))
@@ -82,7 +90,9 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                                     serverWorld.spawnEntity(bolt);
                                 }
                             }
-                            player.getWorld().playSound(null, player.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
+                            if (player.getWorld() instanceof ServerWorld serverWorld) {
+                                serverWorld.playSound(null, player.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
+                            }
                         }
                     }
                 }

@@ -65,11 +65,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
             if (spearParryComponent.getDoubleIntValue2() > 0) {
                 if (!world.isClient) {
-                    ((ServerWorld) this.getEntityWorld()).playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                    ((ServerWorld) world).playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
                 }
             }
             if (!world.isClient) {
-                ((ServerWorld) this.getEntityWorld()).playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
+                ((ServerWorld) world).playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
             }
         } else {
             original.call(world, except, x, y, z, sound, category, volume, pitch);
