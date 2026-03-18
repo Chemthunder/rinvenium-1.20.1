@@ -82,6 +82,7 @@ public class EnviniumSpearItem extends SwordItem {
     public void rush(PlayerEntity user, ItemStack stack) {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
         float j = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack);
+        
         if (spear.getCharge() > 0) {
             float f = user.getYaw();
             float g = user.getPitch();

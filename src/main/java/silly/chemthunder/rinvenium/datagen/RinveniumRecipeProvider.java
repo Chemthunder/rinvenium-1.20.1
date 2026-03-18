@@ -27,6 +27,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(RinveniumItems.ENVIXIUS_PLATE), conditionsFromItem(RinveniumItems.ENVIXIUS_PLATE))
                 .criterion(hasItem(RinveniumItems.ION_CELL), conditionsFromItem(RinveniumItems.ION_CELL))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.ENVIXIA_HELMET)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, RinveniumItems.ENVIXIA_CHESTPLATE, 1)
                 .pattern("P P")
                 .pattern("XIX")
@@ -38,6 +39,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(RinveniumItems.ION_CELL), conditionsFromItem(RinveniumItems.ION_CELL))
                 .criterion(hasItem(RinveniumItems.ENVINIA_INGOT), conditionsFromItem(RinveniumItems.ENVINIA_INGOT))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.ENVIXIA_CHESTPLATE)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, RinveniumItems.ENVIXIA_LEGGINGS, 1)
                 .pattern("PPP")
                 .pattern("X X")
@@ -47,6 +49,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(RinveniumItems.ENVIXIUS_PLATE), conditionsFromItem(RinveniumItems.ENVIXIUS_PLATE))
                 .criterion(hasItem(RinveniumItems.ENVINIA_INGOT), conditionsFromItem(RinveniumItems.ENVINIA_INGOT))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.ENVIXIA_LEGGINGS)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, RinveniumItems.ENVIXIA_BOOTS, 1)
                 .pattern("P P")
                 .pattern("P P")
@@ -67,6 +70,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(RinveniumItems.ION_CELL), conditionsFromItem(RinveniumItems.ION_CELL))
                 .criterion(hasItem(Items.NETHERITE_SWORD), conditionsFromItem(Items.NETHERITE_SWORD))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.ENVINIUM_SPEAR)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, RinveniumItems.HAIL_OF_THE_GODS, 1)
                 .pattern(" PX")
                 .pattern("CXP")
@@ -80,6 +84,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(RinveniumItems.ENVINIA_INGOT), conditionsFromItem(RinveniumItems.ENVINIA_INGOT))
                 .criterion(hasItem(RinveniumItems.ION_CELL), conditionsFromItem(RinveniumItems.ION_CELL))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.HAIL_OF_THE_GODS)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, RinveniumItems.ENVIXIA_CORE, 1)
                 .pattern(" N ")
                 .pattern("XCX")
@@ -100,6 +105,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 80
         ).criterion(hasItem(RinveniumItems.AURIO_INGOT), conditionsFromItem(RinveniumItems.AURIO_INGOT))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_AURIO_INGOT)));
+
         CookingRecipeJsonBuilder.createBlasting(
                 Ingredient.ofItems(RinveniumItems.ENVINIA_INGOT),
                 RecipeCategory.MISC,
@@ -107,7 +113,8 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 0.1f,
                 100
         ).criterion(hasItem(RinveniumItems.ENVINIA_INGOT), conditionsFromItem(RinveniumItems.ENVINIA_INGOT))
-                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVINIA_INGOT)));;
+                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVINIA_INGOT)));
+
         CookingRecipeJsonBuilder.createBlasting(
                 Ingredient.ofItems(RinveniumItems.ENVIXIUS_INGOT),
                 RecipeCategory.MISC,
@@ -115,7 +122,8 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 0.1f,
                 100
         ).criterion(hasItem(RinveniumItems.ENVIXIUS_INGOT), conditionsFromItem(RinveniumItems.ENVIXIUS_INGOT))
-                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT)));;
+                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT)));
+
         CookingRecipeJsonBuilder.createBlasting(
                 Ingredient.ofItems(RinveniumItems.ENVIXIUS_PLATE),
                 RecipeCategory.MISC,
@@ -123,7 +131,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 0.1f,
                 100
         ).criterion(hasItem(RinveniumItems.ENVIXIUS_PLATE), conditionsFromItem(RinveniumItems.ENVIXIUS_PLATE))
-                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE)));;
+                .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE)));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, RinveniumItems.BATTERY, 1)
                 .pattern("CRI")

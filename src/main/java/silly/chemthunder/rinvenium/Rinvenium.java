@@ -21,6 +21,7 @@ public class Rinvenium implements ModInitializer {
 
     public static Identifier id (String path){
         return Identifier.of(MOD_ID, path); }
+        
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final ArrayList<UUID> haters = new ArrayList<>();
 

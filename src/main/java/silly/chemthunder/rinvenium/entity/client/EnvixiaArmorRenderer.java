@@ -48,6 +48,5 @@ public class EnvixiaArmorRenderer implements ArmorRenderer {
         model.left_boot.visible = slot == EquipmentSlot.FEET;
 
         model.render(matrices, ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(TEXTURE), true, false), light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
-
     }
 }
