@@ -131,12 +131,14 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
             }
         }
         if (this.isInEnvixia && EnvixiaArmorItem.hasFullSuit(this.player)) {
-            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addTemporaryModifier(new EntityAttributeModifier(
-                    HEALTH_BUFF_UUID,
-                    HEALTH_BUFF_ID,
-                    20.0,
-                    EntityAttributeModifier.Operation.ADDITION
-            ));
+            if (!player.getAttributes().hasModifierForAttribute(EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_BUFF_UUID)) {
+                player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addTemporaryModifier(new EntityAttributeModifier(
+                        HEALTH_BUFF_UUID,
+                        HEALTH_BUFF_ID,
+                        20.0,
+                        EntityAttributeModifier.Operation.ADDITION
+                ));
+            }
         } else {
             if (player.getAttributes().hasModifierForAttribute(EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_BUFF_UUID)) {
                 player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(HEALTH_BUFF_UUID);

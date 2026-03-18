@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 
 public enum RinveniumArmorMaterials implements StringIdentifiable, ArmorMaterial {
     ENIVIXIA("envixia", 45, Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-        map.put(ArmorItem.Type.BOOTS, 7);
-        map.put(ArmorItem.Type.LEGGINGS, 12);
-        map.put(ArmorItem.Type.CHESTPLATE, 14);
-        map.put(ArmorItem.Type.HELMET, 7);
-    }), 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0f, 0.15f, () -> Ingredient.ofItems(RinveniumItems.ENVINIA_INGOT));
+        map.put(ArmorItem.Type.BOOTS, 3);
+        map.put(ArmorItem.Type.LEGGINGS, 6);
+        map.put(ArmorItem.Type.CHESTPLATE, 8);
+        map.put(ArmorItem.Type.HELMET, 3);
+    }), 15, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0f, 0.15f, () -> Ingredient.ofItems(RinveniumItems.ENVIXIUS_INGOT));
 
 
     public static final StringIdentifiable.Codec<RinveniumArmorMaterials> CODEC = StringIdentifiable.createCodec(RinveniumArmorMaterials::values);
