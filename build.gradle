@@ -11,6 +11,14 @@ base {
 }
 loom {
     accessWidenerPath = file("src/main/resources/rinvenium.accesswidener")
+	runs {
+		client {
+			runDir("run")
+		}
+		server {
+			runDir("run")
+		}
+	}
 }
 
 repositories {

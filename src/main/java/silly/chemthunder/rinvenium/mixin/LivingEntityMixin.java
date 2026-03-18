@@ -14,11 +14,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -108,29 +110,35 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         return !damageSource.isOf(RinveniumDamageSources.BOOP) && !damageSource.isOf(RinveniumDamageSources.ELECTRICITY);
     }
 
-    @Inject(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"))
+    @Inject(method = "tickFallFlying", at = @At(value = "HEAD"), cancellable = true)
     private void rinvenium$envixiaElytraFlight(CallbackInfo ci) {
-        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
         boolean bl = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
-        if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player) {
+        if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player && bl && !this.isOnGround() && !this.hasVehicle() && !this.hasStatusEffect(StatusEffects.LEVITATION)) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+            ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
             if (envixiaFormComponent.getTripleBoolValue1() && itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && EnvixiaArmorItem.hasFullSuit(player)) {
                 bl = true;
                 int i = this.roll + 1;
                 if (!this.getWorld().isClient && i % 10 == 0) {
-                    int j = i / 10;
-                    if (j % 2 == 0) {
-                        //itemStack.damage(1, (LivingEntity) ((Object)this), player -> player.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
-                    }
-
                     this.emitGameEvent(GameEvent.ELYTRA_GLIDE);
                 }
             } else {
                 bl = false;
             }
+        } else {
+            bl = false;
         }
+
         if (!this.getWorld().isClient) {
             this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, bl);
+            if (bl) {
+                ServerWorld serverWorld = (ServerWorld) this.getWorld();
+                Vec3d pos = this.getPos().add(this.getRotationVector().normalize());
+                serverWorld.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.x, pos.y + 0.25, pos.z, 1, 0.01, 0.01, 0.01, 0.001);
+            }
+            ci.cancel();
+            return;
         }
     }
+
 }

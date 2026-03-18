@@ -3,6 +3,7 @@
   "package": "silly.chemthunder.rinvenium.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CraftingScreenHandlerMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin"

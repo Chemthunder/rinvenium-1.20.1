@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider {
     public static TagKey<Item> BIG_ITEM_RENDERING = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("big_item_renderer"));
     public static TagKey<Item> ENVIXIA_CORE_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("envixia_core_ingredients"));
+    public static TagKey<Item> LOCKED_RECIPES = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("locked_recipes"));
 
     public RinveniumItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -32,6 +33,15 @@ public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider 
                         RinveniumItems.ION_CELL,
                         RinveniumItems.ENVIXIUS_PLATE,
                         Items.BEACON
+                );
+        this.getOrCreateTagBuilder(LOCKED_RECIPES)
+                .add(
+                        RinveniumItems.ENVIXIA_CORE,
+                        RinveniumItems.ENVIXIA_HELMET,
+                        RinveniumItems.ENVIXIA_CHESTPLATE,
+                        RinveniumItems.ENVIXIA_LEGGINGS,
+                        RinveniumItems.ENVIXIA_BOOTS,
+                        RinveniumItems.HAIL_OF_THE_GODS
                 );
     }
 }
