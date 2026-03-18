@@ -64,12 +64,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
             SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
             if (spearParryComponent.getDoubleIntValue2() > 0) {
-                if (!world.isClient) {
-                    ((ServerWorld) world).playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                if (world instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
                 }
             }
-            if (!world.isClient) {
-                ((ServerWorld) world).playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
+            if (world instanceof ServerWorld serverWorld) {
+                serverWorld.playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
             }
         } else {
             original.call(world, except, x, y, z, sound, category, volume, pitch);

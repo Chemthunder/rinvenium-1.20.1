@@ -15,6 +15,8 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.util.ModParticleUtil;
 
 import java.util.List;
@@ -90,16 +93,20 @@ public class EnvixiaCoreItem extends Item {
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
         if (player.getAbilities().flying && envixiaFormComponent.getTripleBoolValue1()) player.getAbilities().flying = false;
         envixiaFormComponent.setTripleBoolValue1(!envixiaFormComponent.getTripleBoolValue1());
-
-        ModParticleUtil.addExpandingRingOfParticles(
-                world,
-                player.getPos().add(0, player.getHeight() / 2, 0),
-                0.0,
-                1,
-                100,
-                1.0,
-                ParticleTypes.ELECTRIC_SPARK
-        );
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(), envixiaFormComponent.getTripleBoolValue1() ? RinveniumSoundEvents.ENVIXIA_CORE_USE : SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS,  envixiaFormComponent.getTripleBoolValue1() ? 0.8f : 1.0f, 1.0f);
+        }
+        if (envixiaFormComponent.getTripleBoolValue1()) {
+            ModParticleUtil.addExpandingRingOfParticles(
+                    world,
+                    player.getPos().add(0, player.getHeight() / 2, 0),
+                    0.0,
+                    1,
+                    100,
+                    1.0,
+                    ParticleTypes.END_ROD
+            );
+        }
     }
 
     @Override
