@@ -24,16 +24,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
-import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
-import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -58,7 +55,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             this.getWorld().playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.BLOCK_COPPER_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f, true);
         }
     }*/
-    @WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
+    /*@WrapOperation(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
     private void rinvenium$customHitSounds(World world, PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, Operation<Void> original, @Local(argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -74,7 +71,81 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         } else {
             original.call(world, except, x, y, z, sound, category, volume, pitch);
         }
+    }*/
+
+    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_SWEEP:Lnet/minecraft/sound/SoundEvent;"))
+    private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsSweep(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
+        PlayerEntity player = (PlayerEntity) ((Object)this);
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+            SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
+            if (spearParryComponent.getDoubleIntValue2() > 0) {
+                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                }
+            }
+            return RinveniumSoundEvents.SPEAR_SLASH;
+        } else {
+            return original.call();
+        }
     }
+    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_KNOCKBACK:Lnet/minecraft/sound/SoundEvent;"))
+    private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsKB(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
+        PlayerEntity player = (PlayerEntity) ((Object)this);
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+            SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
+            if (spearParryComponent.getDoubleIntValue2() > 0) {
+                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                }
+            }
+            return RinveniumSoundEvents.SPEAR_SLASH;
+        } else {
+            return original.call();
+        }
+    }
+    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_CRIT:Lnet/minecraft/sound/SoundEvent;"))
+    private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsCrit(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
+        PlayerEntity player = (PlayerEntity) ((Object)this);
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+            if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
+                serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+            }
+            return RinveniumSoundEvents.SPEAR_SLASH;
+        } else {
+            return original.call();
+        }
+    }
+    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_STRONG:Lnet/minecraft/sound/SoundEvent;"))
+    private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsStrong(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
+        PlayerEntity player = (PlayerEntity) ((Object)this);
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+            SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
+            if (spearParryComponent.getDoubleIntValue2() > 0) {
+                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                }
+            }
+            return RinveniumSoundEvents.SPEAR_SLASH;
+        } else {
+            return original.call();
+        }
+    }
+    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_WEAK:Lnet/minecraft/sound/SoundEvent;"))
+    private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsWeak(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
+        PlayerEntity player = (PlayerEntity) ((Object)this);
+        if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+            SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
+            if (spearParryComponent.getDoubleIntValue2() > 0) {
+                if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                }
+            }
+            return RinveniumSoundEvents.SPEAR_SLASH;
+        } else {
+            return original.call();
+        }
+    }
+
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"))
     private float rinvenium$handleParry(PlayerEntity player, DamageSource source, float amount, Operation<Float> original) {
