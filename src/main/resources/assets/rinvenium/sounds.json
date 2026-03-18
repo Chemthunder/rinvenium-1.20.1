@@ -22,5 +22,9 @@
   "overheat": {
     "subtitle": "sound.rinvenium.hail_of_the_gods.overheat",
     "sounds": ["rinvenium:overheat"]
+  },
+  "envixia_core_use": {
+    "subtitle": "sound.rinvenium.envixia_core_use",
+    "sounds": ["rinvenium:envixia_core_use"]
   }
 }
