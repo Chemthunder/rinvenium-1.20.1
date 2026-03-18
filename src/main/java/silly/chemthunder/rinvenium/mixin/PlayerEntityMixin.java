@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -20,18 +21,28 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    @Shadow
+    public abstract void startFallFlying();
+
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -53,9 +64,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
             SpearParryComponent spearParryComponent = SpearParryComponent.get(player);
             if (spearParryComponent.getDoubleIntValue2() > 0) {
-                world.playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                if (!world.isClient) {
+                    ((ServerWorld) this.getEntityWorld()).playSound(target.getX(), target.getY(), target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 1.0f, true);
+                }
             }
-            world.playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
+            if (!world.isClient) {
+                ((ServerWorld) this.getEntityWorld()).playSound(target.getX(), target.getY(), target.getZ(), RinveniumSoundEvents.SPEAR_SLASH, SoundCategory.PLAYERS, 0.8f, 1.0f, true);
+            }
         } else {
             original.call(world, except, x, y, z, sound, category, volume, pitch);
         }
@@ -125,5 +140,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 5, 0));
         }
         super.onPlayerCollision(player);
+    }
+
+    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
+    private void rinvenium$envixiaFlight(CallbackInfoReturnable<Boolean> cir) {
+        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
+        EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((PlayerEntity) ((Object) this));
+        if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && EnvixiaArmorItem.hasFullSuit((PlayerEntity) ((Object) this)) && envixiaFormComponent.getTripleBoolValue1()) {
+            this.startFallFlying();
+            cir.setReturnValue(true);
+        }
     }
 }

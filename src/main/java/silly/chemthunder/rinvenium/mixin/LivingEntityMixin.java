@@ -7,20 +7,27 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
@@ -28,11 +35,21 @@ import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable {
+    @Shadow
+    public abstract boolean hasStatusEffect(StatusEffect effect);
+
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    @Shadow
+    protected int roll;
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -89,5 +106,31 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
     @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
     private boolean rinvenium$knockbacknt(LivingEntity instance, double strength, double x, double z, @Local(argsOnly = true) DamageSource damageSource) {
         return !damageSource.isOf(RinveniumDamageSources.BOOP) && !damageSource.isOf(RinveniumDamageSources.ELECTRICITY);
+    }
+
+    @Inject(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"))
+    private void rinvenium$envixiaElytraFlight(CallbackInfo ci) {
+        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
+        boolean bl = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
+        if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player) {
+            EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+            if (envixiaFormComponent.getTripleBoolValue1() && itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && EnvixiaArmorItem.hasFullSuit(player)) {
+                bl = true;
+                int i = this.roll + 1;
+                if (!this.getWorld().isClient && i % 10 == 0) {
+                    int j = i / 10;
+                    if (j % 2 == 0) {
+                        //itemStack.damage(1, (LivingEntity) ((Object)this), player -> player.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
+                    }
+
+                    this.emitGameEvent(GameEvent.ELYTRA_GLIDE);
+                }
+            } else {
+                bl = false;
+            }
+        }
+        if (!this.getWorld().isClient) {
+            this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, bl);
+        }
     }
 }

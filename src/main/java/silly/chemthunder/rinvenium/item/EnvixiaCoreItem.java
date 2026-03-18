@@ -49,7 +49,7 @@ public class EnvixiaCoreItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         if (isComplete(stack)) {
-            if (armorSlotsEmpty(user) || EnvixiaArmorItem.hasFullSuit(user)) {
+            if (EnvixiaArmorItem.hasFullSuit(user)) {
                 activateEnvixiaTransformation(world, user);
                 user.getItemCooldownManager().set(this, 10);
                 return TypedActionResult.success(stack);
@@ -81,12 +81,12 @@ public class EnvixiaCoreItem extends Item {
     }
 
     private void activateEnvixiaTransformation(World world, PlayerEntity player) {
-        if (armorSlotsEmpty(player)) {
+        /*if (armorSlotsEmpty(player)) {
             player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[3], new ItemStack(RinveniumItems.ENVIXIA_HELMET));
             player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[2], new ItemStack(RinveniumItems.ENVIXIA_CHESTPLATE));
             player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[1], new ItemStack(RinveniumItems.ENVIXIA_LEGGINGS));
             player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
-        }
+        }*/
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
         if (player.getAbilities().flying && envixiaFormComponent.getTripleBoolValue1()) player.getAbilities().flying = false;
         envixiaFormComponent.setTripleBoolValue1(!envixiaFormComponent.getTripleBoolValue1());
