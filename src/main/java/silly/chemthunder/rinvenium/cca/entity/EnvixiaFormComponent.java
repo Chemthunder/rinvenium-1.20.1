@@ -2,6 +2,8 @@ package silly.chemthunder.rinvenium.cca.entity;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +12,12 @@ import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
 import silly.chemthunder.rinvenium.cca.primitive.TripleBoolComponent;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, AutoSyncedComponent, CommonTickingComponent {
+    public static final UUID HEALTH_BUFF_UUID = UUID.fromString("f79edb50-8a3b-408e-a87e-35ba81c43cb4");
+    public static final String HEALTH_BUFF_ID = "Envixia Health Boost";
     public static final String IS_IN_ENVIXIA_KEY = "IsInEnvixia";
     public static final String CAN_FLY_KEY = "CanFly";
     public static final String SHOULD_START_DEATH_SEQ_KEY = "ShouldStartDeathSeq";
@@ -121,6 +128,18 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
         if (!player.getAbilities().allowFlying) {
             if (player.getAbilities().creativeMode || player.isSpectator()) {
                 player.getAbilities().allowFlying = true;
+            }
+        }
+        if (this.isInEnvixia && EnvixiaArmorItem.hasFullSuit(this.player)) {
+            player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addTemporaryModifier(new EntityAttributeModifier(
+                    HEALTH_BUFF_UUID,
+                    HEALTH_BUFF_ID,
+                    20.0,
+                    EntityAttributeModifier.Operation.ADDITION
+            ));
+        } else {
+            if (player.getAttributes().hasModifierForAttribute(EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_BUFF_UUID)) {
+                player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(HEALTH_BUFF_UUID);
             }
         }
     }
