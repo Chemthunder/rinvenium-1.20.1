@@ -18,7 +18,6 @@ public class AscentaShotEntity extends ThrownItemEntity {
         super(entityType, world);
     }
 
-
     public void tick() {
         if (getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.spawnParticles(
@@ -82,7 +81,6 @@ public class AscentaShotEntity extends ThrownItemEntity {
     public boolean hasNoGravity() {
         return true;
     }
-
 
     protected void onEntityHit(EntityHitResult entityHitResult) {
         Entity target = entityHitResult.getEntity();

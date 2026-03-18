@@ -22,14 +22,17 @@ public class RinveniumModelProvider extends FabricModelProvider {
 
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         itemModelGenerator.register(DEBUGGER, Items.STICK, HANDHELD);
+
         itemModelGenerator.register(AURIO_INGOT, GENERATED);
         itemModelGenerator.register(ENVINIA_INGOT, GENERATED);
         itemModelGenerator.register(ENVIXIUS_INGOT, GENERATED);
         itemModelGenerator.register(ENVIXIUS_PLATE, GENERATED);
+
         itemModelGenerator.register(SUPERHEATED_AURIO_INGOT, GENERATED);
         itemModelGenerator.register(SUPERHEATED_ENVINIA_INGOT, GENERATED);
         itemModelGenerator.register(SUPERHEATED_ENVIXIUS_INGOT, GENERATED);
         itemModelGenerator.register(SUPERHEATED_ENVIXIUS_PLATE, GENERATED);
+        
         itemModelGenerator.register(BATTERY, GENERATED);
         itemModelGenerator.register(ION_CELL, GENERATED);
 
@@ -38,5 +41,13 @@ public class RinveniumModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ENVIXIA_CHESTPLATE, GENERATED);
         itemModelGenerator.register(ENVIXIA_LEGGINGS, GENERATED);
         itemModelGenerator.register(ENVIXIA_BOOTS, GENERATED);
+
+
+        // for (Item value : RinveniumItems.ITEMS) {
+        //     if (value != HAIL_OF_THE_GODS && value != DEBUGGER) {
+        //             itemModelGenerator.register(value, Models.GENERATED);
+        //     }
+        // }
+        // maybe quick thing to optimize this idfk
     }
 }
