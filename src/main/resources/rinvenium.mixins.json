@@ -19,8 +19,10 @@
     "client.DrawContextMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
+    "client.LivingEntityRendererMixin",
     "client.PlayerEntityRendererMixin",
     "client.TridentFeatureRendererMixin",
+    "client.WorldRendererMixin",
     "model.ItemRendererAccessor",
     "model.ItemRendererMixin",
     "model.ModelLoaderMixin"

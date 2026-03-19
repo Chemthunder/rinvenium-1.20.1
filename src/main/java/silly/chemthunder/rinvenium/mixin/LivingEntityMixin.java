@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
@@ -151,4 +152,11 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         }
     }
 
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    private void rinvenium$evnixiaGlowing(CallbackInfoReturnable<Boolean> cir) {
+        if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player) {
+            EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+            cir.setReturnValue(envixiaFormComponent.getTripleBoolValue1());
+        }
+    }
 }

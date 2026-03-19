@@ -1,6 +1,7 @@
 package silly.chemthunder.rinvenium.mixin;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -28,12 +29,16 @@ public abstract class ItemEntityMixin extends Entity {
     public int enviniaCraftingTicks = 0;
     public int envixiusCraftingTicks = 0;
     public int envixiusColdCraftingTicks = 0;
+    public int ionCellCraftingTicks = 0;
 
     @Shadow
     public abstract ItemStack getStack();
 
     @Shadow
     public abstract void setStack(ItemStack stack);
+
+    @Shadow
+    public abstract int getItemAge();
 
     public ItemEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -46,11 +51,42 @@ public abstract class ItemEntityMixin extends Entity {
             craftEnvinia();
             craftEnvixius();
             craftColdEnvixius();
+            craftIonCell();
 
             if (this.getStack().isOf(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT) && this.getWorld().getBlockState(this.getBlockPos()).isIn(BlockTags.ANVIL)) {
                 int count = this.getStack().getCount();
                 this.setStack(new ItemStack(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE, count));
             }
+        }
+    }
+
+    private void craftIonCell() {
+        if (this.getStack().isOf(RinveniumItems.BATTERY) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isOf(Blocks.BEACON) && this.getItemAge() < 3000) {
+            BeaconBlockEntity beaconBlockEntity =  (BeaconBlockEntity) this.getWorld().getBlockEntity(this.getBlockPos().offset(Direction.DOWN));
+            if (beaconBlockEntity != null && beaconBlockEntity.level > 0) {
+                ionCellCraftingTicks++;
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.spawnParticles(
+                            ParticleTypes.END_ROD,
+                            this.getX(),
+                            this.getY(),
+                            this.getZ(),
+                            6,
+                            0.001,
+                            0.001,
+                            0.001,
+                            0.06
+                    );
+                }
+                if (ionCellCraftingTicks >= 80 * (int) Math.floor((double) this.getStack().getCount() / 4)) {
+                    int count = this.getStack().getCount();
+                    this.setStack(new ItemStack(RinveniumItems.ION_CELL).copyWithCount(count));
+                }
+            } else {
+                ionCellCraftingTicks = 0;
+            }
+        } else {
+            ionCellCraftingTicks = 0;
         }
     }
 

@@ -2,3 +2,5 @@ accessWidener v2 named
 
 accessible method net/minecraft/client/particle/ParticleManager createParticle (Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;
 accessible method net/minecraft/entity/projectile/ProjectileEntity updateRotation ()V
+accessible method net/minecraft/entity/LivingEntity updateGlowing ()V
+accessible field net/minecraft/block/entity/BeaconBlockEntity level I

@@ -138,6 +138,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
                         20.0,
                         EntityAttributeModifier.Operation.ADDITION
                 ));
+                player.updateGlowing();
             }
         } else {
             if (player.getAttributes().hasModifierForAttribute(EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_BUFF_UUID)) {
@@ -145,6 +146,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
                 if (player.getHealth() >= player.getMaxHealth()) {
                     player.setHealth(player.getMaxHealth());
                 }
+                player.updateGlowing();
             }
         }
     }
