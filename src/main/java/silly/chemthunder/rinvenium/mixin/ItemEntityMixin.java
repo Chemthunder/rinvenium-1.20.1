@@ -58,6 +58,9 @@ public abstract class ItemEntityMixin extends Entity {
             if (this.getStack().isOf(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT) && this.getWorld().getBlockState(this.getBlockPos()).isIn(BlockTags.ANVIL)) {
                 int count = this.getStack().getCount();
                 this.setStack(new ItemStack(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE, count));
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.PLATE_FORMED, SoundCategory.BLOCKS, 0.7F, 1.0F);
+                }
             }
         }
     }

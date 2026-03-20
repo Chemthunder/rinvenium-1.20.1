@@ -38,5 +38,9 @@
   "ion_cell_formed": {
     "subtitle": "sound.rinvenium.ion_cell_formed",
     "sounds": ["rinvenium:ion_cell_formed"]
+  },
+  "plate_formed": {
+    "subtitle": "sound.rinvenium.plate_formed",
+    "sounds": ["rinvenium:ion_cell_formed"]
   }
 }

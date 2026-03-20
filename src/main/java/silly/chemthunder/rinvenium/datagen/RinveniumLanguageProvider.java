@@ -85,6 +85,7 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.ENVIXIUS_FORGED), "Envixius Ingot forged");
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.INGOT_FORGED), "Ingot forged");
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.ION_CELL_FORMED), "Ion Cell formed");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.PLATE_FORMED), "Envixius Plate formed");
     }
 
     public static String getSoundTranslationKey(SoundEvent sound) {
