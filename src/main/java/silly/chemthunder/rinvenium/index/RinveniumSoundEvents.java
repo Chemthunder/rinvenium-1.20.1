@@ -18,6 +18,9 @@ public class RinveniumSoundEvents {
     public static final SoundEvent HAIL_OF_THE_GODS_SHOOT = registerSound("hail_of_the_gods_shoot");
     public static final SoundEvent HAIL_OF_THE_GODS_OVERHEAT = registerSound("overheat");
     public static final SoundEvent ENVIXIA_CORE_USE = registerSound("envixia_core_use");
+    public static final SoundEvent ENVIXIUS_FORGED = registerSound("envixius_forged");
+    public static final SoundEvent INGOT_FORGED = registerSound("ingot_forged");
+    public static final SoundEvent ION_CELL_FORMED = registerSound("ion_cell_formed");
 
     private static SoundEvent registerSound(String name) {
         Identifier identifier = Rinvenium.id(name);

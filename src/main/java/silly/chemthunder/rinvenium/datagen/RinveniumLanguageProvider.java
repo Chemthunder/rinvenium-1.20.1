@@ -82,6 +82,9 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("sound.rinvenium.hail_of_the_gods.shoot", "Hail of the Gods goes BRRRTT");
         translationBuilder.add("sound.rinvenium.hail_of_the_gods.overheat", "Hail of the Gods overheats");
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.ENVIXIA_CORE_USE), "Envixia core activates");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.ENVIXIUS_FORGED), "Envixius Ingot forged");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.INGOT_FORGED), "Ingot forged");
+        translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.ION_CELL_FORMED), "Ion Cell formed");
     }
 
     public static String getSoundTranslationKey(SoundEvent sound) {

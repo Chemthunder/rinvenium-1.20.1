@@ -26,5 +26,17 @@
   "envixia_core_use": {
     "subtitle": "sound.rinvenium.envixia_core_use",
     "sounds": ["rinvenium:envixia_core_use"]
+  },
+  "envixius_forged": {
+    "subtitle": "sound.rinvenium.envixius_forged",
+    "sounds": ["rinvenium:envixius_forged"]
+  },
+  "ingot_forged": {
+    "subtitle": "sound.rinvenium.ingot_forged",
+    "sounds": ["rinvenium:ingot_forged"]
+  },
+  "ion_cell_formed": {
+    "subtitle": "sound.rinvenium.ion_cell_formed",
+    "sounds": ["rinvenium:ion_cell_formed"]
   }
 }

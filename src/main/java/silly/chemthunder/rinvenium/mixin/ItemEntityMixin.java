@@ -10,6 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.datagen.RinveniumBlockTagProvider;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 
 import java.util.List;
 
@@ -81,6 +83,10 @@ public abstract class ItemEntityMixin extends Entity {
                 if (ionCellCraftingTicks >= Math.max(80, 80 * (int) Math.floor((double) this.getStack().getCount() / 4))) {
                     int count = this.getStack().getCount();
                     this.setStack(new ItemStack(RinveniumItems.ION_CELL).copyWithCount(count));
+
+                    if (this.getWorld() instanceof ServerWorld serverWorld) {
+                        serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.ION_CELL_FORMED, SoundCategory.BLOCKS, 0.8f, 1.0f);
+                    }
                 }
             } else {
                 ionCellCraftingTicks = 0;
@@ -130,6 +136,9 @@ public abstract class ItemEntityMixin extends Entity {
                         entity.setStack(entity.getStack().copyWithCount(otherCount - count));
                     }
                 }
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.INGOT_FORGED, SoundCategory.BLOCKS, 1.1f, 1.0f);
+                }
                 this.aurioCraftingTicks = 0;
             }
         }
@@ -174,6 +183,9 @@ public abstract class ItemEntityMixin extends Entity {
                     } else {
                         entity.setStack(entity.getStack().copyWithCount(otherCount - count));
                     }
+                }
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.INGOT_FORGED, SoundCategory.BLOCKS, 1.1f, 1.0f);
                 }
                 this.enviniaCraftingTicks = 0;
             }
@@ -220,6 +232,9 @@ public abstract class ItemEntityMixin extends Entity {
                         entity.setStack(entity.getStack().copyWithCount(otherCount - count));
                     }
                 }
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.ENVIXIUS_FORGED, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                }
                 this.envixiusCraftingTicks = 0;
             }
         }
@@ -264,6 +279,9 @@ public abstract class ItemEntityMixin extends Entity {
                     } else {
                         entity.setStack(entity.getStack().copyWithCount(otherCount - count));
                     }
+                }
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.ENVIXIUS_FORGED, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 }
                 this.envixiusColdCraftingTicks = 0;
             }
