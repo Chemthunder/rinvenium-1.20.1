@@ -4,14 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import silly.chemthunder.rinvenium.index.RinveniumCauldronBehavior;
-import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
-import silly.chemthunder.rinvenium.index.RinveniumEntities;
-import silly.chemthunder.rinvenium.index.RinveniumItems;
-import silly.chemthunder.rinvenium.index.RinveniumPackets;
-import silly.chemthunder.rinvenium.index.RinveniumParticles;
-import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
-import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+import silly.chemthunder.rinvenium.index.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -27,6 +20,7 @@ public class Rinvenium implements ModInitializer {
 
 	public void onInitialize() {
         RinveniumItems.init();
+        RinveniumFoodComponents.initRinveniumFoodComponents();
         RinveniumEnchantments.init();
         RinveniumStatusEffects.init();
         RinveniumEntities.init();

@@ -17,11 +17,11 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
 
-public class HotItem extends Item {
+public class HotItem extends DescriptionItem {
     public final Item quenchedItem;
 
-    public HotItem(Settings settings, Item quenchedItem) {
-        super(settings);
+    public HotItem(Settings settings, Item quenchedItem, String itemName, int numberOfLines) {
+        super(settings, itemName, numberOfLines);
         this.quenchedItem = quenchedItem;
     }
 

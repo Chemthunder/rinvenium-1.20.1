@@ -11,21 +11,21 @@ base {
 }
 loom {
     accessWidenerPath = file("src/main/resources/rinvenium.accesswidener")
-	runs {
+	/*runs {
 		client {
 			runDir("run")
 		}
 		server {
 			runDir("run")
 		}
-	}
+	}*/
 }
 
 repositories {
     maven {url = "https://api.modrinth.com/maven" }
     maven {url = 'https://maven.ladysnake.org/releases'}
     maven {
-        url "https://maven.jamieswhiteshirt.com/libs-release"
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
         content {
             includeGroup "com.jamieswhiteshirt"
         }

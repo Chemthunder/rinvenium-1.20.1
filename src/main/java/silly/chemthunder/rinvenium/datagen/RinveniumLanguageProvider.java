@@ -24,14 +24,30 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add(RinveniumItems.ENVINIA_INGOT, "Envinia Ingot");
         translationBuilder.add(RinveniumItems.ENVIXIUS_INGOT, "Envixius Ingot");
         translationBuilder.add(RinveniumItems.ENVIXIUS_PLATE, "Envixius Plate");
+        translationBuilder.add("item.rinvenium.aurio_ingot.desc1", "Obtained by [R-Click] a Superheated Aurio Ingot");
+        translationBuilder.add("item.rinvenium.aurio_ingot.desc2", "on a water cauldron or source block.");
+        translationBuilder.add("item.rinvenium.envinia_ingot.desc1", "Obtained by [R-Click] a Superheated Envinia Ingot");
+        translationBuilder.add("item.rinvenium.envinia_ingot.desc2", "on a water cauldron or source block.");
+        translationBuilder.add("item.rinvenium.envixius_ingot.desc1", "Obtained by [R-Click] a Superheated Envixius Ingot");
+        translationBuilder.add("item.rinvenium.envixius_ingot.desc2", "on a water cauldron or source block.");
+        translationBuilder.add("item.rinvenium.envixius_plate.desc1", "Obtained by [R-Click] a Superheated Envixius Plate");
+        translationBuilder.add("item.rinvenium.envixius_plate.desc2", "on a water cauldron or source block.");
 
         translationBuilder.add(RinveniumItems.SUPERHEATED_AURIO_INGOT, "Superheated Aurio Ingot");
         translationBuilder.add(RinveniumItems.SUPERHEATED_ENVINIA_INGOT, "Superheated Envinia Ingot");
         translationBuilder.add(RinveniumItems.SUPERHEATED_ENVIXIUS_INGOT, "Superheated Envixius Ingot");
         translationBuilder.add(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE, "Superheated Envixius Plate");
+        translationBuilder.add("item.rinvenium.superheated_aurio_ingot.desc1", "Obtained by dropping a Gold Ingot and Copper Ingot");
+        translationBuilder.add("item.rinvenium.superheated_aurio_ingot.desc2", "into an empty cauldron above a soul flame.");
+        translationBuilder.add("item.rinvenium.superheated_envinia_ingot.desc1", "Obtained by dropping a Netherite Scrap and Iron Ingot");
+        translationBuilder.add("item.rinvenium.superheated_envinia_ingot.desc2", "into an empty cauldron above a soul flame.");
+        translationBuilder.add("item.rinvenium.superheated_envixius_ingot.desc1", "Obtained by dropping an Envinia Ingot and Aurio Ingot");
+        translationBuilder.add("item.rinvenium.superheated_envixius_ingot.desc2", "into an empty cauldron above a soul flame.");
+        translationBuilder.add("item.rinvenium.superheated_envixius_plate.desc1", "Obtained by having an anvil fall on Superheated Envixius Ingot.");
 
         translationBuilder.add(RinveniumItems.BATTERY, "Battery");
         translationBuilder.add(RinveniumItems.ION_CELL, "Ion Cell");
+        translationBuilder.add("item.rinvenium.ion_cell.desc1", "Obtained by dropping a battery on a powered beacon.");
 
         translationBuilder.add(RinveniumItems.ENVIXIA_CORE, "Envixia Core");
         translationBuilder.add(RinveniumItems.ENVIXIA_HELMET, "Envixia Helmet");

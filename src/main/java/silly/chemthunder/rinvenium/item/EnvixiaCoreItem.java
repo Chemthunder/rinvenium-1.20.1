@@ -39,8 +39,8 @@ import java.util.stream.Stream;
 public class EnvixiaCoreItem extends Item {
     public static final String INGREDIENTS_KEY = "Ingredients";
     public static final Map<Item, Integer> INGREDIENT_GOAL = Map.of(
-            RinveniumItems.ION_CELL, 8,
-            RinveniumItems.ENVIXIUS_PLATE, 24,
+            RinveniumItems.ION_CELL, 16,
+            RinveniumItems.ENVIXIUS_PLATE, 12,
             Items.BEACON, 1
     );
 

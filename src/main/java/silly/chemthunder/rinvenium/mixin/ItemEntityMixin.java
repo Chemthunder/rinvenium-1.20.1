@@ -78,7 +78,7 @@ public abstract class ItemEntityMixin extends Entity {
                             0.06
                     );
                 }
-                if (ionCellCraftingTicks >= 80 * (int) Math.floor((double) this.getStack().getCount() / 4)) {
+                if (ionCellCraftingTicks >= Math.max(80, 80 * (int) Math.floor((double) this.getStack().getCount() / 4))) {
                     int count = this.getStack().getCount();
                     this.setStack(new ItemStack(RinveniumItems.ION_CELL).copyWithCount(count));
                 }

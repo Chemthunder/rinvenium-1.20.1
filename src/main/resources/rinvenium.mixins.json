@@ -5,6 +5,7 @@
   "mixins": [
     "CraftingScreenHandlerMixin",
     "ItemEntityMixin",
+    "ItemMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin"
   ],
