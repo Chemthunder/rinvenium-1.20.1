@@ -42,7 +42,7 @@ public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider 
                         RinveniumItems.ENVIXIA_CHESTPLATE,
                         RinveniumItems.ENVIXIA_LEGGINGS,
                         RinveniumItems.ENVIXIA_BOOTS,
-                        RinveniumItems.HAIL_OF_THE_GODS
+                        RinveniumItems.ENVINIUM_SPEAR
                 );
         this.getOrCreateTagBuilder(ENVIXIA_MUNCHIES)
                 .add(
