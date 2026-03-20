@@ -22,7 +22,7 @@ public class DescriptionItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        for (int i = 0; i < numberOfLines; i++) {
+        for (int i = 1; i <= numberOfLines; i++) {
             tooltip.add(Text.translatable("item.rinvenium." + item + ".desc" + i).formatted(Formatting.GRAY));
         }
 

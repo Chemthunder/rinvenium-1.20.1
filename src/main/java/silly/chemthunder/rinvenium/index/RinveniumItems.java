@@ -35,7 +35,7 @@ public interface RinveniumItems {
     Item SUPERHEATED_ENVIXIUS_INGOT = create("superheated_envixius_ingot", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_INGOT, "superheated_envixius_ingot", 2));
     Item SUPERHEATED_ENVIXIUS_PLATE = create("superheated_envixius_plate", new HotItem(new FabricItemSettings().fireproof(), ENVIXIUS_PLATE, "superheated_envixius_plate", 1));
     Item BATTERY = create("battery", new Item(new FabricItemSettings().food(RinveniumFoodComponents.BATTERY)));
-    Item ION_CELL = create("ion_cell", new DescriptionItem(new FabricItemSettings().food(RinveniumFoodComponents.ION_CELL), "ion_cell", 2));
+    Item ION_CELL = create("ion_cell", new DescriptionItem(new FabricItemSettings().food(RinveniumFoodComponents.ION_CELL), "ion_cell", 1));
 
     Item ENVIXIA_CORE = create("envixia_core", new EnvixiaCoreItem(new FabricItemSettings().maxCount(1).fireproof()));
     Item ENVIXIA_HELMET = create("envixia_helmet", new EnvixiaArmorItem(RinveniumArmorMaterials.ENIVIXIA, ArmorItem.Type.HELMET, new FabricItemSettings().maxCount(1).fireproof()));
