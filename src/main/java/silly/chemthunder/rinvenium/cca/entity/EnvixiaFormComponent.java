@@ -138,6 +138,9 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
                         20.0,
                         EntityAttributeModifier.Operation.ADDITION
                 ));
+                if (player.getHealth() >= 20.0f) {
+                    player.setHealth(player.getMaxHealth());
+                }
                 player.updateGlowing();
             }
         } else {

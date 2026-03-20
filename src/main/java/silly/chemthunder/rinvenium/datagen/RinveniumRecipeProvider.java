@@ -133,7 +133,7 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
         ).criterion(hasItem(RinveniumItems.ENVIXIUS_PLATE), conditionsFromItem(RinveniumItems.ENVIXIUS_PLATE))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE)));
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, RinveniumItems.BATTERY, 1)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, RinveniumItems.BATTERY, 4)
                 .pattern("CRI")
                 .input('C', RinveniumItems.AURIO_INGOT)
                 .input('R', Items.REDSTONE)

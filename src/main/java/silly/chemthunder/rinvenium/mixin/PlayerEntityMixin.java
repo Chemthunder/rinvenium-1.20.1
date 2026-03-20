@@ -10,7 +10,9 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
@@ -27,10 +29,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
+import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+import silly.chemthunder.rinvenium.util.inject.HungerDecrement;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -39,6 +43,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow
     public abstract void startFallFlying();
+
+    @Shadow
+    public abstract HungerManager getHungerManager();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -220,6 +227,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1()) {
             this.startFallFlying();
             cir.setReturnValue(true);
+        }
+    }
+
+    @WrapOperation(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;eat(Lnet/minecraft/item/Item;Lnet/minecraft/item/ItemStack;)V"))
+    private void rinvenium$decreaseHungerFromNormalFoods(HungerManager instance, Item item, ItemStack stack, Operation<Void> original) {
+        EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((PlayerEntity) ((Object)this));
+        if (envixiaFormComponent.getTripleBoolValue1() && !stack.isIn(RinveniumItemTagProvider.ENVIXIA_MUNCHIES)) {
+            ((HungerDecrement) this.getHungerManager()).rinvenium$eatSubtract(stack.getItem(), stack);
+        } else {
+            original.call(instance, item, stack);
         }
     }
 }

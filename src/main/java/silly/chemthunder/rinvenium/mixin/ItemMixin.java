@@ -24,10 +24,10 @@ public abstract class ItemMixin {
             if (!envixiaFormComponent.getTripleBoolValue1()) {
                 cir.setReturnValue(TypedActionResult.fail(itemStack));
             }
-        } else {
+        }/* else {
             if (envixiaFormComponent.getTripleBoolValue1()) {
                 cir.setReturnValue(TypedActionResult.fail(itemStack));
             }
-        }
+        }*/
     }
 }
