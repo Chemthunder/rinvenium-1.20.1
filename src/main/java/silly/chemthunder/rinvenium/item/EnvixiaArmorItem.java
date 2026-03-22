@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class EnvixiaArmorItem extends ArmorItem {
@@ -15,5 +16,20 @@ public class EnvixiaArmorItem extends ArmorItem {
                 && player.getInventory().getArmorStack(1).isOf(RinveniumItems.ENVIXIA_LEGGINGS)
                 && player.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)
                 && player.getInventory().getArmorStack(3).isOf(RinveniumItems.ENVIXIA_HELMET);
+    }
+
+    @Override
+    public boolean isItemBarVisible(ItemStack stack) {
+        return stack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE);
+    }
+
+    @Override
+    public int getItemBarStep(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public int getItemBarColor(ItemStack stack) {
+        return 0x5af6bf;
     }
 }

@@ -83,35 +83,33 @@ public class EnviniumSpearItem extends SwordItem {
         EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
         float j = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack);
         
-        if (spear.getCharge() > 0) {
-            float f = user.getYaw();
-            float g = user.getPitch();
-            float h = -MathHelper.sin(f * ((float) Math.PI / 180F)) * MathHelper.cos(g * ((float) Math.PI / 180F));
-            float k = -MathHelper.sin(g * ((float) Math.PI / 180F));
-            float l = MathHelper.cos(f * ((float) Math.PI / 180F)) * MathHelper.cos(g * ((float) Math.PI / 180F));
-            float m = MathHelper.sqrt(h * h + k * k + l * l);
-            float n = 3.0F * ((1.0F + j) / 4.0F);
-            h *= n / m;
-            k *= n / m;
-            l *= n / m;
-            user.addVelocity(h, k, l);
-            user.useRiptide(20);
-            SpearDashingComponent dashingComponent = SpearDashingComponent.KEY.get(user);
+        float f = user.getYaw();
+        float g = user.getPitch();
+        float h = -MathHelper.sin(f * ((float) Math.PI / 180F)) * MathHelper.cos(g * ((float) Math.PI / 180F));
+        float k = -MathHelper.sin(g * ((float) Math.PI / 180F));
+        float l = MathHelper.cos(f * ((float) Math.PI / 180F)) * MathHelper.cos(g * ((float) Math.PI / 180F));
+        float m = MathHelper.sqrt(h * h + k * k + l * l);
+        float n = 3.0F * ((1.0F + j) / 4.0F);
+        h *= n / m;
+        k *= n / m;
+        l *= n / m;
+        user.addVelocity(h, k, l);
+        user.useRiptide(20);
+        SpearDashingComponent dashingComponent = SpearDashingComponent.KEY.get(user);
 
-            dashingComponent.dashTicks = 20;
-            dashingComponent.sync();
+        dashingComponent.dashTicks = 20;
+        dashingComponent.sync();
 
-            if (!user.isCreative()) {
+        if (!user.isCreative()) {
                 /*if (!spear.getFinalRush() && spear.getCharge() == 1) {
                     spear.setFinalRush(true);
                 }
                 spear.setCharge(spear.getCharge() - 1);*/
-                dashingComponent.addValueToInt(-55);
-                user.getItemCooldownManager().set(this, 5);
-            }
-            if (!user.getWorld().isClient) {
-                user.getWorld().playSound(null, user.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH, SoundCategory.PLAYERS, 0.8f, 1.0f + user.getEntityWorld().random.nextFloat() * 0.2f);
-            }
+            dashingComponent.addValueToInt(-55);
+            user.getItemCooldownManager().set(this, 5);
+        }
+        if (!user.getWorld().isClient) {
+            user.getWorld().playSound(null, user.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH, SoundCategory.PLAYERS, 0.8f, 1.0f + user.getEntityWorld().random.nextFloat() * 0.2f);
         }
     }
 
@@ -155,7 +153,6 @@ public class EnviniumSpearItem extends SwordItem {
                     if (spear.getCharge() < 4) {
                         spear.setFinalRush(false);
                         spear.setCharge(spear.getCharge() + 1);
-                        player.getHungerManager().addExhaustion(3.0f * j);
                     }
                 }
             } else {
@@ -219,7 +216,7 @@ public class EnviniumSpearItem extends SwordItem {
             tooltip.add(Text.translatable("desc.spear.unenchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
             tooltip.add(Text.translatable("desc.spear.unenchanted_3").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         } else {
-            tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+            //tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

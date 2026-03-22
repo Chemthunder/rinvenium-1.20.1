@@ -3,10 +3,13 @@ package silly.chemthunder.rinvenium.mixin.client;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.objectweb.asm.Opcodes;
@@ -21,10 +24,16 @@ import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
     @Shadow
     @Final
     private MinecraftClient client;
+
+    @Shadow
+    protected abstract int getHeartCount(LivingEntity entity);
+
+    @Shadow
+    protected abstract int getHeartRows(int heartCount);
 
     @SuppressWarnings("DiscouragedShift")
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
@@ -76,4 +85,17 @@ public class InGameHudMixin {
         }
         return original.call();
     }
+
+
+    /*@Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getProfiler()Lnet/minecraft/util/profiler/Profiler;", ordinal = 2))
+    private void rinvenium$flightBar(DrawContext context, CallbackInfo ci, @Local PlayerEntity playerEntity, @Local LivingEntity livingEntity, @Local(ordinal = 11) int t, @Local(ordinal = 5) int n) {
+        int maxTime = 60;
+        EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(playerEntity);
+        int time = envixiaFormComponent.getInt();
+        int rowOffset = this.getHeartRows(this.getHeartCount(livingEntity)) - 1;
+        t -= rowOffset * 10;
+        if (envixiaFormComponent.getTripleBoolValue1()) {
+            context.drawTexture(RinveniumTextureUtils.FLY_BAR_BG, n - 80, t, 0, 0, 80, 8);
+        }
+    }*/
 }

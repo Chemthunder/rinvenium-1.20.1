@@ -2,9 +2,12 @@ package silly.chemthunder.rinvenium.cca.entity;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.NotNull;
 import silly.chemthunder.rinvenium.cca.RinveniumComponents;
 import silly.chemthunder.rinvenium.cca.primitive.DoubleIntComponent;
@@ -99,6 +102,7 @@ public class HailOfTheGodComponent implements DoubleIntComponent, AutoSyncedComp
         }
         if (this.overheatTime >= MAX_OVERHEAT_TIME) {
             player.getItemCooldownManager().set(RinveniumItems.HAIL_OF_THE_GODS, 270);
+            player.getWorld().createExplosion(null, player.getX(), player.getY(), player.getZ(), 2.0f, World.ExplosionSourceType.NONE);
             player.playSound(SoundEvents.BLOCK_LAVA_EXTINGUISH, 0.8f, 1.1f + player.getWorld().random.nextFloat() * 0.1f);
             if (player.getActiveItem() != null && player.getActiveItem().isOf(RinveniumItems.HAIL_OF_THE_GODS)) {
                 player.stopUsingItem();

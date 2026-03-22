@@ -42,7 +42,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     private void rinvenium$elytraFly(CallbackInfo ci) {
         ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((ClientPlayerEntity) ((Object)this));
-        if (envixiaFormComponent.getTripleBoolValue1() && itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && this.checkFallFlying()) {
+        if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && this.checkFallFlying()) {
             this.networkHandler.sendPacket(new ClientCommandC2SPacket(this, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
         }
     }

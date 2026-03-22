@@ -224,7 +224,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void rinvenium$envixiaFlight(CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((PlayerEntity) ((Object) this));
-        if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1()) {
+        if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
             this.startFallFlying();
             cir.setReturnValue(true);
         }

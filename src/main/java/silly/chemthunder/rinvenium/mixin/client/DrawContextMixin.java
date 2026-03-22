@@ -6,12 +6,14 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.HailOfTheGodComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
@@ -52,6 +54,17 @@ public abstract class DrawContextMixin {
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + useTime, l2 + 1, 0x9cfdff | 0xFF000000);
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + overheatTime, l2 + 1, 0xfdc211 | 0xFF000000);
+            } else if (stack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
+                EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(this.client.player);
+                int flyTime = envixiaFormComponent.getInt();
+                int timeRemaining = (int) MathHelper.clamp(Math.ceil((double) (60 - flyTime) / 60 * 13), 0, 60);
+                int cooldownTime = (int) Math.floor(13 - this.client.player.getItemCooldownManager().getCooldownProgress(RinveniumItems.ENVIXIA_CHESTPLATE, 0.0f) * 13);
+                this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
+                if (this.client.player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE)) {
+                    this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + cooldownTime, l2 + 1, 0x1a4b3a | 0xFF000000);
+                } else {
+                    this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + timeRemaining, l2 + 1, 0x5af6bf | 0xFF000000);
+                }
             }
         }
     }

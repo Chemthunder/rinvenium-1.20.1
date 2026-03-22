@@ -4,15 +4,18 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import silly.chemthunder.rinvenium.cca.RinveniumComponents;
 import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
 import silly.chemthunder.rinvenium.cca.primitive.TripleBoolComponent;
+import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, AutoSyncedComponent, CommonTickingComponent {
@@ -20,13 +23,13 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
     public static final String HEALTH_BUFF_ID = "Envixia Health Boost";
     public static final String IS_IN_ENVIXIA_KEY = "IsInEnvixia";
     public static final String CAN_FLY_KEY = "CanFly";
-    public static final String SHOULD_START_DEATH_SEQ_KEY = "ShouldStartDeathSeq";
-    public static final String DEATH_SEQ_ANIMATION_TIME_KEY = "DeathSeqAnimationTime";
+    public static final String SHOULD_TICK_FLY_TIME_KEY = "ShouldTickFlyTime";
+    public static final String FLY_TIME_KEY = "FlyTime";
     private final PlayerEntity player;
     private boolean isInEnvixia = false;
     private boolean canFly = false;
-    private boolean shouldStartDeathSeq = false;
-    private int death_seq_animation_time = 0;
+    private boolean shouldTickFlyTime = false;
+    private int flyTime = 0;
 
     public EnvixiaFormComponent(PlayerEntity player) {
         this.player = player;
@@ -41,30 +44,30 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
 
     @Override
     public int getInt() {
-        return this.death_seq_animation_time;
+        return this.flyTime;
     }
 
     @Override
     public void setInt(int value) {
-        this.death_seq_animation_time = value;
+        this.flyTime = value;
         this.sync();
     }
 
     @Override
     public void addValueToInt(int count) {
-        this.death_seq_animation_time += count;
+        this.flyTime += count;
         this.sync();
     }
 
     @Override
     public void incrementInt() {
-        this.death_seq_animation_time++;
+        this.flyTime++;
         this.sync();
     }
 
     @Override
     public void decrementInt() {
-        this.death_seq_animation_time--;
+        this.flyTime--;
         this.sync();
     }
 
@@ -87,9 +90,9 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
     @Override
     public boolean getTripleBoolValue3() {
         if (!this.isInEnvixia || player.getHealth() > 0) {
-            this.shouldStartDeathSeq = false;
+            this.shouldTickFlyTime = false;
         }
-        return this.shouldStartDeathSeq;
+        return this.shouldTickFlyTime;
     }
 
     @Override
@@ -106,30 +109,47 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
 
     @Override
     public void setTripleBoolValue3(boolean value) {
-        this.shouldStartDeathSeq = value;
+        this.shouldTickFlyTime = value;
         this.sync();
     }
 
     @Override
     public void tick() {
-        if (this.shouldStartDeathSeq) {
-            startDeathSequence();
-        }
-        if (!player.isSpectator()) {
-            if (!player.getAbilities().allowFlying && this.isInEnvixia) {
-                this.setTripleBoolValue2(true);
-            } else if ((!this.isInEnvixia || !EnvixiaArmorItem.hasFullSuit(this.player)) && !player.getAbilities().creativeMode) {
-                this.setTripleBoolValue2(false);
-            }
+        if (player.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
             if (!player.getAbilities().creativeMode) {
-                player.getAbilities().allowFlying = this.getTripleBoolValue2();
+                player.getAbilities().allowFlying = !player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE) && this.isInEnvixia;
+            }
+            if (player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE) || !this.isInEnvixia) {
+                if (!player.getAbilities().creativeMode && !player.isSpectator()) {
+                    player.getAbilities().flying = false;
+                }
             }
         }
-        if (!player.getAbilities().allowFlying) {
-            if (player.getAbilities().creativeMode || player.isSpectator()) {
-                player.getAbilities().allowFlying = true;
+        if (this.isInEnvixia && player.getAbilities().flying) {
+            this.setTripleBoolValue3(!player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE));
+            if (player.getAbilities().creativeMode && this.shouldTickFlyTime) {
+                this.setTripleBoolValue3(false);
+            }
+            if (this.shouldTickFlyTime) {
+                this.incrementInt();
+            }
+            if (this.flyTime >= 60) {
+                player.getAbilities().allowFlying = false;
+                player.getAbilities().flying = false;
+                player.getItemCooldownManager().set(RinveniumItems.ENVIXIA_CHESTPLATE, 200);
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0, true, false));
+                this.setInt(0);
             }
         }
+
+        if (player.getAbilities().creativeMode && !player.getAbilities().allowFlying) {
+            player.getAbilities().allowFlying = true;
+        }
+        if (player.isSpectator() && !player.getAbilities().flying) {
+            player.getAbilities().flying = true;
+        }
+
+
         if (this.isInEnvixia && EnvixiaArmorItem.hasFullSuit(this.player)) {
             if (!player.getAttributes().hasModifierForAttribute(EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_BUFF_UUID)) {
                 player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addTemporaryModifier(new EntityAttributeModifier(
@@ -154,23 +174,19 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
         }
     }
 
-    private void startDeathSequence() {
-
-    }
-
     @Override
     public void readFromNbt(NbtCompound nbtCompound) {
         this.isInEnvixia = nbtCompound.getBoolean(IS_IN_ENVIXIA_KEY);
         this.canFly = nbtCompound.getBoolean(CAN_FLY_KEY);
-        this.shouldStartDeathSeq = nbtCompound.getBoolean(SHOULD_START_DEATH_SEQ_KEY);
-        this.death_seq_animation_time = nbtCompound.getInt(DEATH_SEQ_ANIMATION_TIME_KEY);
+        this.shouldTickFlyTime = nbtCompound.getBoolean(SHOULD_TICK_FLY_TIME_KEY);
+        this.flyTime = nbtCompound.getInt(FLY_TIME_KEY);
     }
 
     @Override
     public void writeToNbt(NbtCompound nbtCompound) {
         nbtCompound.putBoolean(IS_IN_ENVIXIA_KEY, this.isInEnvixia);
         nbtCompound.putBoolean(CAN_FLY_KEY, this.canFly);
-        nbtCompound.putBoolean(SHOULD_START_DEATH_SEQ_KEY, this.shouldStartDeathSeq);
-        nbtCompound.putInt(DEATH_SEQ_ANIMATION_TIME_KEY, this.death_seq_animation_time);
+        nbtCompound.putBoolean(SHOULD_TICK_FLY_TIME_KEY, this.shouldTickFlyTime);
+        nbtCompound.putInt(FLY_TIME_KEY, this.flyTime);
     }
 }

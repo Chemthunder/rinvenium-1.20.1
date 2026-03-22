@@ -13,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
@@ -24,6 +25,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.Rinvenium;
@@ -121,13 +123,22 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         return !damageSource.isOf(RinveniumDamageSources.BOOP) && !damageSource.isOf(RinveniumDamageSources.ELECTRICITY);
     }
 
+    @ModifyArg(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"), index = 0)
+    private double rinvenium$damageDoesNoKB(double strength, @Local(argsOnly = true) DamageSource damageSource) {
+        if (damageSource.isOf(RinveniumDamageSources.BOOP) || damageSource.isOf(RinveniumDamageSources.ELECTRICITY)) {
+            return 0.0;
+        } else {
+            return strength;
+        }
+    }
+
     @Inject(method = "tickFallFlying", at = @At(value = "HEAD"), cancellable = true)
     private void rinvenium$envixiaElytraFlight(CallbackInfo ci) {
         boolean bl = this.getFlag(Entity.FALL_FLYING_FLAG_INDEX);
         if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player && bl && !this.isOnGround() && !this.hasVehicle() && !this.hasStatusEffect(StatusEffects.LEVITATION)) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
-            if (envixiaFormComponent.getTripleBoolValue1() && itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && EnvixiaArmorItem.hasFullSuit(player)) {
+            if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
                 bl = true;
                 int i = this.roll + 1;
                 if (!this.getWorld().isClient && i % 10 == 0) {
@@ -144,7 +155,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, bl);
             if (bl) {
                 ServerWorld serverWorld = (ServerWorld) this.getWorld();
-                Vec3d pos = this.getPos().add(this.getRotationVector().normalize());
+                Vec3d pos = this.getPos();
                 serverWorld.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.x, pos.y + 0.25, pos.z, 1, 0.01, 0.01, 0.01, 0.001);
             }
             ci.cancel();
@@ -157,6 +168,15 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             cir.setReturnValue(envixiaFormComponent.getTripleBoolValue1());
+        }
+    }
+
+    @Inject(method = "modifyAppliedDamage", at = @At(value = "TAIL"), cancellable = true)
+    private void rinvenium$envixiaFallProt(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
+        if (((LivingEntity)((Object)this)) instanceof  PlayerEntity player) {
+            if (EnvixiaArmorItem.hasFullSuit(player) && source.isIn(DamageTypeTags.IS_FALL)) {
+                cir.setReturnValue(amount * 0.25f);
+            }
         }
     }
 }
