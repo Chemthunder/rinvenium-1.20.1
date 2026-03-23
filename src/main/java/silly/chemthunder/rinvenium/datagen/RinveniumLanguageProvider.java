@@ -76,8 +76,10 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
 
         translationBuilder.add(RinveniumStatusEffects.SPARKED, "Sparked");
         translationBuilder.add(RinveniumStatusEffects.SPARKED_WITH_CD, "Electrified");
+        translationBuilder.add(RinveniumStatusEffects.SWISS_CHEESE, "Swiss Cheese");
         translationBuilder.add("effect.rinvenium.sparked.desc", "Deals low damage rapidly and can chain to nearby players if they are wet.");
         translationBuilder.add("effect.rinvenium.sparked_with_cooldown.desc", "Deals low damage in short intervals.");
+        translationBuilder.add("effect.rinvenium.swiss_cheese.desc", "Applies a visually impairing overlay of holes.");
 
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH), "Spear rushes");
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH_IMPACT), "Spear rush hits");
