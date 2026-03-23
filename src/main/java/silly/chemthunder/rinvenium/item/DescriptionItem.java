@@ -25,7 +25,7 @@ public class DescriptionItem extends Item {
         for (int i = 1; i <= numberOfLines; i++) {
             tooltip.add(Text.translatable("item.rinvenium." + item + ".desc" + i).formatted(Formatting.GRAY));
         }
-
         super.appendTooltip(stack, world, tooltip, context);
     }
-}
+} // i like this, this is good, maybe add a . between the "desc" and the number though for formatting's sake
+// i'm stealing this

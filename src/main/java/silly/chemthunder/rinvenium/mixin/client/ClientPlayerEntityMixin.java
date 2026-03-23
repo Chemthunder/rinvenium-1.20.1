@@ -23,9 +23,7 @@ import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
-    @Shadow
-    @Final
-    public ClientPlayNetworkHandler networkHandler;
+    @Shadow @Final public ClientPlayNetworkHandler networkHandler;
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);

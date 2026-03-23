@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 // Made with Blockbench 5.0.7
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
+// nah i'd win
 public class EnvixiaArmorModel<T extends LivingEntity> extends BipedEntityModel<T> {
 	public final ModelPart headpiece;
 	public final ModelPart chestplate;

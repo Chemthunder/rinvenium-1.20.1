@@ -42,14 +42,9 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable {
-    @Shadow
-    public abstract boolean hasStatusEffect(StatusEffect effect);
-
-    @Shadow
-    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
-
-    @Shadow
-    protected int roll;
+    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Shadow protected int roll;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);

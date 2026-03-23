@@ -27,6 +27,7 @@ public abstract class WorldRendererMixin {
             return original.call(instance);
         }
     }
+    
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/OutlineVertexConsumerProvider;setColor(IIII)V"), index = 3)
     private int rinvenium$envixiaOutlineColorAlpha(int alpha, @Local Entity entity) {
         if (entity instanceof PlayerEntity player) {

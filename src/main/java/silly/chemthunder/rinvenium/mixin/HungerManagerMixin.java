@@ -18,14 +18,9 @@ import silly.chemthunder.rinvenium.util.inject.HungerDecrement;
 
 @Mixin(HungerManager.class)
 public abstract class HungerManagerMixin implements HungerDecrement {
-    @Shadow
-    public abstract void add(int food, float saturationModifier);
-
-    @Shadow
-    private int foodLevel;
-
-    @Shadow
-    private float saturationLevel;
+    @Shadow public abstract void add(int food, float saturationModifier);
+    @Shadow private int foodLevel;
+    @Shadow private float saturationLevel;
 
     @Override
     public void rinvenium$eatSubtract(Item item, ItemStack stack) {

@@ -63,7 +63,7 @@ public class EnvixiaCoreItem extends Item {
 
     public boolean isComplete(ItemStack stack) {
         if (!stack.isOf(this)) return false;
-        NbtCompound nbtCompound = stack.getNbt();
+            NbtCompound nbtCompound = stack.getNbt();
         if (nbtCompound != null) {
             NbtList nbtList = nbtCompound.getList(INGREDIENTS_KEY, NbtElement.COMPOUND_TYPE);
             List<ItemStack> ingredients = nbtList.stream().map(NbtCompound.class::cast).map(ItemStack::fromNbt).toList();
@@ -91,6 +91,7 @@ public class EnvixiaCoreItem extends Item {
             player.getInventory().armor.set(PlayerInventory.ARMOR_SLOTS[0], new ItemStack(RinveniumItems.ENVIXIA_BOOTS));
         }*/
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
+
         if (player.getAbilities().flying && envixiaFormComponent.getTripleBoolValue1()) player.getAbilities().flying = false;
         envixiaFormComponent.setTripleBoolValue1(!envixiaFormComponent.getTripleBoolValue1());
         if (world instanceof ServerWorld serverWorld) {
@@ -120,6 +121,7 @@ public class EnvixiaCoreItem extends Item {
             } else if (stackInSlot.getItem().canBeNested()) {
                 int countToAdd = INGREDIENT_GOAL.get(stackInSlot.getItem()) - getStoredStackCount(stack, stackInSlot);
                 int amountAdded = addToCore(stack, slot.takeStackRange(stackInSlot.getCount(), countToAdd, player));
+
                 if (amountAdded > 0) {
                     this.playInsertSound(player);
                 }
@@ -133,6 +135,7 @@ public class EnvixiaCoreItem extends Item {
         if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
             if (!otherStack.isEmpty()) {
                 int amountAdded = addToCore(stack, otherStack);
+
                 if (amountAdded > 0) {
                     this.playInsertSound(player);
                     otherStack.decrement(amountAdded);
@@ -150,16 +153,20 @@ public class EnvixiaCoreItem extends Item {
             if (!nbtCompound.contains(INGREDIENTS_KEY)) {
                 nbtCompound.put(INGREDIENTS_KEY, new NbtList());
             }
+
             int currentStackInCoreCount = getStoredStackCount(core, stack);
             int countToAdd = Math.min(stack.getCount(), INGREDIENT_GOAL.get(stack.getItem()) - currentStackInCoreCount);
+
             if (countToAdd == 0) {
                 return 0;
             } else {
                 NbtList ingredientList = nbtCompound.getList(INGREDIENTS_KEY, NbtElement.COMPOUND_TYPE);
                 Optional<NbtCompound> optional = canMergeStack(stack, ingredientList);
+
                 if (optional.isPresent()) {
                     NbtCompound optionalCompound = (NbtCompound) optional.get();
                     ItemStack optionalStack = ItemStack.fromNbt(optionalCompound);
+
                     optionalStack.increment(countToAdd);
                     optionalStack.writeNbt(optionalCompound);
                     ingredientList.remove(optionalCompound);
@@ -167,6 +174,7 @@ public class EnvixiaCoreItem extends Item {
                 } else {
                     ItemStack inputStack = stack.copyWithCount(countToAdd);
                     NbtCompound inputCompound = new NbtCompound();
+
                     inputStack.writeNbt(inputCompound);
                     ingredientList.add(0, inputCompound);
                 }
@@ -180,6 +188,7 @@ public class EnvixiaCoreItem extends Item {
     private static int getStoredStackCount(ItemStack core, ItemStack stack) {
         List<ItemStack> list = getStoredStacks(core).toList();
         List<Item> listToItem = new java.util.ArrayList<>(List.of());
+
         list.forEach(itemStack -> listToItem.add(itemStack.getItem()));
         if (listToItem.contains(stack.getItem())) {
             int index = listToItem.indexOf(stack.getItem());
@@ -205,6 +214,7 @@ public class EnvixiaCoreItem extends Item {
 
     private static Stream<ItemStack> getStoredStacks(ItemStack stack) {
         NbtCompound nbtCompound = stack.getNbt();
+
         if (nbtCompound == null) {
             return Stream.empty();
         } else {
@@ -223,6 +233,7 @@ public class EnvixiaCoreItem extends Item {
         int cellCount = 0;
         int plateCount = 0;
         int beaconCount = 0;
+        
         if (nbtCompound != null) {
             NbtList nbtList = nbtCompound.getList(INGREDIENTS_KEY, NbtElement.COMPOUND_TYPE);
             List<ItemStack> ingredients = nbtList.stream().map(NbtCompound.class::cast).map(ItemStack::fromNbt).toList();

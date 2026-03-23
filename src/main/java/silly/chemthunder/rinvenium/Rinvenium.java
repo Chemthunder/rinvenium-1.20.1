@@ -31,6 +31,7 @@ public class Rinvenium implements ModInitializer {
 
 		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");
+        LOGGER.info("whuh?");
 
         // haters
         haters.add(UUID.fromString("c2fd27cf-5931-462b-8d7d-7f11adb7998b"));

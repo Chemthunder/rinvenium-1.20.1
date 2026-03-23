@@ -39,8 +39,9 @@ public class EnviniumSpearItem extends SwordItem {
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
-        EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
         boolean hasRush = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0;
+
+        EnviniumSpearItemComponent spear = EnviniumSpearItemComponent.KEY.get(stack);
         SpearParryComponent spearParryComponent = SpearParryComponent.get(user);
         SpearDashingComponent spearDashingComponent = SpearDashingComponent.get(user);
 
@@ -193,6 +194,7 @@ public class EnviniumSpearItem extends SwordItem {
             } else {
                 builder.putAll(super.getAttributeModifiers(stack, slot));
             }
+
             builder.put(ReachEntityAttributes.ATTACK_RANGE,
                     new EntityAttributeModifier(
                             UUID.fromString("a67e3cc0-45d5-4e8e-9d64-7421e1b5fe3e"),

@@ -17,8 +17,7 @@ import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 @Mixin(TridentRiptideFeatureRenderer.class)
 public abstract class TridentFeatureRendererMixin {
-    @Unique
-    private static final Identifier SPEAR_RIPTIDE_TEXTURE = Rinvenium.id("textures/entity/spear_riptide.png");
+    @Unique private static final Identifier SPEAR_RIPTIDE_TEXTURE = Rinvenium.id("textures/entity/spear_riptide.png");
 
     @ModifyVariable(method = "render", at = @At("STORE"))
     private VertexConsumer swapHotRiptide(VertexConsumer orig, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, LivingEntity livingEntity) {

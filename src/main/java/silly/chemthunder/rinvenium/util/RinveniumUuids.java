@@ -17,6 +17,8 @@ public class RinveniumUuids {
     public static final String MIDGET_S = "b0a8bc6a-4856-44e6-8301-a036d37c24df";
     public static final UUID MIDGET = create(MIDGET_S, CRAFT_ENVIXIA, UUIDS);
 
+    // add me frfr trust ong 
+
     @SafeVarargs
     private static UUID create(String uuid, List<UUID>... lists) {
         UUID created = UUID.fromString(uuid);

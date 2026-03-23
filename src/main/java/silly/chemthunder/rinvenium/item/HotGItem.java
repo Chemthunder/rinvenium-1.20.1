@@ -50,6 +50,7 @@ public class HotGItem extends Item {
         super(settings);
     }
 
+    @Override
     public Text getName(ItemStack stack) {
         return super.getName(stack).copy().styled(style -> style.withColor(0xf58442));
     }
@@ -78,6 +79,7 @@ public class HotGItem extends Item {
         if (user instanceof PlayerEntity player) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             HailOfTheGodComponent hailOfTheGodComponent = HailOfTheGodComponent.get(player);
+
             if (player.getItemCooldownManager().isCoolingDown(RinveniumItems.HAIL_OF_THE_GODS)) {
                 player.stopUsingItem();
             }
@@ -96,6 +98,7 @@ public class HotGItem extends Item {
                 if (envixiaFormComponent.getTripleBoolValue1()) shootAsRaycastAimAssist(world, user, player, hailOfTheGodComponent);
                 world.playSound(null, player.getBlockPos(), RinveniumSoundEvents.HAIL_OF_THE_GODS_SHOOT, SoundCategory.PLAYERS, 0.5f, 0.9f);
             }
+
             if (!world.isClient) {
                 if (hailOfTheGodComponent.getDoubleIntValue1() < HailOfTheGodComponent.MAX_USE_TIME && hailOfTheGodComponent.getDoubleIntValue2() <= 0) {
                     hailOfTheGodComponent.addToDoubleIntValue1(3);
@@ -104,6 +107,7 @@ public class HotGItem extends Item {
                 }
             }
         }
+
         if (user.isUsingItem() && user.getActiveItem().isOf(RinveniumItems.HAIL_OF_THE_GODS) && user.getItemUseTime() >= this.getMaxUseTime(stack)) {
             user.stopUsingItem();
             if (user instanceof PlayerEntity player) {
@@ -117,6 +121,7 @@ public class HotGItem extends Item {
         if (world.isClient) {
             clientRot = user.getRotationVecClient();
         }
+
         if (!world.isClient && !player.getItemCooldownManager().isCoolingDown(RinveniumItems.HAIL_OF_THE_GODS)) {
             final float tickDelta = 0.0f;
             boolean shouldFlash = false;
@@ -147,9 +152,11 @@ public class HotGItem extends Item {
                         entity = target;
                     }
                 }
+
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 0.5, 1.2, RinveniumParticles.HAIL_OF_THE_GODS_TRAIL);
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 1.0, 1.1, RinveniumParticles.HAIL_OF_THE_GODS_SMOKE);
             }
+
             if (shouldFlash && entity != null) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 if (serverPlayerEntity != null) {
@@ -168,6 +175,7 @@ public class HotGItem extends Item {
         if (world.isClient) {
             clientRot = user.getRotationVecClient();
         }
+
         if (!world.isClient && !player.getItemCooldownManager().isCoolingDown(RinveniumItems.HAIL_OF_THE_GODS)) {
             final float tickDelta = 0.0f;
             boolean shouldFlash = false;
@@ -176,11 +184,13 @@ public class HotGItem extends Item {
                 Vec3d start = player.getCameraPosVec(tickDelta);
                 Vec3d rot = clientRot != null ? clientRot : player.getRotationVec(tickDelta);
                 float divergence = 10.1f;
+
                 rot = rot.add(
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence),
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence),
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence)
                 );
+
                 HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, false, divergence);
                 EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, divergence, 0.25);
 
@@ -191,9 +201,11 @@ public class HotGItem extends Item {
                         entity = target;
                     }
                 }
+
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 0.5, 1.2, RinveniumParticles.HAIL_OF_THE_GODS_TRAIL);
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 1.0, 1.1, RinveniumParticles.HAIL_OF_THE_GODS_SMOKE);
             }
+
             if (shouldFlash && entity != null) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 if (serverPlayerEntity != null) {
@@ -207,24 +219,29 @@ public class HotGItem extends Item {
             }
         }
     }
+
     private void shootAsRaycastAimAssist(World world, LivingEntity user, PlayerEntity player, HailOfTheGodComponent hailOfTheGodComponent) {
         Vec3d clientRot = null;
         if (world.isClient) {
             clientRot = user.getRotationVecClient();
         }
+
         if (!world.isClient && !player.getItemCooldownManager().isCoolingDown(RinveniumItems.HAIL_OF_THE_GODS)) {
             final float tickDelta = 0.0f;
             boolean shouldFlash = false;
             Entity entity = null;
+
             for (int i = 0; i < 5; i++) {
                 Vec3d start = player.getCameraPosVec(tickDelta);
                 Vec3d rot = clientRot != null ? clientRot : player.getRotationVec(tickDelta);
                 float divergence = 5.0f;
+
                 rot = rot.add(
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence),
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence),
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence)
                 );
+
                 HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, false, divergence);
                 EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, divergence, 0.25);
 
@@ -235,9 +252,11 @@ public class HotGItem extends Item {
                         entity = target;
                     }
                 }
+
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 0.5, 1.2, RinveniumParticles.HAIL_OF_THE_GODS_TRAIL);
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 1.0, 1.1, RinveniumParticles.HAIL_OF_THE_GODS_SMOKE);
             }
+
             if (shouldFlash && entity != null) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 if (serverPlayerEntity != null) {
@@ -257,18 +276,22 @@ public class HotGItem extends Item {
         if (world.isClient) {
             clientRot = user.getRotationVecClient();
         }
+
         if (!world.isClient && !player.getItemCooldownManager().isCoolingDown(RinveniumItems.HAIL_OF_THE_GODS)) {
             for (int i = 0; i < 4; i++) {
                 GunshotEntity bullet = new GunshotEntity(world, user);
+
                 if (bullet.getOwner() == null) {
                     bullet.setOwner(user);
                 } else if (!bullet.getOwner().equals(user)) {
                     bullet.setOwner(user);
                 }
+
                 Vec3d spawnPos = user.getPos();
                 bullet.updatePosition(spawnPos.getX(), spawnPos.getY() + 0.5f, spawnPos.getZ());
                 float pitch;
                 float yaw;
+
                 if (clientRot != null) {
                     pitch = RinveniumUtil.pitchFromVecDeg(clientRot);
                     yaw = RinveniumUtil.yawFromVecDeg(clientRot);
@@ -276,8 +299,10 @@ public class HotGItem extends Item {
                     pitch = user.getPitch();
                     yaw = user.getYaw();
                 }
+
                 bullet.updateRotation();
                 bullet.setVelocity(user, pitch, yaw, 0.0f, 3.2f * 3.0f, (float) RinveniumUtil.calculateDivergenceDropOff(hailOfTheGodComponent.getDoubleIntValue1()) * 2.0f + 0.1f);
+
                 if (hailOfTheGodComponent.getDoubleIntValue2() > 0) {
                     if (hailOfTheGodComponent.getDoubleIntValue2() % 2 == 0) {
                         world.spawnEntity(bullet);
@@ -286,7 +311,6 @@ public class HotGItem extends Item {
                 } else {
                     world.spawnEntity(bullet);
                 }
-
             }
         }
     }

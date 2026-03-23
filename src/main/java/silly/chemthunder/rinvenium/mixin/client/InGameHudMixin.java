@@ -23,19 +23,13 @@ import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 
+@SuppressWarnings("DiscouragedShift")
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
-    @Shadow
-    @Final
-    private MinecraftClient client;
+    @Shadow @Final private MinecraftClient client;
+    @Shadow protected abstract int getHeartCount(LivingEntity entity);
+    @Shadow protected abstract int getHeartRows(int heartCount);
 
-    @Shadow
-    protected abstract int getHeartCount(LivingEntity entity);
-
-    @Shadow
-    protected abstract int getHeartRows(int heartCount);
-
-    @SuppressWarnings("DiscouragedShift")
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (this.client != null && this.client.player != null && this.client.options.getPerspective().isFirstPerson()) {
@@ -63,6 +57,7 @@ public abstract class InGameHudMixin {
         }
         return original.call();
     }
+
     @WrapOperation(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;", ordinal = 4, opcode = Opcodes.GETSTATIC))
     private Identifier rinvenium$envixiaHungerBarHalf(Operation<Identifier> original) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
@@ -74,6 +69,7 @@ public abstract class InGameHudMixin {
         }
         return original.call();
     }
+
     @WrapOperation(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;", ordinal = 5, opcode = Opcodes.GETSTATIC))
     private Identifier rinvenium$envixiaHungerBarFull(Operation<Identifier> original) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;

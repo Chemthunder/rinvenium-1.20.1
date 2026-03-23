@@ -52,6 +52,7 @@ public class BatteryItem extends Item {
                         }
                     });
                 }
+
                 if (this.shouldCraft) {
                     craftTime += 2;
                     if (world instanceof ServerWorld serverWorld) {
@@ -70,6 +71,7 @@ public class BatteryItem extends Item {
                 } else {
                     craftTime--;
                 }
+
                 if (craftTime >= 80 * (int) Math.floor((double) itemStack.getCount() / 2)) {
                     ItemUsage.exchangeStack(stack, player, new ItemStack(RinveniumItems.ION_CELL).copyWithCount(itemStack.getCount()));
                 }

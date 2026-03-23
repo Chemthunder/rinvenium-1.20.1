@@ -38,14 +38,9 @@ import silly.chemthunder.rinvenium.util.inject.HungerDecrement;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
-    @Shadow
-    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
-
-    @Shadow
-    public abstract void startFallFlying();
-
-    @Shadow
-    public abstract HungerManager getHungerManager();
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Shadow public abstract void startFallFlying();
+    @Shadow public abstract HungerManager getHungerManager();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);

@@ -19,7 +19,6 @@ import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 
 @Mixin(HeldItemFeatureRenderer.class)
 public abstract class HeldItemFeatureRendererMixin<T extends LivingEntity, M extends EntityModel<T> & ModelWithArms> extends FeatureRenderer<T, M> {
-
     public HeldItemFeatureRendererMixin(FeatureRendererContext<T, M> context) {
         super(context);
     }

@@ -20,8 +20,7 @@ import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
-    @Shadow
-    protected M model;
+    @Shadow protected M model;
 
     protected LivingEntityRendererMixin(EntityRendererFactory.Context ctx) {
         super(ctx);
