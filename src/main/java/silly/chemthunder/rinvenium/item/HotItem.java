@@ -38,6 +38,7 @@ public class HotItem extends DescriptionItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+
         if (blockHitResult.getType() == HitResult.Type.MISS) {
             return TypedActionResult.pass(itemStack);
         } else {

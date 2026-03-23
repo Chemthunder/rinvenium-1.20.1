@@ -30,16 +30,20 @@ public abstract class DrawContextMixin {
         if (this.client.player != null) {
             int k2 = x + 2;
             int l2 = y + 13;
+
             if (stack.isOf(RinveniumItems.ENVINIUM_SPEAR)) {
                 SpearParryComponent spearParryComponent = SpearParryComponent.get(this.client.player);
                 SpearDashingComponent spearDashingComponent = SpearDashingComponent.get(this.client.player);
+
                 if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
                     int m = (int) (spearDashingComponent.getChargePercent() * 13);
+
                     this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
                     this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + m, l2 + 1, 0x9cfdff | 0xFF000000);
                 } else {
                     int i = (int) Math.ceil(spearParryComponent.getDoubleIntValue2() > 0 ? spearParryComponent.getDamageWindowPercentage() * 13 : spearParryComponent.getParryWindowPercentage() * 13);
                     int j = spearParryComponent.getDoubleIntValue2() > 0 ? 0x7a1c8c : 0xfdc211;
+
                     this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
                     this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + i, l2 + 1, j | 0xFF000000);
                 }
@@ -47,6 +51,7 @@ public abstract class DrawContextMixin {
                 HailOfTheGodComponent hailOfTheGodComponent = HailOfTheGodComponent.get(this.client.player);
                 int useTime = (int) Math.floor((double) hailOfTheGodComponent.getDoubleIntValue1() / HailOfTheGodComponent.MAX_USE_TIME * 13);
                 int overheatTime = (int) Math.floor((double) hailOfTheGodComponent.getDoubleIntValue2() / HailOfTheGodComponent.MAX_OVERHEAT_TIME * 13);
+
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + useTime, l2 + 1, 0x9cfdff | 0xFF000000);
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + overheatTime, l2 + 1, 0xfdc211 | 0xFF000000);
@@ -55,6 +60,7 @@ public abstract class DrawContextMixin {
                 int flyTime = envixiaFormComponent.getInt();
                 int timeRemaining = (int) MathHelper.clamp(Math.ceil((double) (60 - flyTime) / 60 * 13), 0, 60);
                 int cooldownTime = (int) Math.floor(13 - this.client.player.getItemCooldownManager().getCooldownProgress(RinveniumItems.ENVIXIA_CHESTPLATE, 0.0f) * 13);
+
                 this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + 13, l2 + 2, -16777216);
                 if (this.client.player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE)) {
                     this.fill(RenderLayer.getGuiOverlay(), k2, l2, k2 + cooldownTime, l2 + 1, 0x1a4b3a | 0xFF000000);

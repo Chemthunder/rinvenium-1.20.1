@@ -27,6 +27,7 @@ public abstract class HeldItemRendererMixin {
     private void gitsnshiggles$bigItemPickup(Hand hand, CallbackInfo ci) {
         if (MinecraftClient.getInstance().player != null) {
             ItemStack stack = MinecraftClient.getInstance().player.getStackInHand(hand);
+            
             if (stack.isIn(RinveniumItemTagProvider.BIG_ITEM_RENDERING)) {
                 ci.cancel();
             }
