@@ -1,10 +1,12 @@
 package silly.chemthunder.rinvenium.particle;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
 
-
+@Environment(EnvType.CLIENT)
 public class RailgunTrailParticle<T extends AgeVaryingParticleEffect> extends SpriteBillboardParticle {
     private final SpriteProvider spriteProvider;
 
@@ -30,11 +32,13 @@ public class RailgunTrailParticle<T extends AgeVaryingParticleEffect> extends Sp
         this.setSpriteForAge(this.spriteProvider);
     }
 
+    @Environment(EnvType.CLIENT)
     public static class Default extends RailgunTrailParticle<RailgunTrailParticleEffect> {
         public Default(ClientWorld clientWorld, double d, double e, double f, double g, double h, double i, RailgunTrailParticleEffect parameters, SpriteProvider spriteProvider) {
             super(clientWorld, d, e, f, g, h, i, parameters, spriteProvider);
         }
 
+        @Environment(EnvType.CLIENT)
         public static class Factory implements ParticleFactory<RailgunTrailParticleEffect> {
             private final SpriteProvider spriteProvider;
 

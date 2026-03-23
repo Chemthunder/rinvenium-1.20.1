@@ -6,16 +6,11 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import silly.chemthunder.rinvenium.index.RinveniumParticles;
-import silly.chemthunder.rinvenium.particle.AgeVaryingParticleEffect;
-import silly.chemthunder.rinvenium.particle.SmokeTrailParticle;
-import silly.chemthunder.rinvenium.particle.SmokeTrailParticleEffect;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
 
 public class DebuggerItem extends Item {
