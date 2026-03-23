@@ -12,6 +12,7 @@
   "desc.spear.unenchanted_3": "Attacking in a certain time frame will increase the damage by 50%.",
   "effect.rinvenium.sparked": "Sparked",
   "effect.rinvenium.sparked.desc": "Deals low damage rapidly and can chain to nearby players if they are wet.",
+  "effect.rinvenium.sparked_with_cooldown": "Electrified",
   "enchantment.rinvenium.rush": "Rush",
   "enchantment.rinvenium.rush.desc": "The Envinium Spear will charge over time, \nallowing the user to rush forward at great speeds on right-click.",
   "item.rinvenium.aurio_ingot": "Aurio Ingot",

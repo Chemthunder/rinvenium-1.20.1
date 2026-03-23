@@ -69,11 +69,15 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("death.attack.niki.item", "fuck you");
         translationBuilder.add("death.attack.electricity", "%s was electrocuted");
         translationBuilder.add("death.attack.electricity.player", "%s was electrocuted by %s");
+        translationBuilder.add("death.attack.electricity_with_cooldown", "%s was electrocuted");
+        translationBuilder.add("death.attack.electricity_with_cooldown.player", "%s was electrocuted by %s");
         translationBuilder.add("death.attack.boop", "%s was peppered a thousand times");
         translationBuilder.add("death.attack.boop.player", "%s was peppered a thousand times by %s");
 
         translationBuilder.add(RinveniumStatusEffects.SPARKED, "Sparked");
+        translationBuilder.add(RinveniumStatusEffects.SPARKED_WITH_CD, "Electrified");
         translationBuilder.add("effect.rinvenium.sparked.desc", "Deals low damage rapidly and can chain to nearby players if they are wet.");
+        translationBuilder.add("effect.rinvenium.sparked_with_cooldown.desc", "Deals low damage in short intervals.");
 
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH), "Spear rushes");
         translationBuilder.add(getSoundTranslationKey(RinveniumSoundEvents.SPEAR_DASH_IMPACT), "Spear rush hits");

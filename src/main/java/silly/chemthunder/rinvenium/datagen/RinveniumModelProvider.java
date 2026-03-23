@@ -49,5 +49,6 @@ public class RinveniumModelProvider extends FabricModelProvider {
         //     }
         // }
         // maybe quick thing to optimize this idfk
+        // nah cuz we dont have that many items that warrant groupings like that. Most of the custom items have custom gui models anyway
     }
 }

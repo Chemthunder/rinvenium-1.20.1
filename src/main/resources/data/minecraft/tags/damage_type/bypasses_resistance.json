@@ -1,6 +1,7 @@
 {
   "values": [
     "rinvenium:electricity",
+    "rinvenium:electricity_with_cooldown",
     "rinvenium:boop"
   ]
 }

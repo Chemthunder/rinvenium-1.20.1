@@ -82,6 +82,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                         if (hasChanneling || hasSpear) {
                             if (!Rinvenium.haters.contains(player.getUuid())) {
                                 living.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10));
+
+                                if (player.getWorld() instanceof ServerWorld serverWorld) {
+                                    LightningEntity lightningEntity = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
+                                    lightningEntity.setCosmetic(true);
+                                    lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(entity.getBlockPos()));
+                                    serverWorld.spawnEntity(lightningEntity);
+                                }
                             } else {
                                 player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 20));
 

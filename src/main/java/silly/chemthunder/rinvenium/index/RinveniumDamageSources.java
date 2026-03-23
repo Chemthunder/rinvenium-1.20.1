@@ -6,6 +6,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.Rinvenium;
 
 public interface RinveniumDamageSources {
@@ -16,8 +17,12 @@ public interface RinveniumDamageSources {
     RegistryKey<DamageType> BOOP = of("boop");
     static DamageSource boop(Entity entity) {
         return entity.getDamageSources().create(BOOP); }
-    static DamageSource boop(Entity entity, LivingEntity attacker) {
-        return entity.getDamageSources().create(BOOP, attacker);
+    static DamageSource boop(Entity entity, @Nullable Entity attacker) {
+        if (attacker != null && attacker instanceof LivingEntity livingEntity) {
+            return entity.getDamageSources().create(BOOP, livingEntity);
+        } else {
+            return boop(entity);
+        }
     }
 
     RegistryKey<DamageType> ELECTRICITY = of("electricity");
@@ -25,6 +30,14 @@ public interface RinveniumDamageSources {
         return entity.getDamageSources().create(ELECTRICITY);
     }
     static DamageSource electricity(LivingEntity entity, LivingEntity attacker) {
+        return entity.getDamageSources().create(ELECTRICITY, attacker);
+    }
+
+    RegistryKey<DamageType> ELECTRICITY_WITH_CD = of("electricity_with_cooldown");
+    static DamageSource electricityWithCD(LivingEntity entity) {
+        return entity.getDamageSources().create(ELECTRICITY);
+    }
+    static DamageSource electricityWithCD(LivingEntity entity, LivingEntity attacker) {
         return entity.getDamageSources().create(ELECTRICITY, attacker);
     }
 

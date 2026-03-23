@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
@@ -13,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -59,6 +61,10 @@ public abstract class ItemEntityMixin extends Entity {
                 int count = this.getStack().getCount();
                 this.setStack(new ItemStack(RinveniumItems.SUPERHEATED_ENVIXIUS_PLATE, count));
                 if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    LightningEntity lightningEntity = new LightningEntity(EntityType.LIGHTNING_BOLT, this.getWorld());
+                    lightningEntity.setCosmetic(true);
+                    lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(this.getBlockPos()));
+                    serverWorld.spawnEntity(lightningEntity);
                     serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), RinveniumSoundEvents.PLATE_FORMED, SoundCategory.BLOCKS, 0.7F, 1.0F);
                 }
             }

@@ -97,7 +97,7 @@ public class GunshotEntity extends ThrownItemEntity {
         if (target.equals(this.getOwner())) {
             return;
         }
-        if (target.damage(RinveniumDamageSources.boop(target), 1.5f)) {
+        if (target.damage(RinveniumDamageSources.boop(target, this.getOwner()), 1.5f)) {
             if (target.getWorld().isClient) {
                 ClientWorld clientWorld = (ClientWorld) target.getWorld();
                 clientWorld.getPlayers().forEach(player -> {

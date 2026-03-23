@@ -6,6 +6,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.effect.PublicStatusEffect;
 import silly.chemthunder.rinvenium.effect.SparkedStatusEffect;
 
 import java.util.LinkedHashMap;
@@ -14,7 +15,9 @@ import java.util.Map;
 public interface RinveniumStatusEffects {
     Map<StatusEffect, Identifier> EFFECTS = new LinkedHashMap<>();
 
-    StatusEffect SPARKED = create("sparked", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff));
+    StatusEffect SPARKED = create("sparked", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff, false));
+    StatusEffect SPARKED_WITH_CD = create("sparked_with_cooldown", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff, true));
+    StatusEffect SWISS_CHEESE = create("swiss_cheese", new PublicStatusEffect(StatusEffectCategory.NEUTRAL, 0xd6c127));
 
     static void init() {
         EFFECTS.keySet().forEach(effect -> Registry.register(Registries.STATUS_EFFECT, EFFECTS.get(effect), effect));

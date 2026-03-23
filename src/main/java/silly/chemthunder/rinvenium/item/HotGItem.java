@@ -140,7 +140,7 @@ public class HotGItem extends Item {
                         float random = world.random.nextFloat();
                         if (random <= 0.05f) {
                             if (target instanceof LivingEntity livingEntity) {
-                                livingEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10, 0));
+                                livingEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED_WITH_CD, 40, 0));
                             }
                         }
                         shouldFlash = true;
