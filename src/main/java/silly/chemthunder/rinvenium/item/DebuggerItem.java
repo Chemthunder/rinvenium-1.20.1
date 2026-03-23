@@ -27,7 +27,8 @@ public class DebuggerItem extends Item {
             } else { // Server Side Standing
                 if (world instanceof ServerWorld serverWorld) {
                     HitResult hitResult = player.raycast(50.0, 0.0f, false);
-                    RinveniumUtil.spawnRaycastSmokeParticles(serverWorld, player.getCameraPosVec(0.0f), player.getRotationVector(), hitResult, 50.0, 0.5, 1.2);
+                    RinveniumUtil.spawnRaycastSmokeParticles(serverWorld, player.getCameraPosVec(0.0f), player.getRotationVector(), hitResult, 256.0, 0.5, 1.1, 40);
+                    RinveniumUtil.spawnRaycastRailgunParticles(serverWorld, player.getCameraPosVec(0.0f), player.getRotationVector(), hitResult, 256.0, 0.5, 2.3, 30);
                 }
             }
         } else {

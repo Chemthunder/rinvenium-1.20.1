@@ -12,6 +12,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import silly.chemthunder.rinvenium.particle.RailgunTrailParticleEffect;
 import silly.chemthunder.rinvenium.particle.SmokeTrailParticleEffect;
 
 public class RinveniumUtil {
@@ -147,7 +148,7 @@ public class RinveniumUtil {
         }
     }
 
-    public static void spawnRaycastSmokeParticles(ServerWorld world, Vec3d start, Vec3d rot, HitResult hitResult, double maxDistance, double step, double offset) {
+    public static void spawnRaycastSmokeParticles(ServerWorld world, Vec3d start, Vec3d rot, HitResult hitResult, double maxDistance, double step, double offset, int particleAge) {
         Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
         SmokeTrailParticleEffect particle;
         Vec3d direction = endPos.subtract(start);
@@ -159,22 +160,54 @@ public class RinveniumUtil {
                 Vec3d hitDirection = hitPos.subtract(start);
                 double hitLength = hitDirection.length();
 
+                for (double d = offset; d < Math.min(length, hitLength) * 0.8; d += step) {
+                    Vec3d spawnPos = start.add(normal.multiply(d));
+                    particle = new SmokeTrailParticleEffect((int) Math.ceil(d / Math.min(length, hitLength) * particleAge));
+                    world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
+                }
+            } else {
+                for (double d = offset; d < length * 0.8; d += step) {
+                    Vec3d spawnPos = start.add(normal.multiply(d));
+                    particle = new SmokeTrailParticleEffect((int) Math.ceil(d / length * particleAge));
+                    world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
+                }
+            }
+        } else {
+            for (double d = offset; d < length * 0.8; d += step) {
+                Vec3d spawnPos = start.add(normal.multiply(d));
+                particle = new SmokeTrailParticleEffect((int) Math.ceil(d / length * particleAge));
+                world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
+            }
+        }
+    }
+    public static void spawnRaycastRailgunParticles(ServerWorld world, Vec3d start, Vec3d rot, HitResult hitResult, double maxDistance, double step, double offset, int particleAge) {
+        Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
+        RailgunTrailParticleEffect particle;
+        Vec3d direction = endPos.subtract(start);
+        double length = direction.length();
+        Vec3d normal = direction.normalize();
+        if (hitResult != null) {
+            if (hitResult.getType() != HitResult.Type.MISS) {
+                Vec3d hitPos = hitResult.getPos();
+                Vec3d hitDirection = hitPos.subtract(start);
+                double hitLength = hitDirection.length();
+
                 for (double d = offset; d < Math.min(length, hitLength); d += step) {
                     Vec3d spawnPos = start.add(normal.multiply(d));
-                    particle = new SmokeTrailParticleEffect((int) Math.ceil(d / Math.min(length, hitLength) * 20));
+                    particle = new RailgunTrailParticleEffect((int) Math.ceil(d / Math.min(length, hitLength) * particleAge));
                     world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
                 }
             } else {
                 for (double d = offset; d < length; d += step) {
                     Vec3d spawnPos = start.add(normal.multiply(d));
-                    particle = new SmokeTrailParticleEffect((int) Math.ceil(d / length * 20));
+                    particle = new RailgunTrailParticleEffect((int) Math.ceil(d / length * particleAge));
                     world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
                 }
             }
         } else {
             for (double d = offset; d < length; d += step) {
                 Vec3d spawnPos = start.add(normal.multiply(d));
-                particle = new SmokeTrailParticleEffect((int) Math.ceil(d / length * 20));
+                particle = new RailgunTrailParticleEffect((int) Math.ceil(d / length * particleAge));
                 world.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.0, 0.0, 0);
             }
         }
