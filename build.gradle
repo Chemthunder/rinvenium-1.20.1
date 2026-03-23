@@ -9,6 +9,7 @@ group = project.maven_group
 base {
 	archivesName = project.archives_base_name
 }
+
 loom {
     accessWidenerPath = file("src/main/resources/rinvenium.accesswidener")
 	runs {
@@ -34,9 +35,14 @@ repositories {
 
 fabricApi {
 	configureDataGeneration {
+	//	modId = "rinvenium"
 		client = true
 	}
 }
+
+/* 
+Sync  this to gradle when you ain't busy, it fixes the datagen bug
+*/
 
 dependencies {
 	// To change the versions see the gradle.properties file
