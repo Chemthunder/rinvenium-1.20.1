@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,7 +34,8 @@ public abstract class ItemEntityMixin extends Entity {
     @Unique public int enviniaCraftingTicks = 0;
     @Unique public int envixiusCraftingTicks = 0;
     @Unique public int envixiusColdCraftingTicks = 0;
-    @Unique public int ionCellCraftingTicks = 0;
+    @Unique
+    public int ionCellCraftingTicks = 0;
 
     @Shadow public abstract ItemStack getStack();
     @Shadow public abstract void setStack(ItemStack stack);

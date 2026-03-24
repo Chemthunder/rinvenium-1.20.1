@@ -34,7 +34,7 @@ public class Rinvenium implements ModInitializer {
         LOGGER.info("whuh?");
 
         // haters
-        haters.add(UUID.fromString("c2fd27cf-5931-462b-8d7d-7f11adb7998b"));
-        haters.add(UUID.fromString("d0f1f0f4-631e-4290-9f60-78ace9e5e0ef"));
+        // haters.add(UUID.fromString("c2fd27cf-5931-462b-8d7d-7f11adb7998b"));
+        // haters.add(UUID.fromString("d0f1f0f4-631e-4290-9f60-78ace9e5e0ef"));
 	}
 }

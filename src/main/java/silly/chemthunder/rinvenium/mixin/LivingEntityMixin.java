@@ -140,7 +140,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player && bl && !this.isOnGround() && !this.hasVehicle() && !this.hasStatusEffect(StatusEffects.LEVITATION)) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
-            if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
+            if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1()) {
                 bl = true;
                 int i = this.roll + 1;
                 if (!this.getWorld().isClient && i % 10 == 0) {
