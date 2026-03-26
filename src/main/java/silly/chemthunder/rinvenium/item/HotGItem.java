@@ -141,7 +141,7 @@ public class HotGItem extends Item {
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
-                    if (target != null && target.damage(RinveniumDamageSources.boop(target, user), 0.1f)) {
+                    if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
                         float random = world.random.nextFloat();
                         if (random <= 0.05f) {
                             if (target instanceof LivingEntity livingEntity) {
@@ -196,7 +196,7 @@ public class HotGItem extends Item {
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
-                    if (target != null && target.damage(RinveniumDamageSources.boop(target, user), 0.1f)) {
+                    if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
                         shouldFlash = true;
                         entity = target;
                     }
@@ -247,7 +247,7 @@ public class HotGItem extends Item {
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
-                    if (target != null && target.damage(RinveniumDamageSources.boop(target, user), 0.1f)) {
+                    if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
                         shouldFlash = true;
                         entity = target;
                     }
