@@ -57,6 +57,8 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             if (envixiaFormComponent.getTripleBoolValue1()) {
                 return original.call(instance, box).expand(1.5);
+            } else if (user.getStackInHand(user.getActiveHand()).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
+                return original.call(instance, box).expand(0.5);
             }
         }
         return original.call(instance, box);
