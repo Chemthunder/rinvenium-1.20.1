@@ -56,50 +56,43 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (user instanceof PlayerEntity player) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             if (envixiaFormComponent.getTripleBoolValue1()) {
-                return original.call(instance, box).expand(1);
+                return original.call(instance, box).expand(1.5);
             }
         }
         return original.call(instance, box);
     }
 
     @Inject(method = "tickRiptide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;attackLivingEntity(Lnet/minecraft/entity/LivingEntity;)V"))
-    private void electrifySHIPFGHERFTIOPGIPRTHGPIRTHNPIHJRTYPIJIPTY(Box a, Box b, CallbackInfo ci) {
-        Box box = a.union(b);
-        List<Entity> list = this.getWorld().getOtherEntities(this, box);
-        if (!list.isEmpty()) {
-            for (Entity entity : list) {
-                if (entity instanceof LivingEntity living) {
-                    LivingEntity you = (LivingEntity) (Object) this;
-                    if (you instanceof PlayerEntity player) {
-                        ItemStack stack = player.getStackInHand(player.getActiveHand());
-                        var hasChanneling = EnchantmentHelper.hasChanneling(stack);
-                        var hasSpear = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0;
-                        if (hasChanneling || hasSpear) {
-                            if (!Rinvenium.haters.contains(player.getUuid())) {
-                                living.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10));
+    private void electrifySHIPFGHERFTIOPGIPRTHGPIRTHNPIHJRTYPIJIPTY(Box a, Box b, CallbackInfo ci, @Local Entity entity) {
+        LivingEntity you = (LivingEntity) (Object) this;
+        LivingEntity living = (LivingEntity) entity;
+        if (you instanceof PlayerEntity player) {
+            ItemStack stack = player.getStackInHand(player.getActiveHand());
+            var hasChanneling = EnchantmentHelper.hasChanneling(stack);
+            var hasSpear = EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0;
+            if (hasChanneling || hasSpear) {
+                if (!Rinvenium.haters.contains(player.getUuid())) {
+                    living.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 10));
 
-                                if (player.getWorld() instanceof ServerWorld serverWorld) {
-                                    LightningEntity lightningEntity = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
-                                    lightningEntity.setCosmetic(true);
-                                    lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(entity.getBlockPos()));
-                                    serverWorld.spawnEntity(lightningEntity);
-                                }
-                            } else {
-                                player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 20));
-
-                                if (player.getWorld() instanceof ServerWorld serverWorld) {
-                                    LightningEntity bolt = new LightningEntity(EntityType.LIGHTNING_BOLT, serverWorld);
-
-                                    bolt.updatePosition(player.getX(), player.getY(), player.getZ());
-
-                                    serverWorld.spawnEntity(bolt);
-                                }
-                            }
-                            if (player.getWorld() instanceof ServerWorld serverWorld) {
-                                serverWorld.playSound(null, player.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
-                            }
-                        }
+                    if (player.getWorld() instanceof ServerWorld serverWorld) {
+                        LightningEntity lightningEntity = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
+                        lightningEntity.setCosmetic(true);
+                        lightningEntity.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(entity.getBlockPos()));
+                        serverWorld.spawnEntity(lightningEntity);
                     }
+                } else {
+                    player.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.SPARKED, 20));
+
+                    if (player.getWorld() instanceof ServerWorld serverWorld) {
+                        LightningEntity bolt = new LightningEntity(EntityType.LIGHTNING_BOLT, serverWorld);
+
+                        bolt.updatePosition(player.getX(), player.getY(), player.getZ());
+
+                        serverWorld.spawnEntity(bolt);
+                    }
+                }
+                if (player.getWorld() instanceof ServerWorld serverWorld) {
+                    serverWorld.playSound(null, player.getBlockPos(), RinveniumSoundEvents.SPEAR_DASH_IMPACT, SoundCategory.PLAYERS, 1, 1);
                 }
             }
         }
