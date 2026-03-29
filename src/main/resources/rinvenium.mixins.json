@@ -19,6 +19,7 @@
   "client": [
     "client.ClientPlayerEntityMixin",
     "client.DrawContextMixin",
+    "client.GameRendererMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.LivingEntityRendererMixin",

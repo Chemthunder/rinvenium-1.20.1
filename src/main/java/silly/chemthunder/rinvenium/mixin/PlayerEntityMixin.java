@@ -3,6 +3,8 @@ package silly.chemthunder.rinvenium.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,11 +16,15 @@ import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,11 +36,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
+import silly.chemthunder.rinvenium.cca.entity.riva.SpearHealComponent;
 import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
-import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
-import silly.chemthunder.rinvenium.index.RinveniumItems;
-import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
-import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
+import silly.chemthunder.rinvenium.index.*;
 import silly.chemthunder.rinvenium.util.inject.HungerDecrement;
 
 @Mixin(PlayerEntity.class)
@@ -177,6 +181,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                                 serverWorld.playSoundFromEntity(null, this, RinveniumSoundEvents.SPEAR_PARRY, SoundCategory.PLAYERS, 1.0f, 1.0f + this.getEntityWorld().random.nextFloat() * 0.2f);
                                 serverWorld.playSoundFromEntity(null, this, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 1.0f + this.getEntityWorld().random.nextFloat() * 0.2f);
                             }
+                            PacketByteBuf buf = PacketByteBufs.create();
+                            buf.writeInt(8);
+                            buf.writeInt(0xFFFFFF);
+                            buf.writeInt(4);
+                            buf.writeFloat(0.8f);
+                            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                                ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                            }
+                            if (source.getAttacker() != null && source.getAttacker() instanceof ServerPlayerEntity serverPlayerEntity) {
+                                ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                                serverPlayerEntity.sendMessage(Text.literal("Your attack was parried").formatted(Formatting.RED), true);
+                            }
                             spearParryComponent.setDoubleIntValue2(SpearParryComponent.MAX_DAMAGE_WINDOW);
                             spearParryComponent.setDoubleBoolValue1(false);
                             if (source.getAttacker() instanceof LivingEntity livingEntity) {
@@ -236,7 +252,17 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I"))
+    private void rinvenium$spearHeal(Entity target, CallbackInfo ci, @Local(ordinal = 0) boolean bl) {
+        if (bl) {
+            SpearHealComponent spearHealComponent = SpearHealComponent.get((PlayerEntity) ((Object) this));
+            spearHealComponent.incrementInt();
+        }
+    }
+
     /*@Inject(method = "attackLivingEntity", at = @At("HEAD"))
     private void rinvenium$riptideAttack(LivingEntity target, CallbackInfo ci) {
     }*/
+
+
 }

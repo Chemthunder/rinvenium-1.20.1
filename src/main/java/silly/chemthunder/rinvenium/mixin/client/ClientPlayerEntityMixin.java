@@ -14,16 +14,22 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
+import silly.chemthunder.rinvenium.render.manager.FlashManager;
+import silly.chemthunder.rinvenium.util.inject.FlashContainer;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
+public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements FlashContainer {
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
+
+    @Unique
+    private final FlashManager flashManager = new FlashManager();
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -44,5 +50,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1() && this.checkFallFlying()) {
             this.networkHandler.sendPacket(new ClientCommandC2SPacket(this, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
         }
+    }
+
+    @Override
+    public FlashManager getFlashManager() {
+        return this.flashManager;
     }
 }

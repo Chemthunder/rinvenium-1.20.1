@@ -14,6 +14,7 @@ import silly.chemthunder.rinvenium.cca.entity.HailOfTheGodComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.entity.riva.AscensionPlayerComponent;
+import silly.chemthunder.rinvenium.cca.entity.riva.SpearHealComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
 import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
 
@@ -21,6 +22,7 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
     public static final ComponentKey<SpearParryComponent> SPEAR_PARRY = ComponentRegistry.getOrCreate(Rinvenium.id("spear_parry"), SpearParryComponent.class);
     public static final ComponentKey<HailOfTheGodComponent> HAIL_OF_THE_GODS = ComponentRegistry.getOrCreate(Rinvenium.id("hail_of_the_gods"), HailOfTheGodComponent.class);
     public static final ComponentKey<EnvixiaFormComponent> ENVIXIA_FORM = ComponentRegistry.getOrCreate(Rinvenium.id("envixia_form"), EnvixiaFormComponent.class);
+    public static final ComponentKey<SpearHealComponent> SPEAR_HEAL = ComponentRegistry.getOrCreate(Rinvenium.id("spear_heal"), SpearHealComponent.class);
     // either move to SpearParryComponent.class or move all Component Keys here for consistency :p
     // i like to have all the keys here
 
@@ -34,6 +36,7 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
         registry.beginRegistration(PlayerEntity.class, SpearDashingComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearDashingComponent::new);
         registry.beginRegistration(PlayerEntity.class, AscensionPlayerComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(AscensionPlayerComponent::new);
         registry.beginRegistration(PlayerEntity.class, ENVIXIA_FORM).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(EnvixiaFormComponent::new);
+        registry.beginRegistration(PlayerEntity.class, SPEAR_HEAL).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearHealComponent::new);
     }
 
 }

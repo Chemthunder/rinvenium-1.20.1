@@ -16,12 +16,15 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
+import silly.chemthunder.rinvenium.render.manager.FlashManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
+import silly.chemthunder.rinvenium.util.inject.FlashContainer;
 
 @SuppressWarnings("DiscouragedShift")
 @Mixin(InGameHud.class)
@@ -29,6 +32,9 @@ public abstract class InGameHudMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow protected abstract int getHeartCount(LivingEntity entity);
     @Shadow protected abstract int getHeartRows(int heartCount);
+
+    @Shadow
+    protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
@@ -94,4 +100,36 @@ public abstract class InGameHudMixin {
             context.drawTexture(RinveniumTextureUtils.FLY_BAR_BG, n - 80, t, 0, 0, 80, 8);
         }
     }*/
+
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
+    private void rinvenium$renderOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
+        if (this.client != null && this.client.player != null) {
+            FlashManager flashManager = ((FlashContainer) this.client.player).getFlashManager();
+            flashManager.tick();
+            flashManager.get().forEach(flash -> {
+                if (flash.age >= flash.maxAge + flash.fadeTime) {
+                    flash.fadeTicks--;
+                    this.renderOverlay(
+                            context,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            (float) Math.min(flash.fadeTicks, flash.fadeTime) * flash.maxOpacity / flash.fadeTime
+                    );
+                } else if (flash.age <= flash.fadeTime) {
+                    flash.fadeTicks++;
+                    this.renderOverlay(
+                            context,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            (float) Math.min(flash.fadeTicks, flash.fadeTime) * flash.maxOpacity / flash.fadeTime
+                    );
+                } else {
+                    this.renderOverlay(
+                            context,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            flash.maxOpacity
+                    );
+                }
+            });
+        }
+    }
 }

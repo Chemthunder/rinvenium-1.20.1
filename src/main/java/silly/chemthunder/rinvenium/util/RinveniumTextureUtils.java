@@ -8,4 +8,5 @@ public class RinveniumTextureUtils {
     public static final Identifier ICONS = Rinvenium.id("textures/gui/icons.png");
     public static final Identifier FLY_BAR = Rinvenium.id("textures/gui/fly_bar.png");
     public static final Identifier FLY_BAR_BG = Rinvenium.id("textures/gui/fly_bar_bg.png");
+    public static final Identifier SCREEN_FLASH = Rinvenium.id("textures/misc/flash.png");
 }
