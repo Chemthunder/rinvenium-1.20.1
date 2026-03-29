@@ -30,6 +30,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
     private boolean canFly = false;
     private boolean shouldTickFlyTime = false;
     private int flyTime = 0;
+    private int tickDelta = 0;
 
     public EnvixiaFormComponent(PlayerEntity player) {
         this.player = player;
@@ -115,6 +116,13 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
 
     @Override
     public void tick() {
+        this.tickDelta++;
+        if (this.tickDelta >= 20) {
+            this.tickDelta = 0;
+        }
+        if (this.flyTime < 0) {
+            this.flyTime = 0;
+        }
         if (player.getInventory().getArmorStack(2).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
             if (!player.getAbilities().creativeMode) {
                 player.getAbilities().allowFlying = !player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE) && this.isInEnvixia;
@@ -125,20 +133,28 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
                 }
             }
         }
-        if (this.isInEnvixia && player.getAbilities().flying) {
-            this.setTripleBoolValue3(!player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE));
-            if (player.getAbilities().creativeMode && this.shouldTickFlyTime) {
-                this.setTripleBoolValue3(false);
-            }
-            if (this.shouldTickFlyTime) {
-                this.incrementInt();
-            }
-            if (this.flyTime >= 60) {
-                player.getAbilities().allowFlying = false;
-                player.getAbilities().flying = false;
-                player.getItemCooldownManager().set(RinveniumItems.ENVIXIA_CHESTPLATE, 200);
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0, true, false));
-                this.setInt(0);
+        if (this.isInEnvixia) {
+            if (player.getAbilities().flying) {
+                this.setTripleBoolValue3(!player.getItemCooldownManager().isCoolingDown(RinveniumItems.ENVIXIA_CHESTPLATE));
+                if (player.getAbilities().creativeMode && this.shouldTickFlyTime) {
+                    this.setTripleBoolValue3(false);
+                }
+                if (this.shouldTickFlyTime) {
+                    this.incrementInt();
+                }
+                if (this.flyTime >= 60) {
+                    player.getAbilities().allowFlying = false;
+                    player.getAbilities().flying = false;
+                    player.getItemCooldownManager().set(RinveniumItems.ENVIXIA_CHESTPLATE, 200);
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 0, true, false));
+                    this.setInt(0);
+                }
+            } else {
+                if (this.flyTime > 0) {
+                    if (this.tickDelta % 5 == 0) {
+                        this.decrementInt();
+                    }
+                }
             }
         }
 

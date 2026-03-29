@@ -178,7 +178,7 @@ public class EnviniumSpearItem extends SwordItem {
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-            if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
+            /*if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) {
                 builder.put(
                         EntityAttributes.GENERIC_ATTACK_DAMAGE,
                         new EntityAttributeModifier(
@@ -195,7 +195,8 @@ public class EnviniumSpearItem extends SwordItem {
                 }
             } else {
                 builder.putAll(super.getAttributeModifiers(stack, slot));
-            }
+            }*/
+            builder.putAll(super.getAttributeModifiers(stack, slot));
 
             builder.put(ReachEntityAttributes.ATTACK_RANGE,
                     new EntityAttributeModifier(

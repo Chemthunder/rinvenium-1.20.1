@@ -23,7 +23,7 @@ public interface RinveniumItems {
 
     Item EMPTY = create("empty", new Item(new FabricItemSettings()));
     Item DEBUGGER = create("debugger", new DebuggerItem(new Item.Settings().maxCount(1).fireproof()));
-    Item ENVINIUM_SPEAR = create("envinium_spear", new EnviniumSpearItem(EnviniumToolMaterial.ENVINIUM, 4, -2.4f, new Item.Settings().maxCount(1)));
+    Item ENVINIUM_SPEAR = create("envinium_spear", new EnviniumSpearItem(EnviniumToolMaterial.ENVINIUM, 3, -2.4f, new Item.Settings().maxCount(1)));
     Item HAIL_OF_THE_GODS = create("hail_of_the_gods", new HotGItem(new FabricItemSettings().maxCount(1)));
 
     Item AURIO_INGOT = create("aurio_ingot", new DescriptionItem(new FabricItemSettings(), "aurio_ingot", 2));

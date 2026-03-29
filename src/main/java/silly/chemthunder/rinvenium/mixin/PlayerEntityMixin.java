@@ -185,9 +185,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                             buf.writeInt(8);
                             buf.writeInt(0xFFFFFF);
                             buf.writeInt(4);
-                            buf.writeFloat(0.8f);
+                            buf.writeFloat(0.5f);
                             if (player instanceof ServerPlayerEntity serverPlayerEntity) {
                                 ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                                serverPlayerEntity.heal(2.0f);
                             }
                             if (source.getAttacker() != null && source.getAttacker() instanceof ServerPlayerEntity serverPlayerEntity) {
                                 ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
@@ -195,7 +196,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                             }
                             spearParryComponent.setDoubleIntValue2(SpearParryComponent.MAX_DAMAGE_WINDOW);
                             spearParryComponent.setDoubleBoolValue1(false);
-                            if (source.getAttacker() instanceof LivingEntity livingEntity) {
+                            if (source.getAttacker() instanceof PlayerEntity playerEntity) {
+                                Vec3d launchVec = rotVec;
+                                launchVec = launchVec.add(new Vec3d(0.0, 0.7, 0.0));
+                                launchVec = launchVec.normalize();
+                                playerEntity.setVelocity(launchVec.multiply(1.5));
+                                playerEntity.velocityDirty = true;
+                            } else if (source.getAttacker() instanceof LivingEntity livingEntity) {
                                 Vec3d launchVec = rotVec;
                                 launchVec = launchVec.add(new Vec3d(0.0, 0.7, 0.0));
                                 launchVec = launchVec.normalize();
@@ -256,7 +263,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void rinvenium$spearHeal(Entity target, CallbackInfo ci, @Local(ordinal = 0) boolean bl) {
         if (bl) {
             SpearHealComponent spearHealComponent = SpearHealComponent.get((PlayerEntity) ((Object) this));
-            spearHealComponent.incrementInt();
+            //spearHealComponent.incrementInt();
         }
     }
 
