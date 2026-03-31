@@ -66,11 +66,8 @@ public class RinveniumUtil {
         Box box = new Box(start, endPos).expand(radius);
 
         HitResult hitResult = raycastWithDivergence(entity, start, rot, maxDistance, includeFluids);
-        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
-            if (box.contains(hitResult.getPos())) return null;
-        }
 
-        return ProjectileUtil.raycast(
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(
                 entity,
                 start,
                 endPos,
@@ -78,6 +75,13 @@ public class RinveniumUtil {
                 target -> !target.isSpectator() && target.canHit(),
                 endPos.squaredDistanceTo(start)
         );
+        if (entityHitResult == null && hitResult != null) return null;
+
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
+            if (start.distanceTo(hitResult.getPos()) < start.distanceTo(entityHitResult.getPos())) return null;
+        }
+
+        return entityHitResult;
     }
 
     public static HitResult raycastWithDivergence(Entity entity, double maxDistance, float tickDelta, boolean includeFluids, float divergence) {
