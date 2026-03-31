@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 import silly.chemthunder.rinvenium.util.RinveniumUuids;
+import silly.chemthunder.rinvenium.util.persistent.RestrictCraftingState;
+
+import java.util.Objects;
 
 @Mixin(CraftingScreenHandler.class)
 public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHandler<RecipeInputInventory> {
@@ -26,7 +29,12 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
     private static boolean rinvenium$lockCraftToRiva(boolean original, @Local ServerPlayerEntity serverPlayerEntity, @Local CraftingRecipe craftingRecipe, @Local(argsOnly = true) RecipeInputInventory craftingInventory, @Local(argsOnly = true) World world) {
         ItemStack itemStack = craftingRecipe.craft(craftingInventory, world.getRegistryManager());
         if (itemStack.isIn(RinveniumItemTagProvider.LOCKED_RECIPES)) {
-            return original && RinveniumUuids.canCraftEnvixia(serverPlayerEntity);
+            RestrictCraftingState state = RestrictCraftingState.getServerState(Objects.requireNonNull(serverPlayerEntity.getServer()));
+            if (state.lockRecipes) {
+                return original && RinveniumUuids.canCraftEnvixia(serverPlayerEntity);
+            } else {
+                return original;
+            }
         } else {
             return original;
         }

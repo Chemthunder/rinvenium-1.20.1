@@ -28,6 +28,7 @@ public class Rinvenium implements ModInitializer {
         RinveniumPackets.registerC2SPackets();
         RinveniumParticles.init();
         RinveniumCauldronBehavior.registerCauldronBehaviors();
+        RinveniumCommands.registerRinveniumCommands();
 
 		LOGGER.info(MOD_ID + " has been successfully initalized!");
         LOGGER.info("balls");
