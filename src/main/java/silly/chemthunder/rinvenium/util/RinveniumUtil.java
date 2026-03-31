@@ -39,7 +39,7 @@ public class RinveniumUtil {
         return (float) (Math.atan2(rotVec.z, rotVec.x) - 90.0F);
     }
 
-    public static EntityHitResult raycastWithDivergence(Entity entity, double maxDistance, float tickDelta, float divergence, double radius) {
+    public static EntityHitResult raycastWithDivergenceBox(Entity entity, double maxDistance, float tickDelta, float divergence, double radius) {
         Vec3d camPos = entity.getCameraPosVec(tickDelta);
         Vec3d rot = entity.getRotationVec(tickDelta);
         rot = rot.add(
@@ -60,10 +60,16 @@ public class RinveniumUtil {
         );
     }
 
-    public static EntityHitResult raycastWithDivergence(Entity entity, Vec3d start, Vec3d rot, double maxDistance, float tickDelta, float divergence, double radius) {
+    public static EntityHitResult raycastWithDivergenceBox(Entity entity, Vec3d start, Vec3d rot, double maxDistance, double radius, boolean includeFluids) {
         Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
 
         Box box = new Box(start, endPos).expand(radius);
+
+        HitResult hitResult = raycastWithDivergence(entity, start, rot, maxDistance, includeFluids);
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
+            if (box.contains(hitResult.getPos())) return null;
+        }
+
         return ProjectileUtil.raycast(
                 entity,
                 start,
@@ -94,7 +100,7 @@ public class RinveniumUtil {
         );
     }
 
-    public static HitResult raycastWithDivergence(Entity entity, Vec3d start, Vec3d rot, double maxDistance, float tickDelta, boolean includeFluids, float divergence) {
+    public static HitResult raycastWithDivergence(Entity entity, Vec3d start, Vec3d rot, double maxDistance, boolean includeFluids) {
         Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
         return entity.getWorld().raycast(
                 new RaycastContext(

@@ -2,10 +2,6 @@ package silly.chemthunder.rinvenium.item;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.particle.FireworksSparkParticle;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -13,14 +9,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -29,12 +21,10 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.joml.Vector3f;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.HailOfTheGodComponent;
 import silly.chemthunder.rinvenium.entity.GunshotEntity;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
-import silly.chemthunder.rinvenium.index.RinveniumEntities;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.index.RinveniumParticles;
@@ -136,9 +126,8 @@ public class HotGItem extends Item {
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence),
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence)
                 );
-                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, false, divergence);
-                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, divergence, 0.25);
-
+                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, false);
+                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergenceBox(player, start, rot, 50.0, 0.25, false);
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
                     if (target != null && target.damage(RinveniumDamageSources.boop(target), 0.1f)) {
@@ -191,8 +180,8 @@ public class HotGItem extends Item {
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence)
                 );
 
-                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, false, divergence);
-                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, divergence, 0.25);
+                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, false);
+                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergenceBox(player, start, rot, 50.0, 0.25, false);
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
@@ -242,8 +231,8 @@ public class HotGItem extends Item {
                         player.getWorld().random.nextTriangular(0.0, 0.0172275 * divergence)
                 );
 
-                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, false, divergence);
-                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, tickDelta, divergence, 0.25);
+                HitResult hitResult = RinveniumUtil.raycastWithDivergence(player, start, rot, 50.0, false);
+                EntityHitResult entityHitResult = RinveniumUtil.raycastWithDivergenceBox(player, start, rot, 50.0, 0.25, false);
 
                 if (entityHitResult != null) {
                     Entity target = entityHitResult.getEntity();
@@ -252,6 +241,7 @@ public class HotGItem extends Item {
                         entity = target;
                     }
                 }
+
 
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 0.5, 1.2, RinveniumParticles.HAIL_OF_THE_GODS_TRAIL);
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 1.0, 1.1, RinveniumParticles.HAIL_OF_THE_GODS_SMOKE);
