@@ -15,10 +15,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.render.ScreenFlash;
+import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.manager.FlashManager;
+import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
 
 public class DebuggerItem extends Item {
@@ -44,8 +47,12 @@ public class DebuggerItem extends Item {
                     buf.writeInt(0xFFFFFF);
                     buf.writeInt(5);
                     buf.writeFloat(0.8f);
-                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                    //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
+                Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(5));
+                Vec3d direction = new Vec3d(0, 3, 0);
+                SlashRender slashRender = new SlashRender(origin, direction, 200);
+                SlashRendererManager.add(slashRender);
             }
         } else {
             if (world.isClient) { // Client Side Sneak
