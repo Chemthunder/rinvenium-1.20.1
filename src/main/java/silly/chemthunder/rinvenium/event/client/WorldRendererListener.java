@@ -67,9 +67,9 @@ public class WorldRendererListener {
 
             double endY = MathHelper.lerp(delta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
 
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f);
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f);
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - 1 - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f);
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - 1 - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
 
             matrices.pop();
 
@@ -79,6 +79,7 @@ public class WorldRendererListener {
             VertexBuffer.unbind();
 
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             if (SlashRendererManager.slashBuffer != null) {
                 SlashRendererManager.slashBuffer.bind();
                 ShaderProgram shaderProgram = RenderSystem.getShader();
