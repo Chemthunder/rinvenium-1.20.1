@@ -1,0 +1,11 @@
+{
+  "type": "rinvenium:reskin",
+  "count": 1,
+  "ingredient": {
+    "item": "rinvenium:envinium_spear"
+  },
+  "result": {
+    "item": "rinvenium:envinium_spear"
+  },
+  "texture": "hstar"
+}
