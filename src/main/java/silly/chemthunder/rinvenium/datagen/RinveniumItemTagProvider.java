@@ -18,6 +18,7 @@ public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider 
     public static TagKey<Item> ENVIXIA_CORE_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("envixia_core_ingredients"));
     public static TagKey<Item> LOCKED_RECIPES = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("locked_recipes"));
     public static TagKey<Item> ENVIXIA_MUNCHIES = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("envixia_munchies"));
+    public static TagKey<Item> TRIGGERS_RESKIN_SCREEN = TagKey.of(RegistryKeys.ITEM, Rinvenium.id("triggers_reskin_screen"));
 
     public RinveniumItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -48,6 +49,10 @@ public class RinveniumItemTagProvider extends FabricTagProvider.ItemTagProvider 
                 .add(
                         RinveniumItems.BATTERY,
                         RinveniumItems.ION_CELL
+                );
+        this.getOrCreateTagBuilder(TRIGGERS_RESKIN_SCREEN)
+                .add(
+                        RinveniumItems.ENVINIUM_SPEAR
                 );
     }
 }
