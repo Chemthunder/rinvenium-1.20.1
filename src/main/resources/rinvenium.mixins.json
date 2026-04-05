@@ -8,8 +8,7 @@
     "ItemEntityMixin",
     "ItemMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin",
-    "SmithingTableBlockMixin"
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

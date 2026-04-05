@@ -35,6 +35,7 @@
   "custom": {
     "cardinal-components": [
       "rinvenium:spear",
+      "rinvenium:spear_texture",
       "rinvenium:dash",
       "rinvenium:riva_ascent",
       "rinvenium:spear_parry",

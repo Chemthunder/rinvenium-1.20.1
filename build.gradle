@@ -35,7 +35,7 @@ repositories {
 
 fabricApi {
 	configureDataGeneration {
-	//	modId = "rinvenium"
+		modId = "rinvenium"
 		client = true
 	}
 }

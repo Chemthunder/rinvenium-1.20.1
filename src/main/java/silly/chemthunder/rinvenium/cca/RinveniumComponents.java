@@ -16,6 +16,7 @@ import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.entity.riva.AscensionPlayerComponent;
 import silly.chemthunder.rinvenium.cca.entity.riva.SpearHealComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
+import silly.chemthunder.rinvenium.cca.item.SpearTextureItemComponent;
 import silly.chemthunder.rinvenium.item.EnviniumSpearItem;
 
 public class RinveniumComponents implements ItemComponentInitializer, EntityComponentInitializer {
@@ -23,11 +24,14 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
     public static final ComponentKey<HailOfTheGodComponent> HAIL_OF_THE_GODS = ComponentRegistry.getOrCreate(Rinvenium.id("hail_of_the_gods"), HailOfTheGodComponent.class);
     public static final ComponentKey<EnvixiaFormComponent> ENVIXIA_FORM = ComponentRegistry.getOrCreate(Rinvenium.id("envixia_form"), EnvixiaFormComponent.class);
     public static final ComponentKey<SpearHealComponent> SPEAR_HEAL = ComponentRegistry.getOrCreate(Rinvenium.id("spear_heal"), SpearHealComponent.class);
+
+    public static final ComponentKey<SpearTextureItemComponent> SPEAR_TEXTURE = ComponentRegistry.getOrCreate(Rinvenium.id("spear_texture"), SpearTextureItemComponent.class);
     // either move to SpearParryComponent.class or move all Component Keys here for consistency :p
     // i like to have all the keys here
 
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(item -> item instanceof EnviniumSpearItem, EnviniumSpearItemComponent.KEY, EnviniumSpearItemComponent::new);
+        registry.register(item -> item instanceof EnviniumSpearItem, SPEAR_TEXTURE, SpearTextureItemComponent::new);
     }
 
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

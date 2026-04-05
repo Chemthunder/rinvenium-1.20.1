@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -12,29 +13,30 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import silly.chemthunder.rinvenium.cca.RinveniumComponents;
 import silly.chemthunder.rinvenium.cca.entity.SpearDashingComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.entity.riva.SpearHealComponent;
 import silly.chemthunder.rinvenium.cca.item.EnviniumSpearItemComponent;
+import silly.chemthunder.rinvenium.cca.item.SpearTextureItemComponent;
 import silly.chemthunder.rinvenium.index.RinveniumEnchantments;
+import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 
 import java.util.List;
 import java.util.UUID;
 
 public class EnviniumSpearItem extends SwordItem {
+    private Texture texture = Texture.DEFAULT;
+    private boolean textureDirty = false;
+
     public EnviniumSpearItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
@@ -73,6 +75,19 @@ public class EnviniumSpearItem extends SwordItem {
                 }
             }
         }
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (!context.getWorld().isClient && context.getPlayer() != null && context.getPlayer().isSneaking() && context.getStack().isOf(RinveniumItems.ENVINIUM_SPEAR) && context.getWorld().getBlockState(context.getBlockPos()).isOf(Blocks.SMITHING_TABLE)) {
+            int index = this.getTexture().ordinal();
+            if (index >= Texture.values().length - 1) {
+                this.setTexture(Texture.values()[0]);
+            } else {
+                this.setTexture(Texture.values()[index + 1]);
+            }
+        }
+        return super.useOnBlock(context);
     }
 
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
@@ -175,6 +190,17 @@ public class EnviniumSpearItem extends SwordItem {
     }
 
     @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
+
+        if (this.textureDirty) {
+            SpearTextureItemComponent spearTextureItemComponent = RinveniumComponents.SPEAR_TEXTURE.get(stack);
+            spearTextureItemComponent.setTexture(this.texture.name);
+            this.textureDirty = false;
+        }
+    }
+
+    @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -223,6 +249,44 @@ public class EnviniumSpearItem extends SwordItem {
         } else {
             //tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
+        tooltip.add(Text.literal(""));
+        String textureName = this.texture.name.substring(0, 1).toUpperCase() + this.texture.name.substring(1);
+        tooltip.add(Text.literal("Texture: " + textureName).formatted(Formatting.DARK_GRAY));
         super.appendTooltip(stack, world, tooltip, context);
+    }
+
+    public Texture getTexture() {
+        return this.texture;
+    }
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+        this.markTextureDirty();
+    }
+    public void markTextureDirty() {
+        this.textureDirty = true;
+    }
+
+    public static enum Texture implements StringIdentifiable {
+        DEFAULT("default"),
+        REMAKE("remake"),
+        HSTAR("hstar"),
+        MIDGET("midget"),
+        CREATURE("creature"),
+        INVIS("invis"),
+        HEARTLESS("heartless"),
+        PBGS("pbgs"),
+        SCARLET("scarlet"),
+        HEARTTECH("hearttech");
+
+        private String name;
+
+        Texture(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String asString() {
+            return this.name;
+        }
     }
 }
