@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class EnviniumSpearItem extends SwordItem {
-    private Texture texture = Texture.DEFAULT;
-    private boolean textureDirty = false;
 
     public EnviniumSpearItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
@@ -80,11 +78,11 @@ public class EnviniumSpearItem extends SwordItem {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         if (!context.getWorld().isClient && context.getPlayer() != null && context.getPlayer().isSneaking() && context.getStack().isOf(RinveniumItems.ENVINIUM_SPEAR) && context.getWorld().getBlockState(context.getBlockPos()).isOf(Blocks.SMITHING_TABLE)) {
-            int index = this.getTexture().ordinal();
+            int index = this.getTexture(context.getStack()).ordinal();
             if (index >= Texture.values().length - 1) {
-                this.setTexture(Texture.values()[0]);
+                this.setTexture(Texture.values()[0], context.getStack());
             } else {
-                this.setTexture(Texture.values()[index + 1]);
+                this.setTexture(Texture.values()[index + 1], context.getStack());
             }
         }
         return super.useOnBlock(context);
@@ -190,17 +188,6 @@ public class EnviniumSpearItem extends SwordItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-
-        if (this.textureDirty) {
-            SpearTextureItemComponent spearTextureItemComponent = RinveniumComponents.SPEAR_TEXTURE.get(stack);
-            spearTextureItemComponent.setTexture(this.texture.name);
-            this.textureDirty = false;
-        }
-    }
-
-    @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         if (slot == EquipmentSlot.MAINHAND) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -250,23 +237,25 @@ public class EnviniumSpearItem extends SwordItem {
             //tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
         tooltip.add(Text.literal(""));
-        String textureName = this.texture.name.substring(0, 1).toUpperCase() + this.texture.name.substring(1);
+        String textureName = this.getTexture(stack).name.substring(0, 1).toUpperCase() + this.getTexture(stack).name.substring(1);
         tooltip.add(Text.literal("Texture: " + textureName).formatted(Formatting.DARK_GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
+    public Texture getTexture(ItemStack stack) {
+        SpearTextureItemComponent spearTextureItemComponent = RinveniumComponents.SPEAR_TEXTURE.get(stack);
+        if ( spearTextureItemComponent.getTexture() != null && !spearTextureItemComponent.getTexture().isEmpty()) {
+            this.setTexture(Texture.valueOf(spearTextureItemComponent.getTexture().toUpperCase()), stack);
+        } else {
+            this.setTexture(Texture.DEFAULT, stack);
+        }
+        return Texture.valueOf(spearTextureItemComponent.getTexture().toUpperCase());
+    }
+    public void setTexture(Texture texture, ItemStack stack) {
+        SpearTextureItemComponent spearTextureItemComponent = RinveniumComponents.SPEAR_TEXTURE.get(stack);
+        spearTextureItemComponent.setTexture(texture.name);
+    }
 
-    public Texture getTexture() {
-        return this.texture;
-    }
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-        this.markTextureDirty();
-    }
-    public void markTextureDirty() {
-        this.textureDirty = true;
-    }
-
-    public static enum Texture implements StringIdentifiable {
+    public enum Texture implements StringIdentifiable {
         DEFAULT("default"),
         REMAKE("remake"),
         HSTAR("hstar"),

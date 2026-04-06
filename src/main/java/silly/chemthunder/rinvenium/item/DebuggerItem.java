@@ -50,7 +50,7 @@ public class DebuggerItem extends Item {
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
                 Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(5));
-                Vec3d direction = new Vec3d(0, 3, 0);
+                Vec3d direction = new Vec3d(0, 10, 0);
                 SlashRender slashRender = new SlashRender(origin, direction, 200);
                 SlashRendererManager.add(slashRender);
             }

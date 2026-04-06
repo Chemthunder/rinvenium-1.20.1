@@ -66,10 +66,12 @@ public class WorldRendererListener {
             bufferbuilder.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
 
             double endY = MathHelper.lerp(delta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
+            double endZNeg = MathHelper.lerp(delta, slash.origin.z, slash.origin.add(slash.direction.add(0, 0, -1).normalize()).z);
+            double endZPos = MathHelper.lerp(delta, slash.origin.z, slash.origin.add(slash.direction.add(0, 0, 1).normalize()).z);
 
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (slash.origin.z - 1 - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.4f, 0.0f, 0.0f, 0.9f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (endZPos - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (endZNeg - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
 
             matrices.pop();
 

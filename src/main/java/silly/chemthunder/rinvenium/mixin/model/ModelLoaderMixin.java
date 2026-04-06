@@ -24,7 +24,7 @@ public abstract class ModelLoaderMixin {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;addModel(Lnet/minecraft/client/util/ModelIdentifier;)V", ordinal = 3, shift = At.Shift.AFTER))
     public void addModels(BlockColors blockColors, Profiler profiler, Map jsonUnbakedModels, Map blockStates, CallbackInfo ci) {
-        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_default", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_remake", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_hstar", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_midget", "inventory"));
@@ -34,7 +34,7 @@ public abstract class ModelLoaderMixin {
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_pbgs", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_scarlet", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_hearttech", "inventory"));
-        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_blocking", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_blocking_default", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_blocking_remake", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_blocking_hstar", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_blocking_midget", "inventory"));

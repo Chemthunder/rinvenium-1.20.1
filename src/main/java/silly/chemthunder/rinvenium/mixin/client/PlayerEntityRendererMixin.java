@@ -33,7 +33,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void armPose(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
         if (player.getStackInHand(hand).isOf(RinveniumItems.ENVINIUM_SPEAR) && !(EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, player.getStackInHand(hand)) > 0) && player.isUsingItem()) {
-            cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
+            cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
         }
         if (player.getStackInHand(hand).isOf(RinveniumItems.HAIL_OF_THE_GODS)) {
             cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);

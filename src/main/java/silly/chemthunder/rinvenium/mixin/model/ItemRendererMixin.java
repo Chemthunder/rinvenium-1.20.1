@@ -44,7 +44,7 @@ public abstract class ItemRendererMixin {
             if (stack.isOf(RinveniumItems.ENVINIUM_SPEAR) && (renderMode != ModelTransformationMode.GUI) && renderMode != ModelTransformationMode.GROUND) {
                 EnviniumSpearItem.Texture texture = EnviniumSpearItem.Texture.DEFAULT;
                 if (stack.getItem() instanceof EnviniumSpearItem spearItem) {
-                    texture = spearItem.getTexture();
+                    texture = spearItem.getTexture(stack);
                 }
                 SpearParryComponent spearParryComponent = SpearParryComponent.get(entity);
                 String blocking;
@@ -53,22 +53,19 @@ public abstract class ItemRendererMixin {
                 } else {
                     blocking = "";
                 }
-                String append = "";
-                switch (texture) {
-                    case REMAKE ->  append = "remake";
-                    case HSTAR ->  append = "hstar";
-                    case MIDGET ->  append = "midget";
-                    case CREATURE ->  append = "creature";
-                    case INVIS ->  append = "invis";
-                    case HEARTLESS ->  append = "heartless";
-                    case PBGS ->  append = "pbgs";
-                    case SCARLET ->  append = "scarlet";
-                    case HEARTTECH ->  append = "hearttech";
-                    default -> append = "";
-                }
-                if (!append.isEmpty()) {
-                    append = "_" + append;
-                }
+                String append = switch (texture) {
+                    case REMAKE -> "remake";
+                    case HSTAR -> "hstar";
+                    case MIDGET -> "midget";
+                    case CREATURE ->  "creature";
+                    case INVIS ->  "invis";
+                    case HEARTLESS ->  "heartless";
+                    case PBGS ->  "pbgs";
+                    case SCARLET ->  "scarlet";
+                    case HEARTTECH ->  "hearttech";
+                    case DEFAULT -> "default";
+                };
+                append = "_" + append;
                 return ((ItemRendererAccessor) this).renderer$getModels().getModelManager().getModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d" + blocking + append, "inventory"));
             }
         }
