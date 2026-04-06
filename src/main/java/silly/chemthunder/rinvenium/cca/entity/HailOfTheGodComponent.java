@@ -16,11 +16,13 @@ import silly.chemthunder.rinvenium.index.RinveniumItems;
 public class HailOfTheGodComponent implements DoubleIntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final String USE_TIME_KEY = "HotGUseTime";
     public static final String OVERHEAT_TIME_KEY = "HotGOverheatTime";
+
     public static final int MAX_USE_TIME = 120 * 3;
     public static final int MAX_OVERHEAT_TIME = 60 * 5;
-    private final PlayerEntity player;
     private int useTime = 0;
     private int overheatTime = 0;
+
+    private final PlayerEntity player;
 
     public HailOfTheGodComponent(PlayerEntity player) {
         this.player = player;

@@ -27,9 +27,7 @@ import silly.chemthunder.rinvenium.util.inject.FlashContainer;
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements FlashContainer {
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
-
-    @Unique
-    private final FlashManager flashManager = new FlashManager();
+    @Unique private final FlashManager flashManager = new FlashManager();
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);

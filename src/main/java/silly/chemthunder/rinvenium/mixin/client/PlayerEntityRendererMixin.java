@@ -29,7 +29,6 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         super(ctx, model, shadowRadius);
     }
 
-
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void armPose(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
         if (player.getStackInHand(hand).isOf(RinveniumItems.ENVINIUM_SPEAR) && !(EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, player.getStackInHand(hand)) > 0) && player.isUsingItem()) {

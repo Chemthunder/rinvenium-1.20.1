@@ -21,7 +21,6 @@ public class EnvixiaArmorRenderer implements ArmorRenderer {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private EnvixiaArmorModel<LivingEntity> model;
 
-
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> contextModel) {
         if (model == null) {

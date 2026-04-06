@@ -17,6 +17,7 @@ public class SpawnFlashParticleS2CPacket {
         float f = ((k & 0xFF0000) >> 16) / 255.0F;
         float g = ((k & 0xFF00) >> 8) / 255.0F;
         float h = ((k & 0xFF) >> 0) / 255.0F;
+        
         Particle particle = client.particleManager.createParticle(ParticleTypes.FLASH, x, y, z, 0.0, 0.0, 0.0);
         particle.setColor(f, g, h);
         particle.scale(0.01f);

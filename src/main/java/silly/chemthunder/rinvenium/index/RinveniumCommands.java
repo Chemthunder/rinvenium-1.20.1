@@ -14,6 +14,7 @@ public class RinveniumCommands {
             );
         });
     }
+    
     public static void registerRinveniumCommands() {
         Rinvenium.LOGGER.info("Registering Rinvenium Commands");
         registerMainCommand();

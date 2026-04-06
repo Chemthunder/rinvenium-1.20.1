@@ -23,6 +23,5 @@ public class RinveniumClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(EnvixiaArmorRenderer.ENVIXIA_ARMOR, EnvixiaArmorModel::getTexturedModelData);
         ArmorRenderer.register(new EnvixiaArmorRenderer(), RinveniumItems.ENVIXIA_HELMET, RinveniumItems.ENVIXIA_CHESTPLATE, RinveniumItems.ENVIXIA_LEGGINGS, RinveniumItems.ENVIXIA_BOOTS);
-
     }
 }

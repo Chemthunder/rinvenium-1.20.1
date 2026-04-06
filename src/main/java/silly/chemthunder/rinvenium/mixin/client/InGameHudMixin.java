@@ -32,9 +32,7 @@ public abstract class InGameHudMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow protected abstract int getHeartCount(LivingEntity entity);
     @Shadow protected abstract int getHeartRows(int heartCount);
-
-    @Shadow
-    protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
+    @Shadow protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {

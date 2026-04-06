@@ -37,6 +37,7 @@ public interface RinveniumDamageSources {
     static DamageSource electricityWithCD(LivingEntity entity) {
         return entity.getDamageSources().create(ELECTRICITY);
     }
+
     static DamageSource electricityWithCD(LivingEntity entity, LivingEntity attacker) {
         return entity.getDamageSources().create(ELECTRICITY, attacker);
     }

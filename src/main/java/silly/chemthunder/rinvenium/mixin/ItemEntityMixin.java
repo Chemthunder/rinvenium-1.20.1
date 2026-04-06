@@ -34,8 +34,7 @@ public abstract class ItemEntityMixin extends Entity {
     @Unique public int enviniaCraftingTicks = 0;
     @Unique public int envixiusCraftingTicks = 0;
     @Unique public int envixiusColdCraftingTicks = 0;
-    @Unique
-    public int ionCellCraftingTicks = 0;
+    @Unique public int ionCellCraftingTicks = 0;
 
     @Shadow public abstract ItemStack getStack();
     @Shadow public abstract void setStack(ItemStack stack);

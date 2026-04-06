@@ -95,6 +95,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return original.call();
         }
     }
+
     @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_KNOCKBACK:Lnet/minecraft/sound/SoundEvent;"))
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsKB(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
@@ -110,6 +111,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return original.call();
         }
     }
+
     @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_CRIT:Lnet/minecraft/sound/SoundEvent;"))
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsCrit(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
@@ -122,6 +124,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return original.call();
         }
     }
+
     @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_STRONG:Lnet/minecraft/sound/SoundEvent;"))
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsStrong(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
@@ -137,6 +140,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return original.call();
         }
     }
+
     @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_WEAK:Lnet/minecraft/sound/SoundEvent;"))
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsWeak(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
@@ -152,7 +156,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return original.call();
         }
     }
-
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"))
     private float rinvenium$handleParry(PlayerEntity player, DamageSource source, float amount, Operation<Float> original) {
@@ -215,6 +218,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 }
             }
         }
+
         if (source.getAttacker() instanceof PlayerEntity attacker && attacker.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
             SpearParryComponent attackerSpearParryComponent = SpearParryComponent.get(attacker);
             if (attackerSpearParryComponent.getDoubleIntValue2() > 0 && EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, attacker.getStackInHand(Hand.MAIN_HAND)) <= 0) {
@@ -270,6 +274,4 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     /*@Inject(method = "attackLivingEntity", at = @At("HEAD"))
     private void rinvenium$riptideAttack(LivingEntity target, CallbackInfo ci) {
     }*/
-
-
 }

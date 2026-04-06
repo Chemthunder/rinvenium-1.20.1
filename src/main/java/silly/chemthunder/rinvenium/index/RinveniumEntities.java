@@ -27,6 +27,7 @@ public interface RinveniumEntities {
         ENTITIES.put(entity, new Identifier(Rinvenium.MOD_ID, name));
         return entity;
     }
+
     private static <T extends EntityType<? extends Entity>> T createEntityVanilla(String name, T entity) {
         Identifier id = new Identifier(Rinvenium.MOD_ID, name);
         ENTITIES.put(entity, id);

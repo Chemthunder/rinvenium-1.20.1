@@ -26,8 +26,6 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
     public static final ComponentKey<SpearHealComponent> SPEAR_HEAL = ComponentRegistry.getOrCreate(Rinvenium.id("spear_heal"), SpearHealComponent.class);
 
     public static final ComponentKey<SpearTextureItemComponent> SPEAR_TEXTURE = ComponentRegistry.getOrCreate(Rinvenium.id("spear_texture"), SpearTextureItemComponent.class);
-    // either move to SpearParryComponent.class or move all Component Keys here for consistency :p
-    // i like to have all the keys here
 
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
         registry.register(item -> item instanceof EnviniumSpearItem, EnviniumSpearItemComponent.KEY, EnviniumSpearItemComponent::new);
@@ -42,5 +40,4 @@ public class RinveniumComponents implements ItemComponentInitializer, EntityComp
         registry.beginRegistration(PlayerEntity.class, ENVIXIA_FORM).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(EnvixiaFormComponent::new);
         registry.beginRegistration(PlayerEntity.class, SPEAR_HEAL).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(SpearHealComponent::new);
     }
-
 }

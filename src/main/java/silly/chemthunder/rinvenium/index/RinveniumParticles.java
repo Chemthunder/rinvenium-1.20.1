@@ -24,6 +24,7 @@ public class RinveniumParticles {
     private static DefaultParticleType register(String name, boolean alwaysShow) {
         return Registry.register(Registries.PARTICLE_TYPE, Rinvenium.id(name), FabricParticleTypes.simple(alwaysShow));
     }
+
     private static <T extends ParticleEffect> ParticleType<T> registerComplex(String name, boolean alwaysShow, ParticleEffect.Factory<T> factory, Function<ParticleType<T>, Codec<T>> codecGetter) {
         return Registry.register(Registries.PARTICLE_TYPE, Rinvenium.id(name), new ParticleType<T>(alwaysShow, factory) {
             @Override
