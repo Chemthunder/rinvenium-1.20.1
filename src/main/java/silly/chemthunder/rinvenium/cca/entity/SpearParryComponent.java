@@ -15,11 +15,14 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
     public static final String DAMAGE_WINDOW_KEY = "DamageWindow";
     public static final String CAN_PARRY_KEY = "CanParryKey";
     public static final String IS_BLOCKING_KEY = "IsBlocking";
+
     public static final int MAX_PARRY_WINDOW = 10;
     public static final int MAX_DAMAGE_WINDOW = 100;
-    private final PlayerEntity player;
     private int parryWindow = MAX_PARRY_WINDOW;
     private int damageWindow = 0;
+    
+    private final PlayerEntity player;
+
     private boolean canParry = false;
     private boolean isBlocking = false;
 
@@ -152,6 +155,7 @@ public class SpearParryComponent implements DoubleIntComponent, DoubleBoolCompon
     public float getParryWindowPercentage() {
         return (float) this.parryWindow / MAX_PARRY_WINDOW;
     }
+    
     public float getDamageWindowPercentage() {
         return (float) this.damageWindow / MAX_DAMAGE_WINDOW;
     }

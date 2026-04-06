@@ -13,11 +13,13 @@ import silly.chemthunder.rinvenium.index.RinveniumParticles;
 public class RailgunTrailParticleEffect extends AgeVaryingParticleEffect {
     public static final int TWO_SECONDS = 40;
     public static final RailgunTrailParticleEffect DEFAULT = new RailgunTrailParticleEffect(TWO_SECONDS);
+
     public static final Codec<RailgunTrailParticleEffect> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codecs.NONNEGATIVE_INT.fieldOf("max_age").forGetter(railgunTrailParticleEffect -> railgunTrailParticleEffect.maxAge)
                     ).apply(instance, RailgunTrailParticleEffect::new)
     );
+
     public static final ParticleEffect.Factory<RailgunTrailParticleEffect> PARAMETER_FACTORY = new ParticleEffect.Factory<RailgunTrailParticleEffect>() {
         @Override
         public RailgunTrailParticleEffect read(ParticleType<RailgunTrailParticleEffect> type, StringReader reader) throws CommandSyntaxException {
@@ -38,5 +40,4 @@ public class RailgunTrailParticleEffect extends AgeVaryingParticleEffect {
     public ParticleType<RailgunTrailParticleEffect> getType() {
         return RinveniumParticles.RAILGUN_TRAIL;
     }
-
 }

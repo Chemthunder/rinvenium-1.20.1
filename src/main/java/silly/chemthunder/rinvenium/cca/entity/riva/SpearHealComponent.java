@@ -13,8 +13,9 @@ import silly.chemthunder.rinvenium.cca.primitive.IntComponent;
 public class SpearHealComponent implements IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final String HIT_COUNT_KEY = "HitCount";
     public static final int TRIGGER_COUNT = 6;
-    private final PlayerEntity player;
     private int hitCount = 0;
+
+    private final PlayerEntity player;
 
     public SpearHealComponent(PlayerEntity player) {
         this.player = player;

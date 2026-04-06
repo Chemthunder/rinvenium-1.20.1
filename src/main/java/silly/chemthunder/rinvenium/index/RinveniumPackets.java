@@ -26,6 +26,7 @@ public class RinveniumPackets {
     public static Identifier createC2SId(String name) {
         return Rinvenium.id(name + "_c2s_packet");
     }
+    
     public static Identifier createS2CId(String name) {
         return Rinvenium.id(name + "_s2c_packet");
     }

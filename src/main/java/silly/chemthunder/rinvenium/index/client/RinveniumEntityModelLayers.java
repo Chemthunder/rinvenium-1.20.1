@@ -20,6 +20,7 @@ public class RinveniumEntityModelLayers {
             return entityModelLayer;
         }
     }
+
     public static EntityModelLayer registerMain(String name) {
         return register(name, "main");
     }

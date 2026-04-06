@@ -102,7 +102,6 @@ public class ModParticleUtil {
         }
     }
 
-
     public static void addCollapsingRingOfParticles(World world, Vec3d origin, double yGap, int rings, int count, double speed, ParticleEffect particle, double maxRadius) {
         if (!world.isClient) return;
         for (int j = (int) -Math.floor((double) rings / 2); j < Math.ceil((double) rings / 2); j++) {
@@ -133,6 +132,7 @@ public class ModParticleUtil {
     public static Vector3f colorToVec3f(int color) {
         return Vec3d.unpackRgb(color).toVector3f();
     }
+    
     public static Vec3d colorToVec3d(int color) {
         return Vec3d.unpackRgb(color);
     }

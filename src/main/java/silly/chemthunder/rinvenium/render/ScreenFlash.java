@@ -25,6 +25,4 @@ public class ScreenFlash {
         this.age = 0;
         this.fadeTicks = 0;
     }
-
-
 }

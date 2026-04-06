@@ -20,7 +20,6 @@ public class AscensionPlayerComponent implements AutoSyncedComponent, CommonTick
         this.player = player;
     }
 
-
     public void tick() {
         if (isAscented) {
 

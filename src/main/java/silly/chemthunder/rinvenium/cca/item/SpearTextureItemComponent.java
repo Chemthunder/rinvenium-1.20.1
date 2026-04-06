@@ -13,6 +13,7 @@ public class SpearTextureItemComponent extends ItemComponent {
     public String getTexture() {
         return this.getString(TEXTURE_KEY);
     }
+    
     public void setTexture(String texture) {
         this.putString(TEXTURE_KEY, texture);
     }

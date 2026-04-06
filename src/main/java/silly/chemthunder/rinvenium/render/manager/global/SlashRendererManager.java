@@ -9,8 +9,7 @@ import java.util.List;
 
 public class SlashRendererManager {
     public static final List<SlashRender> SLASH_RENDERS = new ArrayList<>();
-    @Nullable
-    public static VertexBuffer slashBuffer;
+    @Nullable public static VertexBuffer slashBuffer;
 
     public static void add(SlashRender slashRender) {
         SLASH_RENDERS.add(slashRender);

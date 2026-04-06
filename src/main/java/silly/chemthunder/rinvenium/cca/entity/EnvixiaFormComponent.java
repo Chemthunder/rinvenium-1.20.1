@@ -20,15 +20,19 @@ import java.util.UUID;
 
 public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final UUID HEALTH_BUFF_UUID = UUID.fromString("f79edb50-8a3b-408e-a87e-35ba81c43cb4");
+
     public static final String HEALTH_BUFF_ID = "Envixia Health Boost";
     public static final String IS_IN_ENVIXIA_KEY = "IsInEnvixia";
     public static final String CAN_FLY_KEY = "CanFly";
     public static final String SHOULD_TICK_FLY_TIME_KEY = "ShouldTickFlyTime";
     public static final String FLY_TIME_KEY = "FlyTime";
+
     private final PlayerEntity player;
+
     private boolean isInEnvixia = false;
     private boolean canFly = false;
     private boolean shouldTickFlyTime = false;
+
     private int flyTime = 0;
     private int tickDelta = 0;
 
@@ -39,6 +43,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
     public static EnvixiaFormComponent get(@NotNull PlayerEntity player) {
         return RinveniumComponents.ENVIXIA_FORM.get(player);
     }
+
     private void sync() {
         RinveniumComponents.ENVIXIA_FORM.sync(player);
     }
@@ -161,6 +166,7 @@ public class EnvixiaFormComponent implements TripleBoolComponent, IntComponent, 
         if (player.getAbilities().creativeMode && !player.getAbilities().allowFlying) {
             player.getAbilities().allowFlying = true;
         }
+
         if (player.isSpectator() && !player.getAbilities().flying) {
             player.getAbilities().flying = true;
         }

@@ -21,12 +21,12 @@ public class RestrictCraftingState extends PersistentState {
         state.lockRecipes = nbt.getBoolean(LOCK_RECIPES_KEY);
         return state;
     }
+
     public static RestrictCraftingState createNew() {
         RestrictCraftingState state = new RestrictCraftingState();
         state.lockRecipes = false;
         return state;
     }
-
 
     public static RestrictCraftingState getServerState(MinecraftServer server) {
         ServerWorld serverWorld = server.getWorld(ServerWorld.OVERWORLD);

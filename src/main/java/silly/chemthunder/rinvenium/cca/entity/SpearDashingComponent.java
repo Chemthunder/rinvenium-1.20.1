@@ -19,17 +19,21 @@ import silly.chemthunder.rinvenium.index.RinveniumItems;
 
 public class SpearDashingComponent implements IntComponent, AutoSyncedComponent, CommonTickingComponent {
     public static final ComponentKey<SpearDashingComponent> KEY = ComponentRegistry.getOrCreate(Rinvenium.id("dash"), SpearDashingComponent.class);
+
     public static final String DASH_COOLDOWN_KEY = "DashCooldown";
+
     public static final int MAX_COOLDOWN = 200;
     public int dashTicks = 0;
     public int dashCooldown = 0;
+
     private final PlayerEntity player;
-    
-    public void sync() {
-        KEY.sync(this.player);
-    }
+
     public SpearDashingComponent(PlayerEntity player) {
         this.player = player;
+    }
+
+    public void sync() {
+        KEY.sync(this.player);
     }
 
     public static SpearDashingComponent get(@NotNull PlayerEntity player) {
@@ -130,5 +134,4 @@ public class SpearDashingComponent implements IntComponent, AutoSyncedComponent,
         nbtCompound.putInt("dashTicks", dashTicks);
         nbtCompound.putInt(DASH_COOLDOWN_KEY, this.dashCooldown);
     }
-
 }

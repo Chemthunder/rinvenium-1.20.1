@@ -14,6 +14,7 @@ public class AddScreenFlashS2CPacket {
         int color = buf.readInt();
         int fadeTime = buf.readInt();
         float maxOpacity = buf.readFloat();
+        
         if (client.player != null) {
             FlashManager flashManager = ((FlashContainer) client.player).getFlashManager();
             flashManager.add(new ScreenFlash(maxAge, color, fadeTime, maxOpacity));

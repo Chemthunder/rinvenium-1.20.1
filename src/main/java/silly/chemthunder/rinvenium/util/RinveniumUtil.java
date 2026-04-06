@@ -190,6 +190,7 @@ public class RinveniumUtil {
             }
         }
     }
+
     public static void spawnRaycastRailgunParticles(ServerWorld world, Vec3d start, Vec3d rot, HitResult hitResult, double maxDistance, double step, double offset, int particleAge) {
         Vec3d endPos = start.add(rot.x * maxDistance, rot.y * maxDistance, rot.z * maxDistance);
         RailgunTrailParticleEffect particle;
@@ -223,7 +224,6 @@ public class RinveniumUtil {
         }
     }
 
-
     public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack, boolean creativeOverride) {
         boolean bl = player.isCreative();
         int count = inputStack.getCount();
@@ -242,6 +242,7 @@ public class RinveniumUtil {
         }
         return inputStack;
     }
+    
     public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack) {
         return exchangeWholeStack(inputStack, player, outputStack, true);
     }

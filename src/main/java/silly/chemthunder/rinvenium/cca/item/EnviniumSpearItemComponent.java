@@ -55,6 +55,7 @@ public class EnviniumSpearItemComponent extends ItemComponent {
     public boolean isInDamageState() {
         return this.getBoolean(IS_IN_DAMAGE_STATE);
     }
+
     public void setIsInDamageState(boolean value) {
         this.putBoolean(IS_IN_DAMAGE_STATE, value);
     }
