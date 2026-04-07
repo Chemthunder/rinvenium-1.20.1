@@ -24,6 +24,16 @@ public abstract class ModelLoaderMixin {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;addModel(Lnet/minecraft/client/util/ModelIdentifier;)V", ordinal = 3, shift = At.Shift.AFTER))
     public void addModels(BlockColors blockColors, Profiler profiler, Map jsonUnbakedModels, Map blockStates, CallbackInfo ci) {
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_default", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_remake", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_hstar", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_midget", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_creature", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_invis", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_heartless", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_pbgs", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_scarlet", "inventory"));
+        this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear_hearttech", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_default", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_remake", "inventory"));
         this.addModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d_hstar", "inventory"));

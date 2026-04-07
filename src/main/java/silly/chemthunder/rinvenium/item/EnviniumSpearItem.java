@@ -233,12 +233,18 @@ public class EnviniumSpearItem extends SwordItem {
             tooltip.add(Text.translatable("desc.spear.unenchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
             tooltip.add(Text.translatable("desc.spear.unenchanted_2").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
             tooltip.add(Text.translatable("desc.spear.unenchanted_3").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
+            tooltip.add(Text.empty());
         } else {
             //tooltip.add(Text.translatable("desc.spear.enchanted_1").formatted(Formatting.DARK_GRAY).formatted(Formatting.ITALIC));
         }
-        tooltip.add(Text.literal(""));
         String textureName = this.getTexture(stack).name.substring(0, 1).toUpperCase() + this.getTexture(stack).name.substring(1);
+        if (this.getTexture(stack) == Texture.HEARTTECH) {
+            textureName = "Heart Tech";
+        } else if (this.getTexture(stack) == Texture.PBGS) {
+            textureName = "PBGS";
+        }
         tooltip.add(Text.literal("Texture: " + textureName).formatted(Formatting.DARK_GRAY));
+        if (EnchantmentHelper.getLevel(RinveniumEnchantments.RUSH, stack) > 0) tooltip.add(Text.empty());
         super.appendTooltip(stack, world, tooltip, context);
     }
     public Texture getTexture(ItemStack stack) {

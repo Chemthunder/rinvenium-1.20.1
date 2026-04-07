@@ -11,7 +11,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -41,34 +43,45 @@ public abstract class ItemRendererMixin {
     public BakedModel useModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player != null && entity != null) {
-            if (stack.isOf(RinveniumItems.ENVINIUM_SPEAR) && (renderMode != ModelTransformationMode.GUI) && renderMode != ModelTransformationMode.GROUND) {
+            if (stack.isOf(RinveniumItems.ENVINIUM_SPEAR)) {
                 EnviniumSpearItem.Texture texture = EnviniumSpearItem.Texture.DEFAULT;
                 if (stack.getItem() instanceof EnviniumSpearItem spearItem) {
                     texture = spearItem.getTexture(stack);
                 }
-                SpearParryComponent spearParryComponent = SpearParryComponent.get(entity);
-                String blocking;
-                if (spearParryComponent.getDoubleBoolValue2()) {
-                    blocking = "_blocking";
-                } else {
-                    blocking = "";
-                }
-                String append = switch (texture) {
-                    case REMAKE -> "remake";
-                    case HSTAR -> "hstar";
-                    case MIDGET -> "midget";
-                    case CREATURE ->  "creature";
-                    case INVIS ->  "invis";
-                    case HEARTLESS ->  "heartless";
-                    case PBGS ->  "pbgs";
-                    case SCARLET ->  "scarlet";
-                    case HEARTTECH ->  "hearttech";
-                    case DEFAULT -> "default";
-                };
-                append = "_" + append;
-                return ((ItemRendererAccessor) this).renderer$getModels().getModelManager().getModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d" + blocking + append, "inventory"));
+                if (renderMode != ModelTransformationMode.GUI && renderMode != ModelTransformationMode.GROUND) {
+                    SpearParryComponent spearParryComponent = SpearParryComponent.get(entity);
+                    String blocking;
+                    if (spearParryComponent.getDoubleBoolValue2()) {
+                        blocking = "_blocking";
+                    } else {
+                        blocking = "";
+                    }
+                    String append = getSpearTexture(texture);
+                    return ((ItemRendererAccessor) this).renderer$getModels().getModelManager().getModel(new ModelIdentifier(Rinvenium.MOD_ID, "spear_handheld_2d" + blocking + append, "inventory"));
+                }/* else {
+                    String append = getSpearTexture(texture);
+                    return ((ItemRendererAccessor) this).renderer$getModels().getModelManager().getModel(new ModelIdentifier(Rinvenium.MOD_ID, "envinium_spear" + append, "inventory"));
+                }*/
             }
         }
         return value;
+    }
+
+    @Unique
+    private static @NotNull String getSpearTexture(EnviniumSpearItem.Texture texture) {
+        String append = switch (texture) {
+            case REMAKE -> "remake";
+            case HSTAR -> "hstar";
+            case MIDGET -> "midget";
+            case CREATURE -> "creature";
+            case INVIS -> "invis";
+            case HEARTLESS -> "heartless";
+            case PBGS -> "pbgs";
+            case SCARLET -> "scarlet";
+            case HEARTTECH -> "hearttech";
+            case DEFAULT -> "default";
+        };
+        append = "_" + append;
+        return append;
     }
 }
