@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.render.ScreenFlash;
 import silly.chemthunder.rinvenium.render.SlashRender;
+import silly.chemthunder.rinvenium.render.VertexColorSet;
 import silly.chemthunder.rinvenium.render.manager.FlashManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
@@ -49,9 +50,17 @@ public class DebuggerItem extends Item {
                     buf.writeFloat(0.8f);
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
-                Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(5));
+                Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(1.5));
                 Vec3d direction = new Vec3d(0, 10, 0);
-                SlashRender slashRender = new SlashRender(origin, direction, 200);
+                SlashRender slashRender = new SlashRender(
+                        origin,
+                        direction,
+                        200,
+                        new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
+                        new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
+                        new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
+                        new VertexColorSet(1.0f, 0.9f, 0.9f, 1.0f)
+                );
                 SlashRendererManager.add(slashRender);
             }
         } else {
