@@ -16,9 +16,9 @@ public class SlashRender {
     public int age;
     public List<Quaternionf> TRANSFORMATION = new ArrayList<>();
 
-    public SlashRender(Vec3d origin, Vec3d direction, int maxAge, VertexColorSet... vertexColorSets) {
+    public SlashRender(Vec3d origin, int maxAge, VertexColorSet... vertexColorSets) {
         this.origin = origin;
-        this.direction = direction;
+        this.direction = new Vec3d(0, 10, 0);
         this.maxAge = maxAge;
         this.vertexColorSets = List.of(vertexColorSets);
         this.age = 0;

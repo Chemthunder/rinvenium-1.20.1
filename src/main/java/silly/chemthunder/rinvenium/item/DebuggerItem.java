@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.item;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -15,8 +16,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Matrix3d;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.render.ScreenFlash;
 import silly.chemthunder.rinvenium.render.SlashRender;
@@ -51,16 +57,28 @@ public class DebuggerItem extends Item {
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
                 Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(1.5));
-                Vec3d direction = new Vec3d(0, 10, 0);
+                float pitch = world.random.nextFloat() * 360.0F;
+                float yaw = world.random.nextFloat() * 360.0F;
+                float roll = world.random.nextFloat() * 360.0F;
+                Matrix3f matrix3f = new Matrix3f().rotationYXZ((float) Math.toRadians(yaw), (float) Math.toRadians(pitch), (float) Math.toRadians(roll));
+                Vector3f vector3f = new Vector3f(0, 0, -1);
+                matrix3f.transform(vector3f);
+                Vec3d direction = new Vec3d(vector3f);
+                direction = direction.negate().normalize().multiply(0.5);
+                origin = origin.add(direction);
                 SlashRender slashRender = new SlashRender(
                         origin,
-                        direction,
-                        200,
+                        160,
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(1.0f, 0.9f, 0.9f, 1.0f)
                 );
+                slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+                slashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(90));
+                slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
+                slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
+                slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
                 SlashRendererManager.add(slashRender);
             }
         } else {

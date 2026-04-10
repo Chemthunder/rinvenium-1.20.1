@@ -9,8 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import silly.chemthunder.rinvenium.util.persistent.RestrictCraftingState;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.server.command.CommandManager.*;
 
 public class RestrictCraftingCommand {
     public static LiteralArgumentBuilder<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
