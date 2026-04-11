@@ -57,6 +57,8 @@ public class DebuggerItem extends Item {
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
                 Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(1.5));
+                Vec3d originDelta = new Vec3d(world.random.nextFloat() * 0.5, world.random.nextFloat() * 0.5, world.random.nextFloat() * 0.5);
+                origin = origin.add(originDelta);
                 float pitch = world.random.nextFloat() * 360.0F;
                 float yaw = world.random.nextFloat() * 360.0F;
                 float roll = world.random.nextFloat() * 360.0F;
@@ -73,6 +75,7 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
+                slashRender.setSize(4.0f);
                 SlashRendererManager.add(slashRender);
             }
         } else {
@@ -81,6 +84,15 @@ public class DebuggerItem extends Item {
             } else { // Server Side Sneak
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 20, 10));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 20, 20));
+
+                if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeInt(20);
+                    buf.writeInt(0xFF8888);
+                    buf.writeInt(180);
+                    buf.writeFloat(0.6f);
+                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                }
             }
 
         }

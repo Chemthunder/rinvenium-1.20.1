@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SlashRender {
     public final Vec3d origin;
+    public final Vec3d presetOrigin;
     /** {@link #direction} is not to be modified */
     public final Vec3d direction;
     public final int maxAge;
@@ -19,6 +20,7 @@ public class SlashRender {
 
     public SlashRender(Vec3d origin, int maxAge, VertexColorSet... vertexColorSets) {
         this.direction = new Vec3d(0, 10, 0);
+        this.presetOrigin = origin;
         this.origin = origin.subtract(direction.normalize().multiply(0.5f));
         this.maxAge = maxAge;
         this.vertexColorSets = List.of(vertexColorSets);
@@ -35,5 +37,9 @@ public class SlashRender {
     
     public void setSize(float size) {
         this.size = size;
+    }
+
+    private void updateOrigin() {
+        //this.origin = presetOrigin.subtract(direction.normalize().multiply(this.size).multiply(0.5f))       ;
     }
 }

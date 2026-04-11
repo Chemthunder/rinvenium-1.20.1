@@ -11,13 +11,14 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 
 public class WorldRendererListener {
     public static void execute() {
-        WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+        WorldRenderEvents.LAST.register(context -> {
             MinecraftClient client = MinecraftClient.getInstance();
             ClientWorld world = client.world;
             Camera camera = context.camera();
@@ -64,6 +65,7 @@ public class WorldRendererListener {
         // green and blue
         nRed = (float) MathHelper.clamp(-0.8 * Math.exp(-10 * (ageDelta - 0.5)) + 0.8, 0.0, 1.0);
 
+        Vec3d positionOffset = slash.direction.normalize().multiply(slash.size).multiply(0.5f);
 
         MatrixStack matrices = context.matrixStack();
         matrices.push();
@@ -96,18 +98,19 @@ public class WorldRendererListener {
 
             double endY = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
             double endYMid = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y);
-            double endZNeg = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.3).rotateX((float) (Math.PI / 2))).normalize()).z);
-            double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.3).rotateX((float) -(Math.PI / 2))).normalize()).z);
+            double endZNeg = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) (Math.PI / 2))).normalize()).z);
+            double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) -(Math.PI / 2))).normalize()).z);
             double edgeOffset = MathHelper.lerp(zDelta, 0, slash.direction.normalize().multiply(slash.getSize()).multiply(0.05).y);
 
+
             // Translucent edge
-            matrices.translate(-camX, -camY, -camZ);
-            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            /*matrices.translate(-camX, -camY, -camZ);
+            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(positionOffset).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
 
             matrices.scale(1.1f, 1.1f, 1.1f);
 
-            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-            matrices.translate(camX, camY, camZ);
+            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(positionOffset).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            matrices.translate(camX, camY, camZ);*/
 
             /*bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.0f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.2f).next();
@@ -115,13 +118,13 @@ public class WorldRendererListener {
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.0f).next();
 */
             // Main layer
-            matrices.translate(-camX, -camY, -camZ);
-            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            /*matrices.translate(-camX, -camY, -camZ);
+            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(positionOffset).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
 
             matrices.scale(1 / 1.1f, 1 / 1.1f, 1 / 1.1f);
 
-            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-            matrices.translate(camX, camY, camZ);
+            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(positionOffset).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            matrices.translate(camX, camY, camZ);*/
 
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();

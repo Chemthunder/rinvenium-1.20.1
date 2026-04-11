@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -33,6 +34,12 @@ public abstract class InGameHudMixin {
     @Shadow protected abstract int getHeartCount(LivingEntity entity);
     @Shadow protected abstract int getHeartRows(int heartCount);
     @Shadow protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
+
+    @Shadow
+    private int scaledWidth;
+
+    @Shadow
+    private int scaledHeight;
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
@@ -110,6 +117,7 @@ public abstract class InGameHudMixin {
                     flash.fadeTicks--;
                     this.renderOverlay(
                             context,
+                            flash.color,
                             RinveniumTextureUtils.SCREEN_FLASH,
                             (float) Math.min(flash.fadeTicks, flash.fadeTime) * flash.maxOpacity / flash.fadeTime
                     );
@@ -117,17 +125,33 @@ public abstract class InGameHudMixin {
                     flash.fadeTicks++;
                     this.renderOverlay(
                             context,
+                            flash.color,
                             RinveniumTextureUtils.SCREEN_FLASH,
                             (float) Math.min(flash.fadeTicks, flash.fadeTime) * flash.maxOpacity / flash.fadeTime
                     );
                 } else {
                     this.renderOverlay(
                             context,
+                            flash.color,
                             RinveniumTextureUtils.SCREEN_FLASH,
                             flash.maxOpacity
                     );
                 }
             });
         }
+    }
+
+    @Unique
+    private void renderOverlay(DrawContext context, int color, Identifier texture, float opacity) {
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);/* Bit shifting hex colors into that fuckass 256^3 ratio */
+        float r = (color >> 16 & 0xFF) / 255.0f;
+        float g = (color >> 8 & 0xFF) / 255.0f;
+        float b = (color & 0xFF) / 255.0f;
+        context.setShaderColor(r, g, b, opacity);
+        context.drawTexture(texture, 0, 0, -90, 0.0F, 0.0F, this.scaledWidth, this.scaledHeight, this.scaledWidth, this.scaledHeight);
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
