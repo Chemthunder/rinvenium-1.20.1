@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SlashRender {
     public final Vec3d origin;
+    /** {@link #direction} is not to be modified */
     public final Vec3d direction;
     public final int maxAge;
     public final List<VertexColorSet> vertexColorSets;
@@ -17,8 +18,8 @@ public class SlashRender {
     public List<Quaternionf> TRANSFORMATION = new ArrayList<>();
 
     public SlashRender(Vec3d origin, int maxAge, VertexColorSet... vertexColorSets) {
-        this.origin = origin;
         this.direction = new Vec3d(0, 10, 0);
+        this.origin = origin.subtract(direction.normalize().multiply(0.5f));
         this.maxAge = maxAge;
         this.vertexColorSets = List.of(vertexColorSets);
         this.age = 0;

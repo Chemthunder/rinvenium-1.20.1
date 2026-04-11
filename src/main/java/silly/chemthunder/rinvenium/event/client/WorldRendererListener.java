@@ -1,5 +1,6 @@
 package silly.chemthunder.rinvenium.event.client;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -68,21 +69,20 @@ public class WorldRendererListener {
         matrices.push();
 
         matrices.translate(-camX, -camY, -camZ);
-        matrices.translate(slash.origin.x, slash.origin.y, slash.origin.z);
+        matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
 
         slash.TRANSFORMATION.forEach(matrices::multiply);
         matrices.scale(slash.getSize(), slash.getSize(), slash.getSize());
 
-        /*matrices.scale(2.0f, 2.0f, 2.0f);*/
-
         Matrix4f transformation = matrices.peek().getPositionMatrix();
 
-        matrices.translate(-slash.origin.x, -slash.origin.y, -slash.origin.z);
+        matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
         matrices.translate(camX, camY, camZ);
 
         if (slash.origin.squaredDistanceTo(camera.getPos()) < viewDistance * viewDistance) {
             RenderSystem.disableCull();
             RenderSystem.enableBlend();
+            RenderSystem.depthMask(MinecraftClient.isFabulousGraphicsOrBetter());
             RenderSystem.enableDepthTest();
 
             if (SlashRendererManager.slashBuffer != null) {
@@ -96,29 +96,33 @@ public class WorldRendererListener {
 
             double endY = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
             double endYMid = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y);
-            double endZNeg = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.4).rotateX((float) (Math.PI / 2))).normalize()).z);
-            double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.4).rotateX((float) -(Math.PI / 2))).normalize()).z);
+            double endZNeg = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.3).rotateX((float) (Math.PI / 2))).normalize()).z);
+            double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.3).rotateX((float) -(Math.PI / 2))).normalize()).z);
+            double edgeOffset = MathHelper.lerp(zDelta, 0, slash.direction.normalize().multiply(slash.getSize()).multiply(0.05).y);
 
-            double bgEndY = 0;
+            // Translucent edge
+            matrices.translate(-camX, -camY, -camZ);
+            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
 
+            matrices.scale(1.1f, 1.1f, 1.1f);
 
-            // Background translucent layer
-           /* bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - (slash.getSize() / 4) - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.01f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endYMid - (slash.getSize() / 4) - camY), (float) (endZNeg - camZ)).color(1.0f, 0.0f, 0.0f, 0.01f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - (slash.getSize() / 4) - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.01f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endYMid - (slash.getSize() / 4) - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.6f).next();
-            xOffset += 4.9E-5;*/
+            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            matrices.translate(camX, camY, camZ);
 
-           /* matrices.translate(-camX, -camY, -camZ);
-            matrices.translate(slash.origin.x, slash.origin.y, slash.origin.z);
-
-            matrices.scale(0.5f, 0.5f, 0.5f);
-            transformation = matrices.peek().getPositionMatrix();
-
-            matrices.translate(-slash.origin.x, -slash.origin.y, -slash.origin.z);
-            matrices.translate(camX, camY, camZ);*/
-
+            /*bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.0f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.2f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.2f).next();
+            bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.0f).next();
+*/
             // Main layer
+            matrices.translate(-camX, -camY, -camZ);
+            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+
+            matrices.scale(1 / 1.1f, 1 / 1.1f, 1 / 1.1f);
+
+            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+            matrices.translate(camX, camY, camZ);
+
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.9f).next();
@@ -128,14 +132,6 @@ public class WorldRendererListener {
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(red, nRed, nRed, 0.9f).next();
             bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
-
-           /* bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.4f, 0.0f, 0.0f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
-*/
-            // Inner layer
-            //bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endY - camY), (float) (endZPos - camZ)).color(1.0f, 0.0f, 0.0f, 0.9f).next();
 
             matrices.pop();
 
@@ -155,7 +151,7 @@ public class WorldRendererListener {
             }
             RenderSystem.enableCull();
             RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
+            RenderSystem.depthMask(true);
         }
     }
 }

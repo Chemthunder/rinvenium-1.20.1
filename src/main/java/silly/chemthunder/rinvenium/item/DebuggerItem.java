@@ -60,15 +60,9 @@ public class DebuggerItem extends Item {
                 float pitch = world.random.nextFloat() * 360.0F;
                 float yaw = world.random.nextFloat() * 360.0F;
                 float roll = world.random.nextFloat() * 360.0F;
-                Matrix3f matrix3f = new Matrix3f().rotationYXZ((float) Math.toRadians(yaw), (float) Math.toRadians(pitch), (float) Math.toRadians(roll));
-                Vector3f vector3f = new Vector3f(0, 0, -1);
-                matrix3f.transform(vector3f);
-                Vec3d direction = new Vec3d(vector3f);
-                direction = direction.negate().normalize().multiply(0.5);
-                origin = origin.add(direction);
                 SlashRender slashRender = new SlashRender(
                         origin,
-                        160,
+                        100,
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),

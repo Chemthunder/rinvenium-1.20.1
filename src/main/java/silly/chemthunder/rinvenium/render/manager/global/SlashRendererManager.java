@@ -6,9 +6,10 @@ import silly.chemthunder.rinvenium.render.SlashRender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SlashRendererManager {
-    public static final List<SlashRender> SLASH_RENDERS = new ArrayList<>();
+    public static final ConcurrentLinkedQueue<SlashRender> SLASH_RENDERS = new ConcurrentLinkedQueue<>();
     @Nullable public static VertexBuffer slashBuffer;
 
     public static void add(SlashRender slashRender) {
@@ -19,7 +20,7 @@ public class SlashRendererManager {
         SLASH_RENDERS.removeIf(slashRender -> slashRender.maxAge != -1 && ++slashRender.age >= slashRender.maxAge);
     }
 
-    public static List<SlashRender> get() {
+    public static ConcurrentLinkedQueue<SlashRender> get() {
         return SLASH_RENDERS;
     }
 
