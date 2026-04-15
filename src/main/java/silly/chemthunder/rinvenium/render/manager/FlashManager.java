@@ -4,9 +4,10 @@ import silly.chemthunder.rinvenium.render.ScreenFlash;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FlashManager {
-    private final List<ScreenFlash> FLASHES = new ArrayList<>();
+    private final ConcurrentLinkedQueue<ScreenFlash> FLASHES = new ConcurrentLinkedQueue<ScreenFlash>();
 
     public void add(ScreenFlash flash) {
         this.FLASHES.add(flash);
@@ -16,7 +17,7 @@ public class FlashManager {
         this.FLASHES.removeIf(screenFlash -> ++screenFlash.age >= screenFlash.maxAge + screenFlash.fadeTime * 2);
     }
 
-    public List<ScreenFlash> get() {
+    public ConcurrentLinkedQueue<ScreenFlash> get() {
         return this.FLASHES;
     }
 

@@ -4,3 +4,6 @@ accessible method net/minecraft/client/particle/ParticleManager createParticle (
 accessible method net/minecraft/entity/projectile/ProjectileEntity updateRotation ()V
 accessible method net/minecraft/entity/LivingEntity updateGlowing ()V
 accessible field net/minecraft/block/entity/BeaconBlockEntity level I
+accessible field net/minecraft/client/render/WorldRenderer entityRenderDispatcher Lnet/minecraft/client/render/entity/EntityRenderDispatcher;
+accessible field net/minecraft/client/render/WorldRenderer bufferBuilders Lnet/minecraft/client/render/BufferBuilderStorage;
+accessible method net/minecraft/client/render/WorldRenderer renderEntity (Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V

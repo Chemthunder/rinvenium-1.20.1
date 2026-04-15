@@ -8,7 +8,6 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import org.spongepowered.asm.mixin.Final;
@@ -20,14 +19,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
-import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
 import silly.chemthunder.rinvenium.render.manager.FlashManager;
-import silly.chemthunder.rinvenium.util.inject.FlashContainer;
+import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements FlashContainer {
+public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements RenderContainer {
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
     @Unique private final FlashManager flashManager = new FlashManager();
+    @Unique private final ImpactFrameManager impactFrameManager = new ImpactFrameManager();
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -53,5 +53,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Override
     public FlashManager getFlashManager() {
         return this.flashManager;
+    }
+
+    @Override
+    public ImpactFrameManager getImpactFrameManager() {
+        return this.impactFrameManager;
     }
 }

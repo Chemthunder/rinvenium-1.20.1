@@ -85,11 +85,15 @@ public class DebuggerItem extends Item {
 
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
                     PacketByteBuf buf = PacketByteBufs.create();
-                    buf.writeInt(20);
-                    buf.writeInt(0xFF8888);
-                    buf.writeInt(180);
+                    buf.writeUuid(player.getUuid());
+                    buf.writeInt(8);
+                    buf.writeInt(0xFFFFFF);
+                    buf.writeInt(1);
                     buf.writeFloat(0.6f);
-                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                    buf.writeDouble(player.getX());
+                    buf.writeDouble(player.getY());
+                    buf.writeDouble(player.getZ());
+                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                 }
             }
 

@@ -3,16 +3,20 @@ package silly.chemthunder.rinvenium.mixin.client;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.OutlineVertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,8 +28,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.render.manager.FlashManager;
+import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
-import silly.chemthunder.rinvenium.util.inject.FlashContainer;
+import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @SuppressWarnings("DiscouragedShift")
 @Mixin(InGameHud.class)
@@ -110,7 +115,7 @@ public abstract class InGameHudMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
     private void rinvenium$renderOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (this.client != null && this.client.player != null) {
-            FlashManager flashManager = ((FlashContainer) this.client.player).getFlashManager();
+            FlashManager flashManager = ((RenderContainer) this.client.player).getFlashManager();
             flashManager.tick();
             flashManager.get().forEach(flash -> {
                 if (flash.age >= flash.maxAge + flash.fadeTime) {
@@ -138,13 +143,44 @@ public abstract class InGameHudMixin {
                     );
                 }
             });
+
+            ImpactFrameManager impactFrameManager = ((RenderContainer) this.client.player).getImpactFrameManager();
+            impactFrameManager.tick();
+            impactFrameManager.get().forEach(impactFrame -> {
+                if (impactFrame.age >= impactFrame.maxAge + impactFrame.fadeTime) {
+                    impactFrame.fadeTicks--;
+                    this.renderOverlay(
+                            context,
+                            impactFrame.color,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            (float) Math.min(impactFrame.fadeTicks, impactFrame.fadeTime) * impactFrame.maxOpacity / impactFrame.fadeTime
+                    );
+                } else if (impactFrame.age <= impactFrame.fadeTime) {
+                    impactFrame.fadeTicks++;
+                    this.renderOverlay(
+                            context,
+                            impactFrame.color,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            (float) Math.min(impactFrame.fadeTicks, impactFrame.fadeTime) * impactFrame.maxOpacity / impactFrame.fadeTime
+                    );
+                } else {
+                    this.renderOverlay(
+                            context,
+                            impactFrame.color,
+                            RinveniumTextureUtils.SCREEN_FLASH,
+                            impactFrame.maxOpacity
+                    );
+                }
+                renderEntity(impactFrame.entity, context, tickDelta);
+            });
         }
     }
 
     @Unique
     private void renderOverlay(DrawContext context, int color, Identifier texture, float opacity) {
         RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);/* Bit shifting hex colors into that fuckass 256^3 ratio */
+        RenderSystem.depthMask(false);
+        /* Bit shifting hex colors into that fuckass 256^3 ratio */
         float r = (color >> 16 & 0xFF) / 255.0f;
         float g = (color >> 8 & 0xFF) / 255.0f;
         float b = (color & 0xFF) / 255.0f;
@@ -153,5 +189,26 @@ public abstract class InGameHudMixin {
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    @Unique
+    private void renderEntity(Entity entity, DrawContext context, float tickDelta) {
+        MatrixStack matrices = context.getMatrices();
+        OutlineVertexConsumerProvider outlineVertexConsumerProvider = client.worldRenderer.bufferBuilders.getOutlineVertexConsumers();
+        outlineVertexConsumerProvider.setColor(0, 0, 0, 255);
+        if (entity.age == 0) {
+            entity.lastRenderX = entity.getX();
+            entity.lastRenderY = entity.getY();
+            entity.lastRenderZ = entity.getZ();
+        }
+        Vec3d camPos = client.gameRenderer.getCamera().getPos();
+        matrices.push();
+        Vec3d origin = entity.getEyePos().add(entity.getRotationVector().normalize().multiply(5));
+        //matrices.translate(origin.getX() - camPos.x, origin.getY() - camPos.y, origin.getZ() - camPos.z);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(client.gameRenderer.getCamera().getPitch()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(client.gameRenderer.getCamera().getYaw() + 180.0F));
+        EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
+        dispatcher.render(entity, origin.x - camPos.x, origin.y - camPos.y, origin.z - camPos.z, entity.getYaw(), tickDelta, matrices, outlineVertexConsumerProvider, dispatcher.getLight(entity, tickDelta));
+        matrices.pop();
     }
 }

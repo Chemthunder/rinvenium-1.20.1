@@ -88,10 +88,10 @@ public class WorldRendererListener {
             RenderSystem.depthMask(MinecraftClient.isFabulousGraphicsOrBetter());
             RenderSystem.enableDepthTest();
 
-            if (SlashRendererManager.slashBuffer != null) {
+            /*if (SlashRendererManager.slashBuffer != null) {
                 SlashRendererManager.slashBuffer.close();
             }
-            SlashRendererManager.slashBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
+            SlashRendererManager.slashBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);*/
 
             bufferbuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
@@ -107,20 +107,23 @@ public class WorldRendererListener {
 
             matrices.pop();
 
-            BufferBuilder.BuiltBuffer builtBuffer = bufferbuilder.end();
+            /*BufferBuilder.BuiltBuffer builtBuffer = bufferbuilder.end();
             SlashRendererManager.slashBuffer.bind();
             SlashRendererManager.slashBuffer.upload(builtBuffer);
-            VertexBuffer.unbind();
+            VertexBuffer.unbind();*/
 
             RenderSystem.setShader(GameRenderer::getPositionColorProgram);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            if (SlashRendererManager.slashBuffer != null) {
+
+            /*if (SlashRendererManager.slashBuffer != null) {
                 SlashRendererManager.slashBuffer.bind();
                 ShaderProgram shaderProgram = RenderSystem.getShader();
                 Matrix4f positionMatrix = RenderSystem.getModelViewStack().peek().getPositionMatrix();
 
                 SlashRendererManager.slashBuffer.draw(positionMatrix, RenderSystem.getProjectionMatrix(), shaderProgram);
-            }
+            }*/
+            tessellator.draw();
+
             RenderSystem.enableCull();
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
@@ -137,22 +140,5 @@ public class WorldRendererListener {
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(red, nRed, nRed, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
-    }
-
-    private static void buildSlashOutlineVertices(SlashRender slash, BufferBuilder bufferbuilder, Matrix4f transformation, double xOffset, double camX, double endYMid, double camY, double camZ, double endZNeg, double endY, double endZPos) {
-        boolean shouldShowOutline = inRange(slash.age, slash.maxAge / 2, 30);
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
-    }
-
-    private static boolean inRange(int delta, int median, int variance) {
-        return delta >= median - variance || delta <= median + variance;
     }
 }
