@@ -44,7 +44,14 @@ public abstract class ItemEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/ItemEntity;velocityDirty:Z", ordinal = 0))
+    @Inject(
+        method = "tick",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/ItemEntity;velocityDirty:Z",
+            ordinal = 0
+        )
+    )
     private void rinvenium$itemCrafting(CallbackInfo ci) {
         if (!this.getWorld().isClient) {
             craftAurio();
@@ -67,8 +74,7 @@ public abstract class ItemEntityMixin extends Entity {
         }
     }
 
-    @Unique
-    private void craftIonCell() {
+    @Unique private void craftIonCell() {
         if (this.getStack().isOf(RinveniumItems.BATTERY) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isOf(Blocks.BEACON) && this.getItemAge() < 3000) {
             BeaconBlockEntity beaconBlockEntity =  (BeaconBlockEntity) this.getWorld().getBlockEntity(this.getBlockPos().offset(Direction.DOWN));
             if (beaconBlockEntity != null && beaconBlockEntity.level > 0) {
@@ -102,8 +108,7 @@ public abstract class ItemEntityMixin extends Entity {
         }
     }
 
-    @Unique
-    private void craftAurio() {
+    @Unique private void craftAurio() {
         if (this.getStack().isOf(Items.GOLD_INGOT) && this.getWorld().getBlockState(this.getBlockPos()).isOf(Blocks.CAULDRON) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isIn(RinveniumBlockTagProvider.SOUL_FIRE)) {
             List<ItemEntity> itemEntities = this.getWorld().getEntitiesByClass(ItemEntity.class, this.getBoundingBox().expand(0.5), itemEntity -> !itemEntity.isRemoved() && itemEntity.getItemAge() < 5800 && !itemEntity.getStack().isOf(Items.GOLD_INGOT));
             DefaultedList<ItemEntity> ingredients = DefaultedList.ofSize(2);
@@ -151,8 +156,7 @@ public abstract class ItemEntityMixin extends Entity {
         }
     }
 
-    @Unique
-    private void craftEnvinia() {
+    @Unique private void craftEnvinia() {
         if (this.getStack().isOf(Items.NETHERITE_SCRAP) && this.getWorld().getBlockState(this.getBlockPos()).isOf(Blocks.CAULDRON) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isIn(RinveniumBlockTagProvider.SOUL_FIRE)) {
             List<ItemEntity> itemEntities = this.getWorld().getEntitiesByClass(ItemEntity.class, this.getBoundingBox().expand(0.5), itemEntity -> !itemEntity.isRemoved() && itemEntity.getItemAge() < 5800 && !itemEntity.getStack().isOf(Items.NETHERITE_SCRAP));
             DefaultedList<ItemEntity> ingredients = DefaultedList.ofSize(2);
@@ -200,8 +204,7 @@ public abstract class ItemEntityMixin extends Entity {
         }
     }
 
-    @Unique
-    private void craftEnvixius() {
+    @Unique private void craftEnvixius() {
         if (this.getStack().isOf(RinveniumItems.SUPERHEATED_ENVINIA_INGOT) && this.getWorld().getBlockState(this.getBlockPos()).isOf(Blocks.CAULDRON) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isIn(RinveniumBlockTagProvider.SOUL_FIRE)) {
             List<ItemEntity> itemEntities = this.getWorld().getEntitiesByClass(ItemEntity.class, this.getBoundingBox().expand(0.5), itemEntity -> !itemEntity.isRemoved() && itemEntity.getItemAge() < 5800 && !itemEntity.getStack().isOf(RinveniumItems.SUPERHEATED_ENVINIA_INGOT));
             DefaultedList<ItemEntity> ingredients = DefaultedList.ofSize(2);
@@ -249,8 +252,7 @@ public abstract class ItemEntityMixin extends Entity {
         }
     }
 
-    @Unique
-    private void craftColdEnvixius() {
+    @Unique private void craftColdEnvixius() {
         if (this.getStack().isOf(RinveniumItems.ENVINIA_INGOT) && this.getWorld().getBlockState(this.getBlockPos()).isOf(Blocks.CAULDRON) && this.getWorld().getBlockState(this.getBlockPos().offset(Direction.DOWN)).isIn(RinveniumBlockTagProvider.SOUL_FIRE)) {
             List<ItemEntity> itemEntities = this.getWorld().getEntitiesByClass(ItemEntity.class, this.getBoundingBox().expand(0.5), itemEntity -> !itemEntity.isRemoved() && itemEntity.getItemAge() < 5800 && !itemEntity.getStack().isOf(RinveniumItems.ENVINIA_INGOT));
             DefaultedList<ItemEntity> ingredients = DefaultedList.ofSize(2);

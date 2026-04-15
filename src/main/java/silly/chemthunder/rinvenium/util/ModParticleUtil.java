@@ -69,7 +69,6 @@ public class ModParticleUtil {
         }
     }
 
-
     public static void addExpandingRingOfParticles(World world, Vec3d origin, double yGap, int rings, int count, double speed, ParticleEffect particle) {
         for (int j = (int) -Math.floor((double) rings / 2); j < Math.ceil((double) rings / 2); j++) {
             for (int i = 0; i < count; i++) {

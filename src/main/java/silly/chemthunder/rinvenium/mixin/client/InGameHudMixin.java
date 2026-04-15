@@ -35,13 +35,17 @@ public abstract class InGameHudMixin {
     @Shadow protected abstract int getHeartRows(int heartCount);
     @Shadow protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
 
-    @Shadow
-    private int scaledWidth;
+    @Shadow private int scaledWidth;
+    @Shadow private int scaledHeight;
 
-    @Shadow
-    private int scaledHeight;
-
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
+    @Inject(
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I",
+            shift = At.Shift.BEFORE
+        )
+    )
     private void rinvenium$renderCustomCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (this.client != null && this.client.player != null && this.client.options.getPerspective().isFirstPerson()) {
             if (this.client.player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.HAIL_OF_THE_GODS)) {
@@ -52,12 +56,27 @@ public abstract class InGameHudMixin {
         }
     }
 
-    @WrapWithCondition(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 0))
+    @WrapWithCondition(
+        method = "renderCrosshair",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V",
+            ordinal = 0
+        )
+    )
     private boolean rinvenium$derenderCrosshair(DrawContext instance, Identifier texture, int x, int y, int u, int v, int width, int height) {
         return this.client != null && this.client.player != null && !this.client.player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.HAIL_OF_THE_GODS);
     }
 
-    @WrapOperation(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;", ordinal = 3, opcode = Opcodes.GETSTATIC))
+    @WrapOperation(
+        method = "renderStatusBars",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;",
+            ordinal = 3,
+            opcode = Opcodes.GETSTATIC
+        )
+    )
     private Identifier rinvenium$envixiaHungerBarBG(Operation<Identifier> original) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
         if (clientPlayer != null) {
@@ -69,7 +88,15 @@ public abstract class InGameHudMixin {
         return original.call();
     }
 
-    @WrapOperation(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;", ordinal = 4, opcode = Opcodes.GETSTATIC))
+    @WrapOperation(
+        method = "renderStatusBars",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;",
+            ordinal = 4,
+            opcode = Opcodes.GETSTATIC
+        )
+    )
     private Identifier rinvenium$envixiaHungerBarHalf(Operation<Identifier> original) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
         if (clientPlayer != null) {
@@ -81,7 +108,15 @@ public abstract class InGameHudMixin {
         return original.call();
     }
 
-    @WrapOperation(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;", ordinal = 5, opcode = Opcodes.GETSTATIC))
+    @WrapOperation(
+        method = "renderStatusBars",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/gui/hud/InGameHud;ICONS:Lnet/minecraft/util/Identifier;",
+            ordinal = 5,
+            opcode = Opcodes.GETSTATIC
+        )
+    )
     private Identifier rinvenium$envixiaHungerBarFull(Operation<Identifier> original) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
         if (clientPlayer != null) {
@@ -92,7 +127,6 @@ public abstract class InGameHudMixin {
         }
         return original.call();
     }
-
 
     /*@Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getProfiler()Lnet/minecraft/util/profiler/Profiler;", ordinal = 2))
     private void rinvenium$flightBar(DrawContext context, CallbackInfo ci, @Local PlayerEntity playerEntity, @Local LivingEntity livingEntity, @Local(ordinal = 11) int t, @Local(ordinal = 5) int n) {
@@ -106,8 +140,14 @@ public abstract class InGameHudMixin {
         }
     }*/
 
-
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
+    @Inject(
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I",
+            shift = At.Shift.BEFORE
+        )
+    )
     private void rinvenium$renderOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (this.client != null && this.client.player != null) {
             FlashManager flashManager = ((FlashContainer) this.client.player).getFlashManager();
@@ -141,8 +181,7 @@ public abstract class InGameHudMixin {
         }
     }
 
-    @Unique
-    private void renderOverlay(DrawContext context, int color, Identifier texture, float opacity) {
+    @Unique private void renderOverlay(DrawContext context, int color, Identifier texture, float opacity) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);/* Bit shifting hex colors into that fuckass 256^3 ratio */
         float r = (color >> 16 & 0xFF) / 255.0f;

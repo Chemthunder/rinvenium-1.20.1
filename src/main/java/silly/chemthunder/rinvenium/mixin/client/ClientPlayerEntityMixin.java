@@ -33,14 +33,26 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         super(world, profile);
     }
 
-    @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+    @WrapOperation(
+        method = "tickMovement",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"
+        )
+    )
     private boolean gitsnshiggles$noMovementSlowWhenSwordBlocking(ClientPlayerEntity player, Operation<Boolean> original) {
         if (player.getActiveItem().isOf(RinveniumItems.ENVINIUM_SPEAR)) return false;
         if (player.getActiveItem().isOf(RinveniumItems.HAIL_OF_THE_GODS)) return false;
         return original.call(player);
     }
 
-    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"))
+    @Inject(
+        method = "tickMovement",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
+        )
+    )
     private void rinvenium$elytraFly(CallbackInfo ci) {
         ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((ClientPlayerEntity) ((Object)this));

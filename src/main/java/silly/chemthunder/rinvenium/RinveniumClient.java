@@ -13,7 +13,6 @@ import silly.chemthunder.rinvenium.index.RinveniumParticles;
 import silly.chemthunder.rinvenium.index.client.RinveniumModelPredicateProvider;
 
 public class RinveniumClient implements ClientModInitializer {
-    
     public void onInitializeClient() {
         RinveniumEntities.clientInit();
         RinveniumPackets.registerS2CPackets();

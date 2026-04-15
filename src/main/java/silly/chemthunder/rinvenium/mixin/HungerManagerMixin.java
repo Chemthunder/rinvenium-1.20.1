@@ -36,7 +36,14 @@ public abstract class HungerManagerMixin implements HungerDecrement {
         this.saturationLevel = MathHelper.clamp(this.saturationLevel + food * saturationModifier * 2.0F, 0, 20.0f);
     }
 
-    @ModifyExpressionValue(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/HungerManager;foodLevel:I", ordinal = 3))
+    @ModifyExpressionValue(
+        method = "update",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/entity/player/HungerManager;foodLevel:I",
+            ordinal = 3
+        )
+    )
     private int rinvenium$envixiaAlwaysHeals(int foodLevel, @Local(argsOnly = true) PlayerEntity player) {
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
         if (envixiaFormComponent.getTripleBoolValue1()) {

@@ -25,7 +25,14 @@ public abstract class DrawContextMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow public abstract void fill(RenderLayer layer, int x1, int y1, int x2, int y2, int color);
 
-    @Inject(method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V", ordinal = 1))
+    @Inject(
+        method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V",
+            ordinal = 1
+        )
+    )
     private void rinvenium$drawCustomItemBars(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo ci) {
         if (this.client.player != null) {
             int k2 = x + 2;

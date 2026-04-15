@@ -80,7 +80,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }*/
 
-    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_SWEEP:Lnet/minecraft/sound/SoundEvent;"))
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_SWEEP:Lnet/minecraft/sound/SoundEvent;"
+        )
+    )
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsSweep(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -96,7 +102,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_KNOCKBACK:Lnet/minecraft/sound/SoundEvent;"))
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_KNOCKBACK:Lnet/minecraft/sound/SoundEvent;"
+        )
+    )
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsKB(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -112,7 +124,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_CRIT:Lnet/minecraft/sound/SoundEvent;"))
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_CRIT:Lnet/minecraft/sound/SoundEvent;"
+        )
+    )
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsCrit(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -125,7 +143,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_STRONG:Lnet/minecraft/sound/SoundEvent;"))
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_STRONG:Lnet/minecraft/sound/SoundEvent;"
+        )
+    )
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsStrong(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -141,7 +165,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "attack", at = @At(value = "FIELD", target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_WEAK:Lnet/minecraft/sound/SoundEvent;"))
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/sound/SoundEvents;ENTITY_PLAYER_ATTACK_WEAK:Lnet/minecraft/sound/SoundEvent;"
+        )
+    )
     private SoundEvent rinvenium$maybeActuallyPlaysCustomSoundsWeak(Operation<SoundEvent> original, @Local (argsOnly = true) Entity target) {
         PlayerEntity player = (PlayerEntity) ((Object)this);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -157,7 +187,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"))
+    @WrapOperation(
+        method = "applyDamage",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"
+        )
+    )
     private float rinvenium$handleParry(PlayerEntity player, DamageSource source, float amount, Operation<Float> original) {
         float base = original.call(player, source, amount);
         if (player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -243,7 +279,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         super.onPlayerCollision(player);
     }
 
-    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
+    @Inject(
+        method = "checkFallFlying",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
+        ),
+        cancellable = true
+    )
     private void rinvenium$envixiaFlight(CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((PlayerEntity) ((Object) this));
@@ -253,7 +296,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @WrapOperation(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;eat(Lnet/minecraft/item/Item;Lnet/minecraft/item/ItemStack;)V"))
+    @WrapOperation(
+        method = "eatFood",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/HungerManager;eat(Lnet/minecraft/item/Item;Lnet/minecraft/item/ItemStack;)V"
+        )
+    )
     private void rinvenium$decreaseHungerFromNormalFoods(HungerManager instance, Item item, ItemStack stack, Operation<Void> original) {
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get((PlayerEntity) ((Object)this));
         if (envixiaFormComponent.getTripleBoolValue1() && !stack.isIn(RinveniumItemTagProvider.ENVIXIA_MUNCHIES)) {
@@ -263,7 +312,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I"))
+    @Inject(
+        method = "attack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I"
+        )
+    )
     private void rinvenium$spearHeal(Entity target, CallbackInfo ci, @Local(ordinal = 0) boolean bl) {
         if (bl) {
             SpearHealComponent spearHealComponent = SpearHealComponent.get((PlayerEntity) ((Object) this));
