@@ -50,7 +50,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         super(type, world);
     }
 
-    @WrapOperation(method = "tickRiptide", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Box;union(Lnet/minecraft/util/math/Box;)Lnet/minecraft/util/math/Box;"))
+    @WrapOperation(
+        method = "tickRiptide",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/math/Box;union(Lnet/minecraft/util/math/Box;)Lnet/minecraft/util/math/Box;"
+        )
+    )
     private Box rinvenium$envixiaLargerHitbox(Box instance, Box box, Operation<Box> original) {
         LivingEntity user = (LivingEntity) (Object) this;
         if (user instanceof PlayerEntity player) {
@@ -64,7 +70,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         return original.call(instance, box);
     }
 
-    @Inject(method = "tickRiptide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;attackLivingEntity(Lnet/minecraft/entity/LivingEntity;)V"))
+    @Inject(
+        method = "tickRiptide",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;attackLivingEntity(Lnet/minecraft/entity/LivingEntity;)V"
+        )
+    )
     private void electrifySHIPFGHERFTIOPGIPRTHGPIRTHNPIHJRTYPIJIPTY(Box a, Box b, CallbackInfo ci, @Local Entity entity) {
         LivingEntity you = (LivingEntity) (Object) this;
         LivingEntity living = (LivingEntity) entity;
@@ -100,7 +112,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         }
     }
 
-    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"))
+    @WrapOperation(
+        method = "applyDamage",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"
+        )
+    )
     private float rinvenium$spearParryDamage(LivingEntity entity, DamageSource source, float amount, Operation<Float> original) {
         float base = original.call(entity, source, amount);
         if (source.getAttacker() instanceof PlayerEntity player && player.getStackInHand(Hand.MAIN_HAND).isOf(RinveniumItems.ENVINIUM_SPEAR)) {
@@ -115,12 +133,25 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         return base;
     }
 
-    @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
+    @WrapWithCondition(
+        method = "damage",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"
+        )
+    )
     private boolean rinvenium$knockbacknt(LivingEntity instance, double strength, double x, double z, @Local(argsOnly = true) DamageSource damageSource) {
         return !damageSource.isOf(RinveniumDamageSources.BOOP) && !damageSource.isOf(RinveniumDamageSources.ELECTRICITY);
     }
 
-    @ModifyArg(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"), index = 0)
+    @ModifyArg(
+        method = "damage",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"
+        ),
+        index = 0
+    )
     private double rinvenium$damageDoesNoKB(double strength, @Local(argsOnly = true) DamageSource damageSource) {
         if (damageSource.isOf(RinveniumDamageSources.BOOP) || damageSource.isOf(RinveniumDamageSources.ELECTRICITY)) {
             return 0.0;

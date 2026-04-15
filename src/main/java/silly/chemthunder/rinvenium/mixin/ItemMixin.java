@@ -17,7 +17,14 @@ import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 @Mixin(Item.class)
 public abstract class ItemMixin {
 
-    @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canConsume(Z)Z"), cancellable = true)
+    @Inject(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;canConsume(Z)Z"
+        ),
+        cancellable = true
+    )
     private void rinvenium$shouldEatBatteries(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, @Local ItemStack itemStack) {
         EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(user);
         if (itemStack.isIn(RinveniumItemTagProvider.ENVIXIA_MUNCHIES)) {

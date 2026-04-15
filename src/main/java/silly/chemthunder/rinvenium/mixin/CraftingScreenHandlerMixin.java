@@ -25,7 +25,13 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
         super(screenHandlerType, i);
     }
 
-    @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/CraftingResultInventory;shouldCraftRecipe(Lnet/minecraft/world/World;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/recipe/Recipe;)Z"))
+    @ModifyExpressionValue(
+        method = "updateResult",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/inventory/CraftingResultInventory;shouldCraftRecipe(Lnet/minecraft/world/World;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/recipe/Recipe;)Z"
+        )
+    )
     private static boolean rinvenium$lockCraftToRiva(boolean original, @Local ServerPlayerEntity serverPlayerEntity, @Local CraftingRecipe craftingRecipe, @Local(argsOnly = true) RecipeInputInventory craftingInventory, @Local(argsOnly = true) World world) {
         ItemStack itemStack = craftingRecipe.craft(craftingInventory, world.getRegistryManager());
         if (itemStack.isIn(RinveniumItemTagProvider.LOCKED_RECIPES)) {

@@ -159,6 +159,7 @@ public class HotGItem extends Item {
             }
         }
     }
+
     private void shootAsRaycastBuckshot(World world, LivingEntity user, PlayerEntity player, HailOfTheGodComponent hailOfTheGodComponent) {
         Vec3d clientRot = null;
         if (world.isClient) {
@@ -241,7 +242,6 @@ public class HotGItem extends Item {
                         entity = target;
                     }
                 }
-
 
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 0.5, 1.2, RinveniumParticles.HAIL_OF_THE_GODS_TRAIL);
                 RinveniumUtil.spawnRaycastParticles((ServerWorld) world, start, rot, hitResult, 50.0, 1.0, 1.1, RinveniumParticles.HAIL_OF_THE_GODS_SMOKE);
