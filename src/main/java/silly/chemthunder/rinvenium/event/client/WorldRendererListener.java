@@ -13,6 +13,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 
@@ -102,39 +103,7 @@ public class WorldRendererListener {
             double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) -(Math.PI / 2))).normalize()).z);
             double edgeOffset = MathHelper.lerp(zDelta, 0, slash.direction.normalize().multiply(slash.getSize()).multiply(0.05).y);
 
-
-            // Translucent edge
-            /*matrices.translate(-camX, -camY, -camZ);
-            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(positionOffset).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-
-            matrices.scale(1.1f, 1.1f, 1.1f);
-
-            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(positionOffset).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-            matrices.translate(camX, camY, camZ);*/
-
-            /*bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.0f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.2f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.2f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + edgeOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.0f).next();
-*/
-            // Main layer
-            /*matrices.translate(-camX, -camY, -camZ);
-            matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(positionOffset).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-
-            matrices.scale(1 / 1.1f, 1 / 1.1f, 1 / 1.1f);
-
-            matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(positionOffset).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
-            matrices.translate(camX, camY, camZ);*/
-
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
-
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(red, nRed, nRed, 0.9f).next();
-            bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+            buildSlashVertices(slash, bufferbuilder, transformation, xOffset, camX, endYMid, camY, camZ, red, nRed, endZNeg, endY, endZPos);
 
             matrices.pop();
 
@@ -156,5 +125,34 @@ public class WorldRendererListener {
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
         }
+    }
+
+    private static void buildSlashVertices(SlashRender slash, BufferBuilder bufferbuilder, Matrix4f transformation, double xOffset, double camX, double endYMid, double camY, double camZ, float red, float nRed, double endZNeg, double endY, double endZPos) {
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(red, nRed, nRed, 0.9f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+    }
+
+    private static void buildSlashOutlineVertices(SlashRender slash, BufferBuilder bufferbuilder, Matrix4f transformation, double xOffset, double camX, double endYMid, double camY, double camZ, double endZNeg, double endY, double endZPos) {
+        boolean shouldShowOutline = inRange(slash.age, slash.maxAge / 2, 30);
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, shouldShowOutline ? 1.0f : 0.0f).next();
+    }
+
+    private static boolean inRange(int delta, int median, int variance) {
+        return delta >= median - variance || delta <= median + variance;
     }
 }

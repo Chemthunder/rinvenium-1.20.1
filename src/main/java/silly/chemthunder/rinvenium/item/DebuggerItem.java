@@ -1,9 +1,7 @@
 package silly.chemthunder.rinvenium.item;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -19,15 +17,9 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.joml.Matrix3d;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
-import silly.chemthunder.rinvenium.render.ScreenFlash;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.VertexColorSet;
-import silly.chemthunder.rinvenium.render.manager.FlashManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
 
@@ -56,15 +48,21 @@ public class DebuggerItem extends Item {
                     buf.writeFloat(0.8f);
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
-                Vec3d origin = player.getEyePos().add(player.getRotationVector().normalize().multiply(1.5));
-                Vec3d originDelta = new Vec3d(world.random.nextFloat() * 0.5, world.random.nextFloat() * 0.5, world.random.nextFloat() * 0.5);
+                Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
+                float randomX = world.random.nextFloat();
+                randomX = randomX < 0.5 ? -randomX : randomX - 0.5f;
+                float randomY = world.random.nextFloat();
+                randomY = randomY < 0.5 ? -randomY : randomY - 0.5f;
+                float randomZ = world.random.nextFloat();
+                randomZ = randomZ < 0.5 ? -randomZ : randomZ - 0.5f;
+                Vec3d originDelta = new Vec3d(randomX, randomY, randomZ);
                 origin = origin.add(originDelta);
                 float pitch = world.random.nextFloat() * 360.0F;
                 float yaw = world.random.nextFloat() * 360.0F;
                 float roll = world.random.nextFloat() * 360.0F;
                 SlashRender slashRender = new SlashRender(
                         origin,
-                        100,
+                        60,
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
@@ -75,7 +73,7 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
-                slashRender.setSize(4.0f);
+                slashRender.setSize(8.0f);
                 SlashRendererManager.add(slashRender);
             }
         } else {
