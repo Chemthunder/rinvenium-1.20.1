@@ -11,9 +11,9 @@ import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 public class AddImpactFrameS2CPacket {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        if (client.world.getPlayers() != null) {
-            client.world.getPlayers().forEach(player -> {
-                if (player.getUuid().equals(buf.readUuid())) {
+        if (client.world != null && client.world.getEntities() != null) {
+            client.world.getEntities().forEach(entity -> {
+                if (entity.getUuid().equals(buf.readUuid())) {
                     if (client.player != null) {
                         int maxAge = buf.readInt();
                         int color = buf.readInt();
@@ -23,7 +23,7 @@ public class AddImpactFrameS2CPacket {
                         double originY = buf.readDouble();
                         double originZ = buf.readDouble();
                         ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-                        impactFrameManager.add(new ImpactFrame(player, new Vec3d(originX, originY, originZ), maxAge, color, fadeTime, maxOpacity));
+                        impactFrameManager.add(new ImpactFrame(entity, new Vec3d(originX, originY, originZ), maxAge, color, fadeTime, maxOpacity));
                     }
                 }
             });

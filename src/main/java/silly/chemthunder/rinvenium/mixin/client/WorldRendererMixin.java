@@ -61,19 +61,9 @@ public abstract class WorldRendererMixin {
     private int rinvenium$envixiaOutlineColorAlpha(int alpha, @Local Entity entity) {
         if (entity instanceof PlayerEntity player) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
-            // if (envixiaFormComponent.getTripleBoolValue1()) {
-            //     return 80;
-            // } else {
-            //     return alpha;
-            // }
             return envixiaFormComponent.getTripleBoolValue1() ? 80 : alpha;
         } else {
             return alpha;
         }
-    }
-
-    @Inject(method = "render", at = @At(value = "TAIL"))
-    private void rinvenium$impactFrame(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
-        //
     }
 }

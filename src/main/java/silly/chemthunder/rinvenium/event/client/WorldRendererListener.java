@@ -7,15 +7,23 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.VertexBuffer;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
+import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
+import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
+import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 public class WorldRendererListener {
     public static void execute() {
@@ -27,8 +35,58 @@ public class WorldRendererListener {
             if (world != null) {
                 SlashRendererManager.tick();
                 SlashRendererManager.get().forEach(slashRender -> renderSlashes(context, client, world, camera, slashRender));
+                if (client.player != null) {
+                    ((RenderContainer) client.player).getImpactFrameManager().tick();
+                    ((RenderContainer) client.player).getImpactFrameManager().get().forEach(impactFrame -> renderImpactFrame(context, client, world, camera, impactFrame));
+                }
             }
         });
+    }
+
+    private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        double viewDistance = client.options.getClampedViewDistance() * 16;
+
+        double camX = camera.getPos().getX();
+        double camY = camera.getPos().getY();
+        double camZ = camera.getPos().getZ();
+
+        RenderSystem.depthMask(false);
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
+        RenderSystem.disableBlend();
+
+        RenderSystem.setShader(GameRenderer::getRenderTypeOutlineProgram);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+
+        for (Entity entity : world.getEntities()) {
+            if (entity.equals(impactFrame.entity)) {
+                BlockPos blockPos = entity.getBlockPos();
+                if ((context.world().isOutOfHeightLimit(blockPos.getY()) || context.worldRenderer().isRenderingReady(blockPos))) {
+
+                    if (entity.age == 0) {
+                        entity.lastRenderX = entity.getX();
+                        entity.lastRenderY = entity.getY();
+                        entity.lastRenderZ = entity.getZ();
+                    }
+
+                    VertexConsumerProvider vertexConsumerProvider;
+                    OutlineVertexConsumerProvider outlineVertexConsumerProvider = context.worldRenderer().bufferBuilders.getOutlineVertexConsumers();
+                    vertexConsumerProvider = outlineVertexConsumerProvider;
+                    int i = 0x000000;
+                    outlineVertexConsumerProvider.setColor(ColorHelper.Argb.getRed(i), ColorHelper.Argb.getGreen(i), ColorHelper.Argb.getBlue(i), 255);
+
+                    context.worldRenderer().renderEntity(entity, camX, camY, camZ, context.tickDelta(), context.matrixStack(), outlineVertexConsumerProvider);
+                }
+            }
+        }
+
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableCull();
+        RenderSystem.enableBlend();
     }
 
     private static void renderSlashes(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, SlashRender slash) {

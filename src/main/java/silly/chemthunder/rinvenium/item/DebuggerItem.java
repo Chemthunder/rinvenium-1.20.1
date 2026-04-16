@@ -3,6 +3,8 @@ package silly.chemthunder.rinvenium.item;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
@@ -22,6 +25,8 @@ import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.VertexColorSet;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
+
+import java.util.List;
 
 public class DebuggerItem extends Item {
     public DebuggerItem(Settings settings) {
@@ -84,16 +89,20 @@ public class DebuggerItem extends Item {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 20, 20));
 
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                    PacketByteBuf buf = PacketByteBufs.create();
-                    buf.writeUuid(player.getUuid());
-                    buf.writeInt(8);
-                    buf.writeInt(0xFFFFFF);
-                    buf.writeInt(1);
-                    buf.writeFloat(0.6f);
-                    buf.writeDouble(player.getX());
-                    buf.writeDouble(player.getY());
-                    buf.writeDouble(player.getZ());
-                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                    List<LivingEntity> livingEntities = world.getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(10), livingEntity -> !livingEntity.equals(player));
+                    LivingEntity livingEntity = world.getClosestEntity(livingEntities, TargetPredicate.createAttackable().setPredicate(LivingEntity::isAlive), player, player.getX(), player.getY(), player.getZ());
+                    if (livingEntity != null) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeUuid(livingEntity.getUuid());
+                        buf.writeInt(100);
+                        buf.writeInt(0xFFFFFF);
+                        buf.writeInt(1);
+                        buf.writeFloat(1.0f);
+                        buf.writeDouble(player.getX());
+                        buf.writeDouble(player.getY());
+                        buf.writeDouble(player.getZ());
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                    }
                 }
             }
 
