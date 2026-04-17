@@ -1,27 +1,20 @@
 package silly.chemthunder.rinvenium.event.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.VertexBuffer;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
@@ -60,9 +53,8 @@ public class WorldRendererListener {
         RenderSystem.setShader(GameRenderer::getRenderTypeOutlineProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-
         for (Entity entity : world.getEntities()) {
-            if (entity.equals(impactFrame.entity)) {
+            if (entity.getUuid().equals(impactFrame.uuid)) {
                 BlockPos blockPos = entity.getBlockPos();
                 if ((context.world().isOutOfHeightLimit(blockPos.getY()) || context.worldRenderer().isRenderingReady(blockPos))) {
 
@@ -77,8 +69,16 @@ public class WorldRendererListener {
                     vertexConsumerProvider = outlineVertexConsumerProvider;
                     int i = 0x000000;
                     outlineVertexConsumerProvider.setColor(ColorHelper.Argb.getRed(i), ColorHelper.Argb.getGreen(i), ColorHelper.Argb.getBlue(i), 255);
+                    context.worldRenderer().entityOutlinePostProcessor.render(context.tickDelta());
+                    client.getFramebuffer().beginWrite(false);
 
-                    context.worldRenderer().renderEntity(entity, camX, camY, camZ, context.tickDelta(), context.matrixStack(), outlineVertexConsumerProvider);
+                    context.worldRenderer().renderEntity(entity, camX, camY, camZ, context.tickDelta(), context.matrixStack(), vertexConsumerProvider);
+
+                    VertexConsumerProvider.Immediate normal = context.worldRenderer().bufferBuilders.getEntityVertexConsumers();
+                    RenderSystem.setShaderColor(255.0f, 255.0f, 255.0f, 1.0f);
+                    context.worldRenderer().renderEntity(entity, camX, camY, camZ, context.tickDelta(), context.matrixStack(), normal);
+                    normal.draw();
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                 }
             }
         }

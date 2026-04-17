@@ -8,3 +8,5 @@ accessible field net/minecraft/client/render/WorldRenderer entityRenderDispatche
 accessible field net/minecraft/client/render/WorldRenderer bufferBuilders Lnet/minecraft/client/render/BufferBuilderStorage;
 accessible method net/minecraft/client/render/WorldRenderer renderEntity (Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V
 accessible field net/minecraft/client/render/WorldRenderer entityOutlinePostProcessor Lnet/minecraft/client/gl/PostEffectProcessor;
+accessible field net/minecraft/client/gui/hud/InGameHud scaledWidth I
+accessible field net/minecraft/client/gui/hud/InGameHud scaledHeight I

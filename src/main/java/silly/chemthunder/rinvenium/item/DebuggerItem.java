@@ -93,14 +93,15 @@ public class DebuggerItem extends Item {
                     LivingEntity livingEntity = world.getClosestEntity(livingEntities, TargetPredicate.createAttackable().setPredicate(LivingEntity::isAlive), player, player.getX(), player.getY(), player.getZ());
                     if (livingEntity != null) {
                         PacketByteBuf buf = PacketByteBufs.create();
-                        buf.writeUuid(livingEntity.getUuid());
                         buf.writeInt(100);
                         buf.writeInt(0xFFFFFF);
                         buf.writeInt(1);
                         buf.writeFloat(1.0f);
-                        buf.writeDouble(player.getX());
-                        buf.writeDouble(player.getY());
-                        buf.writeDouble(player.getZ());
+                        buf.writeDouble(livingEntity.getX());
+                        buf.writeDouble(livingEntity.getY());
+                        buf.writeDouble(livingEntity.getZ());
+                        buf.writeUuid(livingEntity.getUuid());
+
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }

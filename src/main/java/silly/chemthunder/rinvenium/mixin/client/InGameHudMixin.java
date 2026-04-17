@@ -5,20 +5,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -189,7 +181,7 @@ public abstract class InGameHudMixin {
             ImpactFrameManager impactFrameManager = ((RenderContainer) this.client.player).getImpactFrameManager();
             impactFrameManager.tick();
             impactFrameManager.get().forEach(impactFrame -> {
-                /*if (impactFrame.age >= impactFrame.maxAge + impactFrame.fadeTime) {
+                if (impactFrame.age >= impactFrame.maxAge + impactFrame.fadeTime) {
                     impactFrame.fadeTicks--;
                     this.renderOverlay(
                             context,
@@ -212,46 +204,9 @@ public abstract class InGameHudMixin {
                             RinveniumTextureUtils.SCREEN_FLASH,
                             impactFrame.maxOpacity
                     );
-                }*/
-                //testRender(context, tickDelta);
+                }
             });
         }
-    }
-
-    @Unique
-    private void testRender(DrawContext context, float tickDelta) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-
-        bufferBuilder.begin(VertexFormat.DrawMode.LINES, VertexFormats.POSITION_COLOR);
-
-        MatrixStack matrices = context.getMatrices();
-        matrices.push();
-
-        Matrix4f transformation = matrices.peek().getPositionMatrix();
-
-        Vec3d camPos = client.gameRenderer.getCamera().getPos();
-
-        RenderSystem.enableBlend();
-        RenderSystem.disableCull();
-        RenderSystem.disableDepthTest();
-        RenderSystem.lineWidth(2.0f);
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-
-        if (client != null && this.client.player != null) {
-            Vec3d origin = client.player.getPos().add(client.player.getRotationVector().normalize().multiply(4));
-            bufferBuilder.vertex(transformation, (float) (origin.x - camPos.x), (float) (origin.y - camPos.y), (float) (origin.z - camPos.z)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
-            bufferBuilder.vertex(transformation, (float) (origin.x - camPos.x), (float) (origin.y + 2 - camPos.y), (float) (origin.z - camPos.z)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
-
-        }
-
-
-        tessellator.draw();
-        matrices.pop();
-
-        RenderSystem.disableBlend();
-        RenderSystem.enableCull();
-        RenderSystem.enableDepthTest();
     }
 
     @Unique

@@ -6,9 +6,10 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ImpactFrame {
-    public final Entity entity;
+    //public final Entity entity;
 
     public final Vec3d origin;
     public final Vec3d presetOrigin;
@@ -24,11 +25,13 @@ public class ImpactFrame {
     public final float maxOpacity;
     public int fadeTicks;
 
+    public final UUID uuid;
+
     /** @param color The color of the impact frame screen flash
      *  @param maxOpacity The opacity of the impact frame screen flash
      * */
-    public ImpactFrame(Entity entity, Vec3d origin, int maxAge, int color, int fadeTime, float maxOpacity) {
-        this.entity = entity;
+    public ImpactFrame(UUID uuid, Vec3d origin, int maxAge, int color, int fadeTime, float maxOpacity) {
+        this.uuid = uuid;
         this.direction = new Vec3d(0, 10, 0);
         this.presetOrigin = origin;
         this.origin = origin.subtract(direction.normalize().multiply(0.5f));
