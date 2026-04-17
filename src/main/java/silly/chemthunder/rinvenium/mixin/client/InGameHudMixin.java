@@ -180,7 +180,7 @@ public abstract class InGameHudMixin {
 
             ImpactFrameManager impactFrameManager = ((RenderContainer) this.client.player).getImpactFrameManager();
             impactFrameManager.tick();
-            impactFrameManager.get().forEach(impactFrame -> {
+            /*impactFrameManager.get().forEach(impactFrame -> {
                 if (impactFrame.age >= impactFrame.maxAge + impactFrame.fadeTime) {
                     impactFrame.fadeTicks--;
                     this.renderOverlay(
@@ -205,7 +205,7 @@ public abstract class InGameHudMixin {
                             impactFrame.maxOpacity
                     );
                 }
-            });
+            });*/
         }
     }
 

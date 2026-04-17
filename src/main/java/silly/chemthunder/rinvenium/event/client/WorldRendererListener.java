@@ -38,7 +38,7 @@ public class WorldRendererListener {
 
     private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame) {
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
         double viewDistance = client.options.getClampedViewDistance() * 16;
 
         double camX = camera.getPos().getX();
@@ -49,6 +49,21 @@ public class WorldRendererListener {
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
         RenderSystem.disableBlend();
+/*
+
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShaderColor(255.0f, 255.0f, 255.0f, 1.0f);
+
+        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), 0, 0, -90).color(255, 255, 255, 255).next();
+        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), 0, client.inGameHud.scaledHeight, -90).color(255, 255, 255, 255).next();
+        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), client.inGameHud.scaledWidth, client.inGameHud.scaledHeight, 0).color(255, 255, 255, 255).next();
+        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), client.inGameHud.scaledWidth, 0, -90).color(255, 255, 255, 255).next();
+
+        tessellator.draw();
+
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+*/
 
         RenderSystem.setShader(GameRenderer::getRenderTypeOutlineProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
