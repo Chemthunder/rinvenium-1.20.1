@@ -12,6 +12,7 @@ import net.minecraft.util.Util;
 import java.util.EnumMap;
 import java.util.function.Supplier;
 
+@SuppressWarnings("deprecation")
 public enum RinveniumArmorMaterials implements StringIdentifiable, ArmorMaterial {
     ENIVIXIA("envixia", 45, Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
         map.put(ArmorItem.Type.BOOTS, 3);

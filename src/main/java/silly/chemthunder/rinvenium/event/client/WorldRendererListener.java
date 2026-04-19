@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
+import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
@@ -29,8 +30,16 @@ public class WorldRendererListener {
                 SlashRendererManager.tick();
                 SlashRendererManager.get().forEach(slashRender -> renderSlashes(context, client, world, camera, slashRender));
                 if (client.player != null) {
-                    ((RenderContainer) client.player).getImpactFrameManager().tick();
-                    ((RenderContainer) client.player).getImpactFrameManager().get().forEach(impactFrame -> renderImpactFrame(context, client, world, camera, impactFrame));
+                    ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
+                    impactFrameManager.tick();
+                    impactFrameManager.get().forEach(impactFrame -> {
+                        if (impactFrameManager.shouldShow()) {
+                            client.options.hudHidden = true;
+                            renderImpactFrame(context, client, world, camera, impactFrame);
+                        } else {
+                            client.options.hudHidden = false;
+                        }
+                    });
                 }
             }
         });
@@ -48,22 +57,6 @@ public class WorldRendererListener {
         RenderSystem.depthMask(false);
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
-        RenderSystem.disableBlend();
-/*
-
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        RenderSystem.setShaderColor(255.0f, 255.0f, 255.0f, 1.0f);
-
-        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), 0, 0, -90).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), 0, client.inGameHud.scaledHeight, -90).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), client.inGameHud.scaledWidth, client.inGameHud.scaledHeight, 0).color(255, 255, 255, 255).next();
-        bufferBuilder.vertex(context.matrixStack().peek().getPositionMatrix(), client.inGameHud.scaledWidth, 0, -90).color(255, 255, 255, 255).next();
-
-        tessellator.draw();
-
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-*/
 
         RenderSystem.setShader(GameRenderer::getRenderTypeOutlineProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);

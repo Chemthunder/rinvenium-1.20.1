@@ -1,5 +1,8 @@
 package silly.chemthunder.rinvenium.render.manager;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 
 import java.util.ArrayList;
@@ -23,5 +26,28 @@ public class ImpactFrameManager {
 
     public void clear() {
         this.FRAMES.clear();
+    }
+
+    public boolean shouldShow() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player != null && client.world != null) {
+            if (!FRAMES.isEmpty()) {
+                for (Entity entity : client.world.getEntities()) {
+                    for (ImpactFrame impactFrame : FRAMES) {
+                        if (entity.getUuid().equals(impactFrame.uuid)) {
+                            Vec3d vec3d = client.player.getRotationVec(1.0F).normalize();
+                            Vec3d vec3d2 = new Vec3d(entity.getX() - client.player.getX(), entity.getEyeY() - client.player.getEyeY(), entity.getZ() - client.player.getZ());
+                            double d = vec3d2.length();
+                            vec3d2 = vec3d2.normalize();
+                            double e = vec3d.dotProduct(vec3d2);
+                            return e > 0.1 / d && client.player.canSee(entity);
+                        }
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

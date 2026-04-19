@@ -20,6 +20,7 @@
     "client.BackgroundRendererMixin",
     "client.ClientPlayerEntityMixin",
     "client.DrawContextMixin",
+    "client.EntityRenderDispatcherMixin",
     "client.GameRendererMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",

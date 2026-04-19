@@ -14,7 +14,7 @@ import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(BackgroundRenderer.class)
-public class BackgroundRendererMixin {
+public abstract class BackgroundRendererMixin {
     @Shadow
     private static float red;
 
@@ -29,7 +29,7 @@ public class BackgroundRendererMixin {
         MinecraftClient client =  MinecraftClient.getInstance();
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            if (!impactFrameManager.get().isEmpty()) {
+            if (!impactFrameManager.get().isEmpty() && impactFrameManager.shouldShow()) {
                 red = 1.0f;
                 green = 1.0f;
                 blue = 1.0f;
