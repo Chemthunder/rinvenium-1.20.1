@@ -17,6 +17,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "client.BackgroundRendererMixin",
     "client.ClientPlayerEntityMixin",
     "client.DrawContextMixin",
     "client.GameRendererMixin",
