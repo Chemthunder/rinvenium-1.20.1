@@ -21,7 +21,7 @@ public abstract class EntityRenderDispatcherMixin implements SynchronousResource
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -31,7 +31,7 @@ public abstract class EntityRenderDispatcherMixin implements SynchronousResource
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -41,7 +41,7 @@ public abstract class EntityRenderDispatcherMixin implements SynchronousResource
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }

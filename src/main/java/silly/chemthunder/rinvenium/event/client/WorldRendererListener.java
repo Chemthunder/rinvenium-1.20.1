@@ -17,7 +17,11 @@ import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
+import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldRendererListener {
     public static void execute() {
@@ -77,6 +81,60 @@ public class WorldRendererListener {
                     vertexConsumerProvider = outlineVertexConsumerProvider;
                     int i = 0x000000;
                     outlineVertexConsumerProvider.setColor(ColorHelper.Argb.getRed(i), ColorHelper.Argb.getGreen(i), ColorHelper.Argb.getBlue(i), 255);
+
+                    List<SlashRender> slashRenders = new ArrayList<>();
+                    for (SlashRender slashRender : SlashRendererManager.get()) {
+                        if (entity.getBoundingBox().expand(5).contains(slashRender.presetOrigin)) {
+                            slashRenders.add(slashRender);
+                        }
+                    }
+
+                    VertexConsumer outlineVertexConsumer = outlineVertexConsumerProvider.getBuffer(RenderLayer.getOutline(RinveniumTextureUtils.SCREEN_FLASH));
+
+                    for (SlashRender slash : slashRenders) {
+                        float ageDelta = (float) slash.age / slash.maxAge;
+                        float yDelta;
+                        float zDelta;
+                        // yDelta
+                        if (ageDelta <= 0.29f) {
+                            yDelta = (float) (9.2 * ageDelta * Math.exp(-3.4 * (ageDelta)));
+                        } else if (ageDelta > 0.29f && ageDelta <= 0.33f) {
+                            yDelta = 1f;
+                        } else {
+                            yDelta = 1f;
+                        }
+                        // zDelta
+                        if (ageDelta <= 0.19f) {
+                            zDelta = (float) (ageDelta * Math.exp(-Math.pow(3.6034, 2) * (Math.pow(ageDelta, 2) - 0.164)));
+                        } else if (ageDelta > 0.19f && ageDelta <= 0.35f) {
+                            zDelta = 1;
+                        } else {
+                            zDelta = (float) ((ageDelta - 0.1475) * Math.exp(-Math.pow(3.6034, 2) * (Math.pow(ageDelta - 0.1475, 2) - 0.164)));
+                        }
+                        double endY = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
+                        double endYMid = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y);
+                        double endZNeg = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) (Math.PI / 2))).normalize()).z);
+                        double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) -(Math.PI / 2))).normalize()).z);
+
+                        MatrixStack matrices = context.matrixStack();
+                        matrices.push();
+
+                        matrices.translate(-camX, -camY, -camZ);
+                        matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+
+                        slash.TRANSFORMATION.forEach(matrices::multiply);
+                        matrices.scale(slash.getSize(), slash.getSize(), slash.getSize());
+
+                        Matrix4f transformation = matrices.peek().getPositionMatrix();
+
+                        matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+                        matrices.translate(camX, camY, camZ);
+
+                        buildSlashOutlineVertices(slash, outlineVertexConsumer, transformation, 0.0, camX, camY, camZ, endYMid, endZNeg, endY, endZPos);
+
+                        matrices.pop();
+                    }
+
                     context.worldRenderer().entityOutlinePostProcessor.render(context.tickDelta());
                     client.getFramebuffer().beginWrite(false);
 
@@ -169,7 +227,13 @@ public class WorldRendererListener {
             double endZPos = MathHelper.lerp(zDelta, slash.origin.z, slash.origin.add(slash.direction.add(slash.direction.normalize().multiply(0.1).rotateX((float) -(Math.PI / 2))).normalize()).z);
             double edgeOffset = MathHelper.lerp(zDelta, 0, slash.direction.normalize().multiply(slash.getSize()).multiply(0.05).y);
 
-            buildSlashVertices(slash, bufferbuilder, transformation, xOffset, camX, endYMid, camY, camZ, red, nRed, endZNeg, endY, endZPos);
+            boolean shouldRender = true;
+            if (client.player != null) {
+                shouldRender = ((RenderContainer) client.player).getImpactFrameManager().get().isEmpty();
+            }
+            if (shouldRender) {
+                buildSlashVertices(slash, bufferbuilder, transformation, xOffset, camX, camY, camZ, red, nRed, endYMid, endZNeg, endY, endZPos);
+            }
 
             matrices.pop();
 
@@ -191,12 +255,11 @@ public class WorldRendererListener {
             tessellator.draw();
 
             RenderSystem.enableCull();
-            RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
         }
     }
 
-    private static void buildSlashVertices(SlashRender slash, BufferBuilder bufferbuilder, Matrix4f transformation, double xOffset, double camX, double endYMid, double camY, double camZ, float red, float nRed, double endZNeg, double endY, double endZPos) {
+    private static void buildSlashVertices(SlashRender slash, BufferBuilder bufferbuilder, Matrix4f transformation, double xOffset, double camX, double camY, double camZ, float red, float nRed, double endYMid, double endZNeg, double endY, double endZPos) {
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 0.9f, 0.9f, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(red, nRed, nRed, 0.9f).next();
@@ -206,5 +269,67 @@ public class WorldRendererListener {
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(red, nRed, nRed, 0.9f).next();
         bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(red, nRed, nRed, 0.9f).next();
+    }
+    private static void buildSlashOutlineVertices(SlashRender slash, VertexConsumer vertexConsumer, Matrix4f transformation, double xOffset, double camX, double camY, double camZ, double endYMid, double endZNeg, double endY, double endZPos) {
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(1, 1).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(1, 0).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(0, 0).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(0, 1).normal(1, 0, 0).next();
+
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(1, 1).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(1, 0).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(0, 0).normal(1, 0, 0).next();
+        vertexConsumer.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).texture(0, 1).normal(1, 0, 0).next();
+    }
+
+    private static void buildSlashOutlineVertices_(SlashRender slash, BufferBuilder bufferbuilder, MatrixStack matrices, Matrix4f transformation, double xOffset, double camX, double camY, double camZ, double endYMid, double endZNeg, double endY, double endZPos) {
+        float outlineScalar = 1.2f;
+        matrices.translate(-camX, -camY, -camZ);
+        matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+
+        matrices.scale(outlineScalar, outlineScalar, outlineScalar);
+
+        matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+        matrices.translate(camX, camY, camZ);
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(0.0f, 0.0f, 0.0f, 1.0f).next();
+
+        matrices.translate(-camX, -camY, -camZ);
+        matrices.translate(slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+
+        matrices.scale(1 / outlineScalar, 1 / outlineScalar, 1 / outlineScalar);
+
+        matrices.translate(-slash.origin.add(slash.direction.normalize().multiply(0.5f)).x, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).y, -slash.origin.add(slash.direction.normalize().multiply(0.5f)).z);
+        matrices.translate(camX, camY, camZ);
+
+        xOffset = 4.98E-5;
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x + xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (endZNeg - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (slash.origin.y - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endYMid - camY), (float) (endZPos - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
+        bufferbuilder.vertex(transformation, (float) (slash.origin.x - xOffset - camX), (float) (endY - camY), (float) (slash.origin.z - camZ)).color(1.0f, 1.0f, 1.0f, 1.0f).next();
     }
 }

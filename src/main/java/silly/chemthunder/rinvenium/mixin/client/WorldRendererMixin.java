@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -15,7 +14,6 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -81,7 +79,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelSkyRendering(WorldRenderer instance, MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -90,7 +88,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelFogRendering(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -99,7 +97,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelRenderLayerRendering(WorldRenderer instance, RenderLayer renderLayer, MatrixStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -108,7 +106,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelTerrainRendering4(Matrix4f positionMatrix) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -117,7 +115,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelTerrainRendering5(Matrix4f positionMatrix) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -126,7 +124,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelEntityRendering(WorldRenderer instance, Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -135,7 +133,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelImmediateRendering(VertexConsumerProvider.Immediate instance) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -144,7 +142,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelImmediateDrawRendering(VertexConsumerProvider.Immediate instance) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -153,7 +151,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelImmediateDrawRendering(VertexConsumerProvider.Immediate instance, RenderLayer layer) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -162,7 +160,7 @@ public abstract class WorldRendererMixin {
     private <E extends BlockEntity> boolean rinvenium$cancelBlockEntityRendering1(BlockEntityRenderDispatcher instance, E blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -171,7 +169,7 @@ public abstract class WorldRendererMixin {
     private <E extends BlockEntity> boolean rinvenium$cancelBlockEntityRendering2(BlockEntityRenderDispatcher instance, E blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -180,7 +178,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelBlockEntityRendering3(VertexConsumerProvider.Immediate instance, RenderLayer layer) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }*/
@@ -189,7 +187,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelOutlineRendering(WorldRenderer instance, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double cameraX, double cameraY, double cameraZ, BlockPos pos, BlockState state) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -198,7 +196,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelDebugRendering(DebugRenderer instance, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, double cameraX, double cameraY, double cameraZ) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -207,7 +205,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelParticleRendering(ParticleManager instance, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, LightmapTextureManager lightmapTextureManager, Camera camera, float tickDelta) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -216,7 +214,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelCloudRendering(WorldRenderer instance, MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, double cameraX, double cameraY, double cameraZ) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -225,7 +223,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelWeatherRendering(WorldRenderer instance, LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -234,7 +232,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelWorldBorderRendering(WorldRenderer instance, Camera camera) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }
@@ -243,7 +241,7 @@ public abstract class WorldRendererMixin {
     private boolean rinvenium$cancelPostProcessorRendering(PostEffectProcessor instance, float tickDelta) {
         if (client.player != null) {
             ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            return impactFrameManager.get().isEmpty() && !impactFrameManager.shouldShow();
+            return impactFrameManager.get().isEmpty() || !impactFrameManager.shouldShow();
         }
         return true;
     }

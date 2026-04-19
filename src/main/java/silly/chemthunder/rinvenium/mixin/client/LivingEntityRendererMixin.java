@@ -40,17 +40,4 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
             original.call(instance, matrixStack, vertexConsumer, light, overlay, r, g, b, a);
         }
     }*/
-
-    @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;getOverlay(Lnet/minecraft/entity/LivingEntity;F)I"))
-    private void rinvenium$derenderForImpactFrame(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci, @Local VertexConsumer vertexConsumer) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null) {
-            ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
-            impactFrameManager.get().forEach(impactFrame -> {
-                if (impactFrame.uuid.equals(livingEntity.getUuid())) {
-
-                }
-            });
-        }
-    }
 }

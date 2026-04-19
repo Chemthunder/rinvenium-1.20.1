@@ -35,6 +35,8 @@ public class DebuggerItem extends Item {
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
+        List<LivingEntity> livingEntities = world.getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(10), livingEntity -> !livingEntity.equals(player));
+        LivingEntity livingEntity = world.getClosestEntity(livingEntities, TargetPredicate.createAttackable().setPredicate(LivingEntity::isAlive), player, player.getX(), player.getY(), player.getZ());
         if (!player.isSneaking()) {
             if (world.isClient) { // Client Side Standing
                 MinecraftClient client = MinecraftClient.getInstance();
@@ -54,6 +56,11 @@ public class DebuggerItem extends Item {
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
                 }
                 Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
+
+                if (livingEntity != null) {
+                    origin = livingEntity.getPos().add(0, (livingEntity.getBoundingBox().maxY - livingEntity.getBoundingBox().minY) / 2, 0);
+                }
+
                 float randomX = world.random.nextFloat();
                 randomX = randomX < 0.5 ? -randomX : randomX - 0.5f;
                 float randomY = world.random.nextFloat();
@@ -78,7 +85,7 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
-                slashRender.setSize(8.0f);
+                slashRender.setSize(10.0f);
                 SlashRendererManager.add(slashRender);
             }
         } else {
@@ -89,11 +96,9 @@ public class DebuggerItem extends Item {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 20, 20));
 
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                    List<LivingEntity> livingEntities = world.getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(10), livingEntity -> !livingEntity.equals(player));
-                    LivingEntity livingEntity = world.getClosestEntity(livingEntities, TargetPredicate.createAttackable().setPredicate(LivingEntity::isAlive), player, player.getX(), player.getY(), player.getZ());
                     if (livingEntity != null) {
                         PacketByteBuf buf = PacketByteBufs.create();
-                        buf.writeInt(100);
+                        buf.writeInt(200);
                         buf.writeInt(0xFFFFFF);
                         buf.writeInt(1);
                         buf.writeFloat(1.0f);

@@ -40,7 +40,7 @@ public class ImpactFrameManager {
                             double d = vec3d2.length();
                             vec3d2 = vec3d2.normalize();
                             double e = vec3d.dotProduct(vec3d2);
-                            return e > 0.1 / d && client.player.canSee(entity);
+                            return e > 0.2 / d && client.player.canSee(entity);
                         }
                     }
                 }
