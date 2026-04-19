@@ -142,5 +142,6 @@ public class RinveniumRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.REDSTONE), conditionsFromItem(Items.REDSTONE))
                 .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
                 .offerTo(recipeExporter, new Identifier(getRecipeName(RinveniumItems.BATTERY)));
+
     }
 }
