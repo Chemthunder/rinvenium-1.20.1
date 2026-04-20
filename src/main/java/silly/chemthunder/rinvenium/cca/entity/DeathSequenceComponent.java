@@ -50,8 +50,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
     public static final String SHOULD_START_KEY = "ShouldStart";
     public static final String GLOBAL_TIMER_KEY = "GlobalTimer";
     public static final String SLASH_TIMER_KEY = "SlashTimer";
-    public static final String SKY_COLOR_KEY = "SkyColor";
-    public static final String BASE_COLOR_KEY = "BaseSkyColor";
+    public static final String IMPACT_FRAME_KEY = "ImpactFrameKey";
     public static final String BOSSBAR_NAME_KEY = "BossBarName";
     public static final Identifier BOSSBAR_ID = Rinvenium.id("death_sequence_bossbar");
     public static final int MAIN_TOTAL_TIME = 20 * 36;
@@ -59,7 +58,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
     private boolean shouldStart = false;
     private int globalTimer = 0;
     private int slashTimer = 0;
-    private int tripleInt3 = 0;
+    private int impactFrameTimer = 0;
     private String bossBarName = "abyss";
     private ServerBossBar bossBar = (ServerBossBar)new ServerBossBar(Text.of(bossBarName), BossBar.Color.RED, BossBar.Style.PROGRESS).setDarkenSky(true);
 
@@ -101,7 +100,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     @Override
     public int getTripleIntValue3() {
-        return this.tripleInt3;
+        return this.impactFrameTimer;
     }
 
     @Override
@@ -118,7 +117,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     @Override
     public void setTripleIntValue3(int value) {
-        this.tripleInt3 = value;
+        this.impactFrameTimer = value;
         this.sync();
     }
 
@@ -136,7 +135,8 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     @Override
     public void addToTripleIntValue3(int count) {
-
+        this.impactFrameTimer += count;
+        this.sync();
     }
 
     @Override
@@ -153,7 +153,8 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     @Override
     public void incrementTripleIntValue3() {
-
+        this.impactFrameTimer++;
+        this.sync();
     }
 
     @Override
@@ -170,7 +171,8 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     @Override
     public void decrementTripleIntValue3() {
-
+        this.impactFrameTimer--;
+        this.sync();
     }
 
     @Override
@@ -178,6 +180,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         this.shouldStart = nbtCompound.getBoolean(SHOULD_START_KEY);
         this.globalTimer = nbtCompound.getInt(GLOBAL_TIMER_KEY);
         this.slashTimer = nbtCompound.getInt(SLASH_TIMER_KEY);
+        this.impactFrameTimer = nbtCompound.getInt(IMPACT_FRAME_KEY);
         this.bossBarName = nbtCompound.getString(BOSSBAR_NAME_KEY);
     }
 
@@ -186,6 +189,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         nbtCompound.putBoolean(SHOULD_START_KEY, this.shouldStart);
         nbtCompound.putInt(GLOBAL_TIMER_KEY, this.globalTimer);
         nbtCompound.putInt(SLASH_TIMER_KEY, this.slashTimer);
+        nbtCompound.putInt(IMPACT_FRAME_KEY, this.impactFrameTimer);
         nbtCompound.putString(BOSSBAR_NAME_KEY, this.bossBarName);
     }
 
@@ -341,7 +345,8 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         if (this.globalTimer == 20 * 36) {
             PlayerRendererManager.remove("orchidpuppy");
         }
-        if (this.globalTimer == 20 * 36 + 20 * 60) {
+        if (this.globalTimer >= 20 * 36 + 20 * 60) {
+            shouldStart = false;
             this.bossBar.clearPlayers();
             resetAll();
         }
