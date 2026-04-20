@@ -1,5 +1,6 @@
 package silly.chemthunder.rinvenium.item;
 
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -19,6 +20,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.render.CustomFog;
 import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
@@ -31,6 +33,7 @@ import silly.chemthunder.rinvenium.util.RinveniumUtil;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DebuggerItem extends Item {
     public DebuggerItem(Settings settings) {
@@ -90,8 +93,11 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
                 slashRender.setSize(10.0f);
-                SlashRendererManager.add(slashRender);
+                //SlashRendererManager.add(slashRender);
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
+                //PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
+                DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(player);
+                deathSequenceComponent.setBool(true);
             }
         } else {
             if (world.isClient) { // Client Side Sneak
@@ -112,11 +118,13 @@ public class DebuggerItem extends Item {
                         buf.writeDouble(livingEntity.getZ());
                         buf.writeUuid(livingEntity.getUuid());
 
-                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }
 
-                //CustomFogManager.clear();
+                CustomFogManager.clear();
+                DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(player);
+                deathSequenceComponent.setBool(false);
             }
 
         }

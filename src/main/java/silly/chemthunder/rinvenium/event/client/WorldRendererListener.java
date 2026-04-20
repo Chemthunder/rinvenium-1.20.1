@@ -1,20 +1,28 @@
 package silly.chemthunder.rinvenium.event.client;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.render.*;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
@@ -27,6 +35,7 @@ import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WorldRendererListener {
     public static void execute() {
@@ -58,25 +67,30 @@ public class WorldRendererListener {
     }
 
     private static void renderPlayer(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, FakePlayerRenderer playerRenderer) {
-        /*context.worldRenderer().renderEntity(
-                new PlayerEntity(world, new BlockPos((int) playerRenderer.origin.x, (int) playerRenderer.origin.y, (int) playerRenderer.origin.z), playerRenderer.yaw, null) {
-                    @Override
-                    public boolean isSpectator() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isCreative() {
-                        return false;
-                    }
-                },
-                camera.getPos().getX(),
-                camera.getPos().getY(),
-                camera.getPos().getZ(),
-                context.tickDelta(),
+        if (playerRenderer.fakePlayer == null) {
+            playerRenderer.fakePlayer = new OtherClientPlayerEntity(world, playerRenderer.gameProfile) {
+                @Override
+                public Identifier getSkinTexture() {
+                    return Rinvenium.id("textures/entity/fakeplayer/" + playerRenderer.skinTexture + ".png");
+                }
+            };
+            playerRenderer.fakePlayer.prevYaw = playerRenderer.yaw;
+            playerRenderer.fakePlayer.prevHeadYaw = playerRenderer.yaw;
+            playerRenderer.fakePlayer.prevBodyYaw = playerRenderer.yaw;
+            playerRenderer.fakePlayer.prevPitch = playerRenderer.pitch;
+            playerRenderer.fakePlayer.setPitch(playerRenderer.pitch);
+        }
+        client.getEntityRenderDispatcher().render(
+                playerRenderer.fakePlayer,
+                playerRenderer.origin.x - camera.getPos().getX(),
+                playerRenderer.origin.y - camera.getPos().getY(),
+                playerRenderer.origin.z - camera.getPos().getZ(),
+                playerRenderer.yaw,
+                0.0f,
                 context.matrixStack(),
-                context.worldRenderer().bufferBuilders.getEntityVertexConsumers()
-        );*/
+                context.worldRenderer().bufferBuilders.getEntityVertexConsumers(),
+                240
+        );
     }
 
     private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame) {

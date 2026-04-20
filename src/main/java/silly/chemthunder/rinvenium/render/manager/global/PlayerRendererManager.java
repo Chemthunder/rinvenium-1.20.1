@@ -22,4 +22,17 @@ public class PlayerRendererManager {
     public static void clear() {
         PLAYER_RENDERS.clear();
     }
+
+    public static void remove(String name) {
+        PLAYER_RENDERS.removeIf(fakePlayerRenderer -> fakePlayerRenderer.gameProfile.getName().equals(name));
+    }
+
+    public static FakePlayerRenderer getPlayer(String name) {
+        for (FakePlayerRenderer fakePlayerRenderer : PLAYER_RENDERS) {
+            if (fakePlayerRenderer.gameProfile.getName().equals(name)) {
+                return fakePlayerRenderer;
+            }
+        }
+        return null;
+    }
 }
