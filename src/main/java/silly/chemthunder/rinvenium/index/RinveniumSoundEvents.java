@@ -22,6 +22,8 @@ public class RinveniumSoundEvents {
     public static final SoundEvent INGOT_FORGED = registerSound("ingot_forged");
     public static final SoundEvent ION_CELL_FORMED = registerSound("ion_cell_formed");
     public static final SoundEvent PLATE_FORMED = registerSound("plate_formed");
+    public static final SoundEvent BELL = registerSound("bell");
+    public static final SoundEvent HEARTBEAT = registerSound("heartbeat");
 
     private static SoundEvent registerSound(String name) {
         Identifier identifier = Rinvenium.id(name);

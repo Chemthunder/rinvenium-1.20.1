@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.index;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.network.s2c.AddCustomFogS2CPacket;
 import silly.chemthunder.rinvenium.network.s2c.AddImpactFrameS2CPacket;
 import silly.chemthunder.rinvenium.network.s2c.AddScreenFlashS2CPacket;
 import silly.chemthunder.rinvenium.network.s2c.SpawnFlashParticleS2CPacket;
@@ -19,11 +20,13 @@ public class RinveniumPackets {
     public static final Identifier FLASH_PARTICLE = createS2CId("flash_particle");
     public static final Identifier ADD_SCREEN_FLASH = createS2CId("add_screen_flash");
     public static final Identifier ADD_IMPACT_FRAME = createS2CId("add_impact_frame");
+    public static final Identifier ADD_CUSTOM_FOG = createS2CId("add_custom_fog");
 
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(FLASH_PARTICLE, SpawnFlashParticleS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_SCREEN_FLASH, AddScreenFlashS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_IMPACT_FRAME, AddImpactFrameS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(ADD_CUSTOM_FOG, AddCustomFogS2CPacket::receive);
     }
 
     public static Identifier createC2SId(String name) {

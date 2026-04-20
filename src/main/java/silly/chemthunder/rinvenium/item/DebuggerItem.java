@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
@@ -21,10 +20,15 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
+import silly.chemthunder.rinvenium.render.CustomFog;
+import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.VertexColorSet;
+import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
+import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
+import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.List;
 
@@ -87,6 +91,7 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
                 slashRender.setSize(10.0f);
                 SlashRendererManager.add(slashRender);
+                //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
             }
         } else {
             if (world.isClient) { // Client Side Sneak
@@ -110,6 +115,8 @@ public class DebuggerItem extends Item {
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }
+
+                //CustomFogManager.clear();
             }
 
         }

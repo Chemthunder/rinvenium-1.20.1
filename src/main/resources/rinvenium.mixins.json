@@ -19,6 +19,7 @@
   "client": [
     "client.BackgroundRendererMixin",
     "client.ClientPlayerEntityMixin",
+    "client.ClientWorldMixin",
     "client.DrawContextMixin",
     "client.EntityRenderDispatcherMixin",
     "client.GameRendererMixin",

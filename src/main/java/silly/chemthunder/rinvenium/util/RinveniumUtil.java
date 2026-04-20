@@ -246,4 +246,28 @@ public class RinveniumUtil {
     public static ItemStack exchangeWholeStack(ItemStack inputStack, PlayerEntity player, ItemStack outputStack) {
         return exchangeWholeStack(inputStack, player, outputStack, true);
     }
+
+    public static int lerpColor(float tickDelta, int start, int end) {
+        int r1 = (start >> 16) & 0xFF;
+        int g1 = (start >> 8) & 0xFF;
+        int b1 = start & 0xFF;
+
+        int r2 = (end >> 16) & 0xFF;
+        int g2 = (end >> 8) & 0xFF;
+        int b2 = end & 0xFF;
+
+        int r = MathHelper.lerp(tickDelta, r1, r2);
+        int g = MathHelper.lerp(tickDelta, g1, g2);
+        int b = MathHelper.lerp(tickDelta, b1, b2);
+
+        return (r << 16) | (g << 8) | b;
+    }
+
+    public static int colorFromFloat(float rf, float gf, float bf) {
+        int r = (int)  (rf * 255);
+        int g = (int)  (gf * 255);
+        int b = (int)  (bf * 255);
+
+        return (r << 16) | (g << 8) | b;
+    }
 }

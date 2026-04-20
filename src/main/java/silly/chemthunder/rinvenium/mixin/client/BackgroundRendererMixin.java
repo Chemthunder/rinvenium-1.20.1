@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(BackgroundRenderer.class)
@@ -24,6 +25,11 @@ public abstract class BackgroundRendererMixin {
     @Shadow
     private static float blue;
 
+    @Shadow
+    public static void setFogBlack() {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
+
     @Inject(method = "render", at = @At(value = "TAIL"))
     private static void rinvenium$whiteoutBackground(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
         MinecraftClient client =  MinecraftClient.getInstance();
@@ -34,6 +40,14 @@ public abstract class BackgroundRendererMixin {
                 green = 1.0f;
                 blue = 1.0f;
                 RenderSystem.clearColor(red, green, blue, 1.0f);
+            } else if (!CustomFogManager.get().isEmpty()){
+                CustomFogManager.get().forEach(customFog -> {
+                    red = customFog.red;
+                    green = customFog.green;
+                    blue = customFog.blue;
+                    setFogBlack();
+                    RenderSystem.clearColor(red, green, blue, 0.0f);
+                });
             }
         }
     }

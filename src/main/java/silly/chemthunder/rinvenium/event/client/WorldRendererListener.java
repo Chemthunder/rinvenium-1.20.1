@@ -4,18 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
+import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
 import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
@@ -45,8 +50,33 @@ public class WorldRendererListener {
                         }
                     });
                 }
+                CustomFogManager.tick();
+                PlayerRendererManager.tick();
+                PlayerRendererManager.get().forEach(fakePlayerRenderer -> renderPlayer(context, client, world, camera, fakePlayerRenderer));
             }
         });
+    }
+
+    private static void renderPlayer(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, FakePlayerRenderer playerRenderer) {
+        /*context.worldRenderer().renderEntity(
+                new PlayerEntity(world, new BlockPos((int) playerRenderer.origin.x, (int) playerRenderer.origin.y, (int) playerRenderer.origin.z), playerRenderer.yaw, null) {
+                    @Override
+                    public boolean isSpectator() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isCreative() {
+                        return false;
+                    }
+                },
+                camera.getPos().getX(),
+                camera.getPos().getY(),
+                camera.getPos().getZ(),
+                context.tickDelta(),
+                context.matrixStack(),
+                context.worldRenderer().bufferBuilders.getEntityVertexConsumers()
+        );*/
     }
 
     private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame) {

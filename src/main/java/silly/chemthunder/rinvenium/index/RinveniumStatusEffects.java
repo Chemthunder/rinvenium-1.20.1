@@ -18,6 +18,7 @@ public interface RinveniumStatusEffects {
     StatusEffect SPARKED = create("sparked", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff, false));
     StatusEffect SPARKED_WITH_CD = create("sparked_with_cooldown", new SparkedStatusEffect(StatusEffectCategory.HARMFUL, 0x87f9ff, true));
     StatusEffect SWISS_CHEESE = create("swiss_cheese", new PublicStatusEffect(StatusEffectCategory.NEUTRAL, 0xd6c127));
+    StatusEffect WATCHED = create("watched", new PublicStatusEffect(StatusEffectCategory.NEUTRAL, 0x880000));
 
     static void init() {
         EFFECTS.keySet().forEach(effect -> Registry.register(Registries.STATUS_EFFECT, EFFECTS.get(effect), effect));

@@ -10,3 +10,6 @@ accessible method net/minecraft/client/render/WorldRenderer renderEntity (Lnet/m
 accessible field net/minecraft/client/render/WorldRenderer entityOutlinePostProcessor Lnet/minecraft/client/gl/PostEffectProcessor;
 accessible field net/minecraft/client/gui/hud/InGameHud scaledWidth I
 accessible field net/minecraft/client/gui/hud/InGameHud scaledHeight I
+accessible field net/minecraft/client/render/BackgroundRenderer red F
+accessible field net/minecraft/client/render/BackgroundRenderer green F
+accessible field net/minecraft/client/render/BackgroundRenderer blue F

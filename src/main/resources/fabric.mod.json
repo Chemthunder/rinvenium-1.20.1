@@ -41,7 +41,8 @@
       "rinvenium:spear_parry",
       "rinvenium:hail_of_the_gods",
       "rinvenium:envixia_form",
-      "rinvenium:spear_heal"
+      "rinvenium:spear_heal",
+      "rinvenium:death_sequence"
     ]
   },
   "accessWidener": "rinvenium.accesswidener",
