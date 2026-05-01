@@ -81,6 +81,8 @@ public class RinveniumLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("death.attack.electricity.player", "%s was electrocuted by %s");
         translationBuilder.add("death.attack.electricity_with_cooldown", "%s was electrocuted");
         translationBuilder.add("death.attack.electricity_with_cooldown.player", "%s was electrocuted by %s");
+        translationBuilder.add("death.attack.orchid", "%s was executed");
+        translationBuilder.add("death.attack.orchid.player", "%s was executed");
 
         translationBuilder.add("death.attack.boop", "%s was peppered a thousand times");
         translationBuilder.add("death.attack.boop.player", "%s was peppered a thousand times by %s");
