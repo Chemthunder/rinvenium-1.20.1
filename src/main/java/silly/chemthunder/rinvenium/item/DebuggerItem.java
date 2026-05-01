@@ -22,6 +22,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
+import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 import silly.chemthunder.rinvenium.render.CustomFog;
 import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
 import silly.chemthunder.rinvenium.render.SlashRender;
@@ -31,6 +32,7 @@ import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
 import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
+import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 import java.util.List;
 import java.util.UUID;
@@ -96,8 +98,21 @@ public class DebuggerItem extends Item {
                 //SlashRendererManager.add(slashRender);
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
                 //PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
-                DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(player);
-                deathSequenceComponent.setBool(true);
+
+                if (player.getServer() != null) {
+                    DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
+                    ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
+                    if (storedPlayer != null && player.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
+                        DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(storedPlayer);
+                        deathSequenceComponent.setBool(true);
+                        player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                            if (serverPlayerEntity.squaredDistanceTo(storedPlayer) <= 128 * 128 && !serverPlayerEntity.equals(storedPlayer)) {
+                                serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, 20 * 38, 0, false, false, false));
+                            }
+                        });
+
+                    }
+                }
             }
         } else {
             if (world.isClient) { // Client Side Sneak

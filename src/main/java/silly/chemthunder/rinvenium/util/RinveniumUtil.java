@@ -1,5 +1,6 @@
 package silly.chemthunder.rinvenium.util;
 
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 import silly.chemthunder.rinvenium.particle.RailgunTrailParticleEffect;
 import silly.chemthunder.rinvenium.particle.SmokeTrailParticleEffect;
 
@@ -272,5 +274,10 @@ public class RinveniumUtil {
         int b = (int)  (bf * 255);
 
         return (r << 16) | (g << 8) | b;
+    }
+
+    public static boolean shouldLockPlayerMovement(ClientPlayerEntity player) {
+        if (player == null) return false;
+        return player.hasStatusEffect(RinveniumStatusEffects.WATCHED);
     }
 }

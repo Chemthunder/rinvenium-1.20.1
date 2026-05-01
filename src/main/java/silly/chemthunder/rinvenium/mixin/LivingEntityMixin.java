@@ -11,7 +11,9 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
@@ -166,7 +168,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (((LivingEntity) ((Object)this)) instanceof PlayerEntity player && bl && !this.isOnGround() && !this.hasVehicle() && !this.hasStatusEffect(StatusEffects.LEVITATION)) {
             EnvixiaFormComponent envixiaFormComponent = EnvixiaFormComponent.get(player);
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
-            if (itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1()) {
+            if ((itemStack.isOf(RinveniumItems.ENVIXIA_CHESTPLATE) && envixiaFormComponent.getTripleBoolValue1()) || (itemStack.isOf(Items.ELYTRA) && ElytraItem.isUsable(itemStack))) {
                 bl = true;
                 int i = this.roll + 1;
                 if (!this.getWorld().isClient && i % 10 == 0) {
@@ -181,7 +183,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
 
         if (!this.getWorld().isClient) {
             this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, bl);
-            if (bl) {
+            if (bl && this.getEquippedStack(EquipmentSlot.CHEST).isOf(RinveniumItems.ENVIXIA_CHESTPLATE)) {
                 ServerWorld serverWorld = (ServerWorld) this.getWorld();
                 Vec3d pos = this.getPos();
                 serverWorld.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.x, pos.y + 0.25, pos.z, 1, 0.01, 0.01, 0.01, 0.001);
