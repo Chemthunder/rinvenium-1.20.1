@@ -1,6 +1,10 @@
 package silly.chemthunder.rinvenium.index;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.network.s2c.AddCustomFogS2CPacket;
@@ -39,5 +43,19 @@ public class RinveniumPackets {
 
     public static void init() {
         Rinvenium.LOGGER.info("Registering Rinvenium Packets");
+    }
+
+    public static void sendImpactFrame(ServerPlayerEntity player, int time) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(time);
+        buf.writeInt(0xFFFFFF);
+        buf.writeInt(1);
+        buf.writeFloat(1.0f);
+        buf.writeDouble(player.getX());
+        buf.writeDouble(player.getY());
+        buf.writeDouble(player.getZ());
+        buf.writeUuid(player.getUuid());
+
+        ServerPlayNetworking.send(player, RinveniumPackets.ADD_IMPACT_FRAME, buf);
     }
 }

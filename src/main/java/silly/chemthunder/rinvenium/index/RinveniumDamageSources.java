@@ -46,6 +46,11 @@ public interface RinveniumDamageSources {
     static DamageSource niki(LivingEntity entity) {
         return entity.getDamageSources().create(NIKI); }
 
+    RegistryKey<DamageType> ORCHID = of("orchid");
+    static DamageSource orchid(LivingEntity entity) {
+        return entity.getDamageSources().create(ORCHID);
+    }
+
     private static RegistryKey<DamageType> of(String name) {
         return RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Rinvenium.id(name));
     }

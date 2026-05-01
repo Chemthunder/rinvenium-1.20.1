@@ -15,7 +15,10 @@ import net.minecraft.world.RaycastContext;
 import silly.chemthunder.rinvenium.particle.RailgunTrailParticleEffect;
 import silly.chemthunder.rinvenium.particle.SmokeTrailParticleEffect;
 
+import java.util.UUID;
+
 public class RinveniumUtil {
+    public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
     /**Equation: -0.0002x^2 + 5*/
     public static double calculateDivergenceDropOff(double input) {
         return MathHelper.clamp(-0.0002 * (input * input) + 5.0, 0.0, 5.0);
