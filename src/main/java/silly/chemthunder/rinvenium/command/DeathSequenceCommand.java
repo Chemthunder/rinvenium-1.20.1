@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -27,15 +28,15 @@ public class DeathSequenceCommand {
                                         .executes(context -> executeSetCanSequence(context.getSource(), BoolArgumentType.getBool(context, "value")))
                                 )
                         )
-                        .then(literal("setPlayer")
-                                .then(argument("player", EntityArgumentType.player())
-                                        .executes(context -> executeSetPlayer(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
-                                )
+                )
+                .then(literal("setPlayer")
+                        .then(argument("player", EntityArgumentType.player())
+                                .executes(context -> executeSetPlayer(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
                         )
-                        .then(literal("queryPlayer")
-                                .executes(context -> executeQueryPlayer(context.getSource()))
+                )
+                .then(literal("queryPlayer")
+                        .executes(context -> executeQueryPlayer(context.getSource()))
 
-                        )
                 );
     }
 

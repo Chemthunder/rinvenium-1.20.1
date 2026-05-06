@@ -220,20 +220,11 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             double g = Math.sqrt(d * d + f * f);
             float pitch = MathHelper.wrapDegrees((float)(-(MathHelper.atan2(e, g) * 180.0F / (float)Math.PI)));
             float yaw = MathHelper.wrapDegrees((float)(MathHelper.atan2(f, d) * 180.0F / (float)Math.PI) - 90.0F);
-            PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), spawnPos, pitch, yaw, -1, "orchidpuppy"));
 
             if (player.getServer() != null) {
                 player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
                     if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
                         this.bossBar.addPlayer(serverPlayerEntity);
-                    }
-                });
-            }
-        }
-        if (this.globalTimer == 20 * 4) {
-            if (player.getServer() != null) {
-                player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
-                    if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
                         serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, MAIN_TOTAL_TIME - 80, 0, false, false, false));
                         if (serverPlayerEntity.currentScreenHandler != null) {
                             serverPlayerEntity.closeHandledScreen();
@@ -241,6 +232,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                 });
             }
+            PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), spawnPos, pitch, yaw, -1, "orchidpuppy"));
         }
         if (this.globalTimer == 20 * 5) {
             sendServerMessageS("<orchidpuppy> oh.");
@@ -351,14 +343,16 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 }
                 SlashRendererManager.add(slashRenders.get(0));
             }
+            if (this.slashTimer == 110) {
+                if (playerList != null) {
+                    playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 40));
+                }
+            }
             if (this.slashTimer == 120) {
                 if (player.getServer() != null) {
                     DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                     deathSequenceState.shouldStartPostTick = true;
                     deathSequenceState.markDirty();
-                }
-                if (playerList != null) {
-                    playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 15));
                 }
                 if (slashRenders.size() > 1) {
                     SlashRendererManager.add(slashRenders.get(1));
