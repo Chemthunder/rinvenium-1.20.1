@@ -265,7 +265,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             randomY = randomY < 0.5 ? -randomY : randomY - 0.5f;
             float randomZ = world.random.nextFloat();
             randomZ = randomZ < 0.5 ? -randomZ : randomZ - 0.5f;
-            Vec3d originDelta = new Vec3d(randomX, randomY, randomZ);
+            Vec3d originDelta = new Vec3d(randomX, randomY, randomZ).multiply(0.7);
             origin = origin.add(originDelta);
             float pitch = world.random.nextFloat() * 360.0F;
             float yaw = world.random.nextFloat() * 360.0F;
@@ -283,7 +283,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
             slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
             slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
-            slashRender.setSize(10.0f);
+            slashRender.setSize(20.0f);
 
             origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
             SlashRender bigSlashRender = new SlashRender(
@@ -297,7 +297,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             bigSlashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
             bigSlashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(45));
             bigSlashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(60));
-            bigSlashRender.setSize(16.0f);
+            bigSlashRender.setSize(32.0f);
             if (player.getServer() != null) {
                 addSlashes(
                         player.getServer().getPlayerManager().getPlayerList(),
@@ -337,7 +337,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 }
                 SlashRendererManager.add(slashRenders.get(0));
             }
-            if (this.slashTimer >= 90 && this.slashTimer < 110) {
+            if (this.slashTimer >= 90 && this.slashTimer < 110 && this.slashTimer % 2 == 0) {
                 if (this.slashTimer % 2 == 0 && playerList != null) {
                     //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
                 }
@@ -359,7 +359,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 } else {
                     SlashRendererManager.add(slashRenders.get(0));
                 }
-                sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
+                //sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
                 this.resetAll();
                 player.damage(RinveniumDamageSources.orchid(player), Integer.MAX_VALUE);
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
