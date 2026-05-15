@@ -83,7 +83,7 @@ public class DebuggerItem extends Item {
                 float roll = world.random.nextFloat() * 360.0F;
                 SlashRender slashRender = new SlashRender(
                         origin,
-                        60,
+                        80,
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
                         new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
@@ -94,12 +94,12 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
-                slashRender.setSize(10.0f);
+                slashRender.setSize(20.0f);
                 //SlashRendererManager.add(slashRender);
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
                 //PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
 
-                if (player.getServer() != null) {
+                /*if (player.getServer() != null) {
                     DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                     ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
                     if (storedPlayer != null && player.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
@@ -112,7 +112,7 @@ public class DebuggerItem extends Item {
                         });
 
                     }
-                }
+                }*/
             }
         } else {
             if (world.isClient) { // Client Side Sneak
