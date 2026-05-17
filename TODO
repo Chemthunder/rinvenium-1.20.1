@@ -1,1 +1,5 @@
-//todo kick player
+//todo make player death text yellow
+//todo player takes damage on slashes
+//todo orchid skin
+//todo check if final impact frame works
+//todo add command config for whether individual clients should render impact frame
