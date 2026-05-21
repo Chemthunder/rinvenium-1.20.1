@@ -3,3 +3,4 @@
 //todo check if final impact frame works
 //todo add command config for whether individual clients should render impact frame
 //todo add to existing command -> add player uuid to permit list when locked crafting is enabled
+//todo playerList seems to get the fake players on the serverside and causes the sequence to fuck itself

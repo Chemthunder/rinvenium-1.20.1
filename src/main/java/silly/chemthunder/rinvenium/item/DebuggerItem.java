@@ -95,7 +95,7 @@ public class DebuggerItem extends Item {
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
                 slashRender.setSize(20.0f);
-                //SlashRendererManager.add(slashRender);
+                SlashRendererManager.add(slashRender);
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
                 //PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
 
@@ -135,13 +135,13 @@ public class DebuggerItem extends Item {
                         buf.writeDouble(livingEntity.getZ());
                         buf.writeUuid(livingEntity.getUuid());
 
-                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }
 
-                CustomFogManager.clear();
+                /*CustomFogManager.clear();
                 DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(player);
-                deathSequenceComponent.setBool(false);
+                deathSequenceComponent.setBool(false);*/
             }
 
         }
