@@ -5,6 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -253,7 +254,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         }
         if (this.globalTimer == 20 * 16.5) {
             if (!PlayerRendererManager.get().isEmpty()) {
-                PlayerRendererManager.get().peek().fakePlayer.swingHand(Hand.MAIN_HAND, true);
+                //PlayerRendererManager.get().peek().fakePlayer.swingHand(Hand.MAIN_HAND, true);
             }
         }
         if (this.globalTimer >= 20 * 17 && this.globalTimer <= 20 * 28) {
