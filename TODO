@@ -1,6 +1,5 @@
-//todo player takes damage on slashes
+//todo player takes damage on slashes -> THE DO NOT RENDER ON SERVER
 //todo orchid skin
 //todo check if final impact frame works
 //todo add command config for whether individual clients should render impact frame
 //todo add to existing command -> add player uuid to permit list when locked crafting is enabled
-//todo playerList seems to get the fake players on the serverside and causes the sequence to fuck itself
