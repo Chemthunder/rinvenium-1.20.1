@@ -102,15 +102,17 @@ public class DebuggerItem extends Item {
                 if (player.getServer() != null) {
                     DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                     ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
-                    if (storedPlayer != null && player.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
-                        DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(storedPlayer);
-                        deathSequenceComponent.setBool(true);
-                        player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
-                            if (serverPlayerEntity.squaredDistanceTo(storedPlayer) <= 128 * 128 && !serverPlayerEntity.equals(storedPlayer)) {
-                                serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, 20 * 38, 0, false, false, false));
-                            }
-                        });
+                    if (deathSequenceState.canSequence) {
+                        if (storedPlayer != null && player.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
+                            DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(storedPlayer);
+                            deathSequenceComponent.setBool(true);
+                            player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                                if (serverPlayerEntity.squaredDistanceTo(storedPlayer) <= 128 * 128 && !serverPlayerEntity.equals(storedPlayer)) {
+                                    serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, 20 * 38, 0, false, false, false));
+                                }
+                            });
 
+                        }
                     }
                 }
             }

@@ -277,7 +277,7 @@ public class RinveniumUtil {
     }
 
     public static boolean shouldLockPlayerMovement(ClientPlayerEntity player) {
-        if (player == null) return false;
+        if (player == null || player.isDead()) return false;
         return player.hasStatusEffect(RinveniumStatusEffects.WATCHED);
     }
 }

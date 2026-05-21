@@ -58,4 +58,13 @@ public class RinveniumPackets {
 
         ServerPlayNetworking.send(player, RinveniumPackets.ADD_IMPACT_FRAME, buf);
     }
+    public static void sendRedFlash(ServerPlayerEntity player, int time, int fade, float opacity) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(time);
+        buf.writeInt(0xFF0000);
+        buf.writeInt(fade);
+        buf.writeFloat(opacity);
+
+        ServerPlayNetworking.send(player, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+    }
 }

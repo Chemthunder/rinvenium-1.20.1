@@ -265,14 +265,14 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             randomY = randomY < 0.5 ? -randomY : randomY - 0.5f;
             float randomZ = world.random.nextFloat();
             randomZ = randomZ < 0.5 ? -randomZ : randomZ - 0.5f;
-            Vec3d originDelta = new Vec3d(randomX, randomY, randomZ).multiply(0.7);
+            Vec3d originDelta = new Vec3d(randomX, randomY, randomZ).multiply(0.5);
             origin = origin.add(originDelta);
             float pitch = world.random.nextFloat() * 360.0F;
             float yaw = world.random.nextFloat() * 360.0F;
             float roll = world.random.nextFloat() * 360.0F;
             SlashRender slashRender = new SlashRender(
                     origin,
-                    60,
+                    40,
                     new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
                     new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
                     new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
@@ -359,7 +359,10 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 } else {
                     SlashRendererManager.add(slashRenders.get(0));
                 }
-                //sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
+                if (playerList != null) {
+                    playerList.forEach(player -> RinveniumPackets.sendRedFlash(player, 30, 5, 0.1f));
+                }
+                sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
                 this.resetAll();
                 player.damage(RinveniumDamageSources.orchid(player), Integer.MAX_VALUE);
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
