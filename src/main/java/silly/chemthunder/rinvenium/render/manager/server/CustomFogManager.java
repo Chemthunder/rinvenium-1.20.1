@@ -1,4 +1,4 @@
-package silly.chemthunder.rinvenium.render.manager.global;
+package silly.chemthunder.rinvenium.render.manager.server;
 
 import silly.chemthunder.rinvenium.render.CustomFog;
 

@@ -1,16 +1,15 @@
-package silly.chemthunder.rinvenium.render.manager.global;
+package silly.chemthunder.rinvenium.render.manager.client;
 
 import net.minecraft.client.gl.VertexBuffer;
 import org.jetbrains.annotations.Nullable;
 import silly.chemthunder.rinvenium.render.SlashRender;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class SlashRendererManager {
+public class DeathSequenceSlashManager {
     public static final ConcurrentLinkedQueue<SlashRender> SLASH_RENDERS = new ConcurrentLinkedQueue<>();
-    @Nullable public static VertexBuffer slashBuffer;
+    @Nullable
+    public static VertexBuffer slashBuffer;
 
     public static void add(SlashRender slashRender) {
         SLASH_RENDERS.add(slashRender);

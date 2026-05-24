@@ -7,10 +7,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.network.s2c.AddCustomFogS2CPacket;
-import silly.chemthunder.rinvenium.network.s2c.AddImpactFrameS2CPacket;
-import silly.chemthunder.rinvenium.network.s2c.AddScreenFlashS2CPacket;
-import silly.chemthunder.rinvenium.network.s2c.SpawnFlashParticleS2CPacket;
+import silly.chemthunder.rinvenium.network.s2c.*;
 
 public class RinveniumPackets {
     /**C2S Packets*/
@@ -25,12 +22,16 @@ public class RinveniumPackets {
     public static final Identifier ADD_SCREEN_FLASH = createS2CId("add_screen_flash");
     public static final Identifier ADD_IMPACT_FRAME = createS2CId("add_impact_frame");
     public static final Identifier ADD_CUSTOM_FOG = createS2CId("add_custom_fog");
+    public static final Identifier ADD_SLASH = createS2CId("add_slash");
+    public static final Identifier ADD_MULTIPLE_SLASHES = createS2CId("add_multiple_slashes");
+    public static final Identifier ADD_FAKE_PLAYER = createS2CId("add_fake_player");
 
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(FLASH_PARTICLE, SpawnFlashParticleS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_SCREEN_FLASH, AddScreenFlashS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_IMPACT_FRAME, AddImpactFrameS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_CUSTOM_FOG, AddCustomFogS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(ADD_MULTIPLE_SLASHES, AddMultipleSlashS2CPacket::receive);
     }
 
     public static Identifier createC2SId(String name) {

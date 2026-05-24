@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
-import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
+import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.server.CustomFogManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(BackgroundRenderer.class)

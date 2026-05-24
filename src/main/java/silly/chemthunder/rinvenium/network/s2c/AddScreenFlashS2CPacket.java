@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import silly.chemthunder.rinvenium.render.ScreenFlash;
-import silly.chemthunder.rinvenium.render.manager.FlashManager;
+import silly.chemthunder.rinvenium.render.manager.client.FlashManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 public class AddScreenFlashS2CPacket {

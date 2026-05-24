@@ -1,12 +1,10 @@
-package silly.chemthunder.rinvenium.render.manager;
+package silly.chemthunder.rinvenium.render.manager.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ImpactFrameManager {

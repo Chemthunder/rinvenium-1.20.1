@@ -5,7 +5,7 @@ import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
 
-public class FakePlayerRenderer {
+public class FakePlayerRender {
     public final GameProfile gameProfile;
     public final Vec3d origin;
     public final int maxAge;
@@ -16,7 +16,7 @@ public class FakePlayerRenderer {
     public float pitch;
     public float yaw;
 
-    public FakePlayerRenderer(GameProfile gameProfile, Vec3d origin, float pitch, float yaw, int maxAge, String skinTexture) {
+    public FakePlayerRender(GameProfile gameProfile, Vec3d origin, float pitch, float yaw, int maxAge, String skinTexture) {
         this.gameProfile = gameProfile;
         this.origin = origin;
         this.pitch = pitch;

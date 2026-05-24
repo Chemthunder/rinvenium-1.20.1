@@ -3,12 +3,10 @@ package silly.chemthunder.rinvenium.network.s2c;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.UUID;

@@ -1,9 +1,7 @@
-package silly.chemthunder.rinvenium.render.manager;
+package silly.chemthunder.rinvenium.render.manager.client;
 
 import silly.chemthunder.rinvenium.render.ScreenFlash;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FlashManager {

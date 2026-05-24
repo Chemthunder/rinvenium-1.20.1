@@ -7,7 +7,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.server.CustomFogManager;
+import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 public class ServerTickListener {
@@ -33,7 +35,7 @@ public class ServerTickListener {
                     }
                 }
                 if (deathSequenceState.postTick == 20 * 16) {
-                    PlayerRendererManager.remove("orchidpuppy");
+                    //FakePlayerRendererManager.remove("orchidpuppy");
                 }
                 if (deathSequenceState.postTick >= 20 * 16 + 20 * 120) {
                     deathSequenceState.shouldStartPostTick = false;
@@ -43,6 +45,11 @@ public class ServerTickListener {
                 if (deathSequenceState.shouldStartPostTick) deathSequenceState.postTick++;
                 deathSequenceState.markDirty();
             }
+        });
+        ServerTickEvents.END_SERVER_TICK.register(serverWorld -> {
+            //SlashRendererManager.tick();
+            CustomFogManager.tick();
+            //FakePlayerRendererManager.tick();
         });
     }
 

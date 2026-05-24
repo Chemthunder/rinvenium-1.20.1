@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
-import silly.chemthunder.rinvenium.render.manager.FlashManager;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.client.FlashManager;
+import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 

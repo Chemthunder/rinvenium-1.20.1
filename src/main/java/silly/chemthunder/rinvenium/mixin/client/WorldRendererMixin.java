@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(WorldRenderer.class)

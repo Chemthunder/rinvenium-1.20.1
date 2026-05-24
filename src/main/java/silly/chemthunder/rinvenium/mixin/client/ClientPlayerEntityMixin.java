@@ -21,9 +21,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
-import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
-import silly.chemthunder.rinvenium.render.manager.FlashManager;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.client.*;
+import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(ClientPlayerEntity.class)
@@ -31,6 +30,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
     @Unique private final FlashManager flashManager = new FlashManager();
     @Unique private final ImpactFrameManager impactFrameManager = new ImpactFrameManager();
+    @Unique private final SlashRendererManager slashRendererManager = new SlashRendererManager();
+    @Unique private final FakePlayerRendererManager fakePlayerRendererManager = new FakePlayerRendererManager();
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -75,4 +76,13 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         return this.impactFrameManager;
     }
 
+    @Override
+    public SlashRendererManager getSlashRendererManager() {
+        return this.slashRendererManager;
+    }
+
+    @Override
+    public FakePlayerRendererManager getFakePlayerRendererManager() {
+        return this.fakePlayerRendererManager;
+    }
 }

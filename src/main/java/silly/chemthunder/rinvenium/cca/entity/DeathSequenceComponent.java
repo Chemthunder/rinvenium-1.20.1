@@ -3,25 +3,18 @@ package silly.chemthunder.rinvenium.cca.entity;
 import com.mojang.authlib.GameProfile;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.network.OtherClientPlayerEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -36,14 +29,10 @@ import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
-import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
-import silly.chemthunder.rinvenium.render.ImpactFrame;
+import silly.chemthunder.rinvenium.render.FakePlayerRender;
 import silly.chemthunder.rinvenium.render.SlashRender;
-import silly.chemthunder.rinvenium.render.VertexColorSet;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
-import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
-import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
-import silly.chemthunder.rinvenium.util.inject.RenderContainer;
+import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 import java.util.List;
@@ -233,7 +222,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                 });
             }
-            PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), spawnPos, pitch, yaw, -1, "orchidpuppy"));
+            //FakePlayerRendererManager.add(new FakePlayerRender(new GameProfile(UUID.randomUUID(), "orchidpuppy"), spawnPos, pitch, yaw, -1, "orchidpuppy"));
         }
         if (this.globalTimer == 20 * 5) {
             sendServerMessageS("<orchidpuppy> oh.");
@@ -253,9 +242,9 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             sendServerMessageS("<orchidpuppy> how about we speed up the process?");
         }
         if (this.globalTimer == 20 * 16.5) {
-            if (!PlayerRendererManager.get().isEmpty()) {
-                //PlayerRendererManager.get().peek().fakePlayer.swingHand(Hand.MAIN_HAND, true);
-            }
+            /*if (!FakePlayerRendererManager.get().isEmpty()) {
+                //FakePlayerRendererManager.get().peek().fakePlayer.swingHand(Hand.MAIN_HAND, true);
+            }*/
         }
         if (this.globalTimer >= 20 * 17 && this.globalTimer <= 20 * 28) {
             Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
@@ -273,11 +262,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             float roll = world.random.nextFloat() * 360.0F;
             SlashRender slashRender = new SlashRender(
                     origin,
-                    40,
-                    new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(1.0f, 0.9f, 0.9f, 1.0f)
+                    40
             );
             slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
             slashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(90));
@@ -289,29 +274,30 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
             SlashRender bigSlashRender = new SlashRender(
                     origin,
-                    100,
-                    new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(0.4f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(1.0f, 0.0f, 0.0f, 0.9f),
-                    new VertexColorSet(1.0f, 0.9f, 0.9f, 1.0f)
+                    100
             );
             bigSlashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
             bigSlashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(45));
             bigSlashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(60));
             bigSlashRender.setSize(32.0f);
             if (player.getServer() != null) {
-                addSlashes(
-                        player.getServer().getPlayerManager().getPlayerList(),
-                        slashRender,
-                        bigSlashRender
-                );
+                player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                    if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
+
+                        /*addSlashes(
+                                player.getServer().getPlayerManager().getPlayerList(),
+                                slashRender,
+                                bigSlashRender
+                        );*/
+                    }
+                });
             }
         }
 
 
     }
 
-    private void addSlashes(List<ServerPlayerEntity> playerList, SlashRender... slashes) {
+    /*private void addSlashes(List<ServerPlayerEntity> playerList, SlashRender... slashes) {
         List<SlashRender> slashRenders = List.of(slashes);
         if (!slashRenders.isEmpty()) {
             if (this.slashTimer >= 0 && this.slashTimer < 20 * 1.5 && this.slashTimer % 10 == 0) {
@@ -373,7 +359,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         }
         this.incrementTripleIntValue2();
     }
-
+*/
     public void resetTimes() {
         this.setTripleIntValue1(0);
         this.setTripleIntValue2(0);
@@ -391,12 +377,12 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     private void sendServerMessageT(MutableText literal) {
         if (player.getServer() != null) {
-            player.sendMessage(literal);
+            player.getServer().getPlayerManager().broadcast(literal, false);
         }
     }
     private void sendServerMessageS(String string) {
         if (player.getServer() != null) {
-            player.sendMessage(Text.literal(string).formatted(Formatting.RED));
+            player.getServer().getPlayerManager().broadcast(Text.literal(string).formatted(Formatting.RED), false);
         }
     }
     private void playSound(SoundEvent soundEvent, float volume, float pitch) {

@@ -1,6 +1,5 @@
 package silly.chemthunder.rinvenium.item;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -22,20 +21,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
-import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
-import silly.chemthunder.rinvenium.render.CustomFog;
-import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.VertexColorSet;
-import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
-import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
-import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
+import silly.chemthunder.rinvenium.render.manager.server.CustomFogManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
-import silly.chemthunder.rinvenium.util.inject.RenderContainer;
-import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DebuggerItem extends Item {
     public DebuggerItem(Settings settings) {
@@ -56,31 +47,23 @@ public class DebuggerItem extends Item {
                     RinveniumUtil.spawnRaycastSmokeParticles(serverWorld, player.getCameraPosVec(0.0f), player.getRotationVector(), hitResult, 256.0, 0.5, 1.1, 40);
                     RinveniumUtil.spawnRaycastRailgunParticles(serverWorld, player.getCameraPosVec(0.0f), player.getRotationVector(), hitResult, 256.0, 0.5, 2.3, 30);
                 }
-                if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                    PacketByteBuf buf = PacketByteBufs.create();
-                    buf.writeInt(10);
-                    buf.writeInt(0xFFFFFF);
-                    buf.writeInt(5);
-                    buf.writeFloat(0.8f);
-                    //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
-                }
                 Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
 
                 if (livingEntity != null) {
                     origin = livingEntity.getPos().add(0, (livingEntity.getBoundingBox().maxY - livingEntity.getBoundingBox().minY) / 2, 0);
                 }
 
-                float randomX = world.random.nextFloat();
+                /*float randomX = world.random.nextFloat();
                 randomX = randomX < 0.5 ? -randomX : randomX - 0.5f;
                 float randomY = world.random.nextFloat();
                 randomY = randomY < 0.5 ? -randomY : randomY - 0.5f;
                 float randomZ = world.random.nextFloat();
                 randomZ = randomZ < 0.5 ? -randomZ : randomZ - 0.5f;
                 Vec3d originDelta = new Vec3d(randomX, randomY, randomZ);
-                origin = origin.add(originDelta);
+                origin = origin.add(originDelta);*//*
                 float pitch = world.random.nextFloat() * 360.0F;
                 float yaw = world.random.nextFloat() * 360.0F;
-                float roll = world.random.nextFloat() * 360.0F;
+                float roll = world.random.nextFloat() * 360.0F;*/
                 SlashRender slashRender = new SlashRender(
                         origin,
                         80,
@@ -90,16 +73,17 @@ public class DebuggerItem extends Item {
                         new VertexColorSet(1.0f, 0.9f, 0.9f, 1.0f)
                 );
                 slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-                slashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(90));
+                slashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(90));/*
                 slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
                 slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
-                slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
+                slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));*/
                 slashRender.setSize(20.0f);
                 //SlashRendererManager.add(slashRender);
+                //player.sendMessage(Text.of("Number of slashes: " + SlashRendererManager.get().size()));
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
-                //PlayerRendererManager.add(new FakePlayerRenderer(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
+                //FakePlayerRendererManager.add(new FakePlayerRender(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
 
-                if (player.getServer() != null) {
+                /*if (player.getServer() != null) {
                     DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                     ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
                     if (deathSequenceState.canSequence) {
@@ -114,6 +98,21 @@ public class DebuggerItem extends Item {
 
                         }
                     }
+                }*/
+                if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeInt(20);
+                    buf.writeInt(0xFFFFFF);
+                    buf.writeInt(5);
+                    buf.writeFloat(0.8f);
+                    //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
+                    PacketByteBuf slashBuf = PacketByteBufs.create();
+                    int[] ageDelta = new int[20];
+                    for (int i = 0; i < 20; i++) {
+                        ageDelta[i] = i * 4;
+                    }
+                    slashBuf = SlashRender.writeMultiple(slashBuf, origin, 16f, 60, true, 20, ageDelta);
+                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                 }
             }
         } else {
@@ -135,7 +134,7 @@ public class DebuggerItem extends Item {
                         buf.writeDouble(livingEntity.getZ());
                         buf.writeUuid(livingEntity.getUuid());
 
-                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }
 

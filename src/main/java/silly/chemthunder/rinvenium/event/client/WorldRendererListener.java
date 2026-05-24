@@ -1,6 +1,5 @@
 package silly.chemthunder.rinvenium.event.client;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -8,14 +7,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
@@ -23,19 +17,17 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import silly.chemthunder.rinvenium.Rinvenium;
-import silly.chemthunder.rinvenium.render.FakePlayerRenderer;
+import silly.chemthunder.rinvenium.render.FakePlayerRender;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
-import silly.chemthunder.rinvenium.render.manager.global.CustomFogManager;
-import silly.chemthunder.rinvenium.render.manager.ImpactFrameManager;
-import silly.chemthunder.rinvenium.render.manager.global.PlayerRendererManager;
-import silly.chemthunder.rinvenium.render.manager.global.SlashRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
+import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class WorldRendererListener {
     public static void execute() {
@@ -45,28 +37,32 @@ public class WorldRendererListener {
             Camera camera = context.camera();
 
             if (world != null) {
-                SlashRendererManager.tick();
-                SlashRendererManager.get().forEach(slashRender -> renderSlashes(context, client, world, camera, slashRender));
                 if (client.player != null) {
+                    ClientPlayerEntity player = client.player;
+                    RenderContainer renderContainer = ((RenderContainer) player);
+                    SlashRendererManager slashRendererManager = renderContainer.getSlashRendererManager();
+                    slashRendererManager.tick();
+                    slashRendererManager.get().forEach(slashRender -> renderSlashes(context, client, world, camera, slashRender));
+                    renderContainer.getFakePlayerRendererManager().tick();
+                    FakePlayerRendererManager fakePlayerRendererManager = renderContainer.getFakePlayerRendererManager();
+                    fakePlayerRendererManager.tick();
+                    fakePlayerRendererManager.get().forEach(fakePlayerRender -> renderPlayer(context, client, world, camera, fakePlayerRender));
                     ImpactFrameManager impactFrameManager = ((RenderContainer) client.player).getImpactFrameManager();
                     impactFrameManager.tick();
                     impactFrameManager.get().forEach(impactFrame -> {
                         if (impactFrameManager.shouldShow()) {
                             client.options.hudHidden = true;
-                            renderImpactFrame(context, client, world, camera, impactFrame);
+                            renderImpactFrame(context, client, world, camera, impactFrame, slashRendererManager);
                         } else {
                             client.options.hudHidden = false;
                         }
                     });
                 }
-                CustomFogManager.tick();
-                PlayerRendererManager.tick();
-                PlayerRendererManager.get().forEach(fakePlayerRenderer -> renderPlayer(context, client, world, camera, fakePlayerRenderer));
             }
         });
     }
 
-    private static void renderPlayer(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, FakePlayerRenderer playerRenderer) {
+    private static void renderPlayer(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, FakePlayerRender playerRenderer) {
         if (playerRenderer.fakePlayer == null) {
             playerRenderer.fakePlayer = new OtherClientPlayerEntity(world, playerRenderer.gameProfile) {
                 @Override
@@ -93,7 +89,7 @@ public class WorldRendererListener {
         );
     }
 
-    private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame) {
+    private static void renderImpactFrame(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, ImpactFrame impactFrame, SlashRendererManager slashRendererManager) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         double viewDistance = client.options.getClampedViewDistance() * 16;
@@ -127,7 +123,7 @@ public class WorldRendererListener {
                     outlineVertexConsumerProvider.setColor(ColorHelper.Argb.getRed(i), ColorHelper.Argb.getGreen(i), ColorHelper.Argb.getBlue(i), 255);
 
                     List<SlashRender> slashRenders = new ArrayList<>();
-                    for (SlashRender slashRender : SlashRendererManager.get()) {
+                    for (SlashRender slashRender : slashRendererManager.get()) {
                         if (entity.getBoundingBox().expand(5).contains(slashRender.presetOrigin)) {
                             slashRenders.add(slashRender);
                         }
