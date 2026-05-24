@@ -87,6 +87,14 @@ public class SlashRender {
         }
         return buf;
     }
-
+    public static PacketByteBuf writeSingular(PacketByteBuf buf, Vec3d origin, float size, int maxAge, boolean randomTransformations) {
+        buf.writeDouble(origin.x);
+        buf.writeDouble(origin.y);
+        buf.writeDouble(origin.z);
+        buf.writeFloat(size);
+        buf.writeInt(maxAge);
+        buf.writeBoolean(randomTransformations);
+        return buf;
+    }
 
 }

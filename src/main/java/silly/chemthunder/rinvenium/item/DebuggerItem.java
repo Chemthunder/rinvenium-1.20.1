@@ -21,10 +21,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
+import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.VertexColorSet;
 import silly.chemthunder.rinvenium.render.manager.server.CustomFogManager;
 import silly.chemthunder.rinvenium.util.RinveniumUtil;
+import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 import java.util.List;
 
@@ -83,7 +85,7 @@ public class DebuggerItem extends Item {
                 //CustomFogManager.add(new CustomFog(0.2f, 0.0f, 0.0f, -1));
                 //FakePlayerRendererManager.add(new FakePlayerRender(new GameProfile(UUID.randomUUID(), "orchidpuppy"), player.getPos(), player.getPitch(), player.getYaw(), 100, "orchidpuppy"));
 
-                /*if (player.getServer() != null) {
+                if (player.getServer() != null) {
                     DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                     ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
                     if (deathSequenceState.canSequence) {
@@ -98,7 +100,7 @@ public class DebuggerItem extends Item {
 
                         }
                     }
-                }*/
+                }
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
                     PacketByteBuf buf = PacketByteBufs.create();
                     buf.writeInt(20);
@@ -112,7 +114,7 @@ public class DebuggerItem extends Item {
                         ageDelta[i] = i * 4;
                     }
                     slashBuf = SlashRender.writeMultiple(slashBuf, origin, 16f, 60, true, 20, ageDelta);
-                    ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                 }
             }
         } else {
@@ -134,7 +136,7 @@ public class DebuggerItem extends Item {
                         buf.writeDouble(livingEntity.getZ());
                         buf.writeUuid(livingEntity.getUuid());
 
-                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
                     }
                 }
 

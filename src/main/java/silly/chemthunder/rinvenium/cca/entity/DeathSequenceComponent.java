@@ -3,6 +3,8 @@ package silly.chemthunder.rinvenium.cca.entity;
 import com.mojang.authlib.GameProfile;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.BossBar;
@@ -10,6 +12,7 @@ import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
@@ -283,12 +286,11 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             if (player.getServer() != null) {
                 player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
                     if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
-
-                        /*addSlashes(
+                        addSlashes(
                                 player.getServer().getPlayerManager().getPlayerList(),
                                 slashRender,
                                 bigSlashRender
-                        );*/
+                        );
                     }
                 });
             }
@@ -297,69 +299,116 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
 
     }
 
-    /*private void addSlashes(List<ServerPlayerEntity> playerList, SlashRender... slashes) {
+    private void addSlashes(List<ServerPlayerEntity> playerList, SlashRender... slashes) {
         List<SlashRender> slashRenders = List.of(slashes);
-        if (!slashRenders.isEmpty()) {
-            if (this.slashTimer >= 0 && this.slashTimer < 20 * 1.5 && this.slashTimer % 10 == 0) {
-                if (this.slashTimer % 20 == 0 && playerList != null) {
-                    //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
+        Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
+        playerList.forEach(serverPlayerEntity -> {
+            if (!slashRenders.isEmpty()) {
+                if (this.slashTimer >= 0 && this.slashTimer < 20 * 1.5) {
+                    if (this.slashTimer % 10 == 0) {
+                        player.damage(RinveniumDamageSources.orchid(player), 0);
+                    }
+                    if (this.slashTimer == 0) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int numberOfSlashes = 3;
+                        int[] ageDelta = new int[numberOfSlashes];
+                        for (int i = 0; i < numberOfSlashes; i++) {
+                            ageDelta[i] = i * 10;
+                        }
+                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    }
                 }
-                SlashRendererManager.add(slashRenders.get(0));
+                if (this.slashTimer >= 20 * 1.5 && this.slashTimer < 20 * 3) {
+                    if (this.slashTimer % 5 == 0) {
+                        player.damage(RinveniumDamageSources.orchid(player), 0);
+                    }
+                    if (this.slashTimer == 20 * 1.5) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int numberOfSlashes = 6;
+                        int[] ageDelta = new int[numberOfSlashes];
+                        for (int i = 0; i < numberOfSlashes; i++) {
+                            ageDelta[i] = i * 5;
+                        }
+                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    }
+                }
+                if (this.slashTimer >= 20 * 3 && this.slashTimer < 72) {
+                    if (this.slashTimer % 3 == 0) {
+                        player.damage(RinveniumDamageSources.orchid(player), 0);
+                    }
+                    if (this.slashTimer == 20 * 3) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int numberOfSlashes = 4;
+                        int[] ageDelta = new int[numberOfSlashes];
+                        for (int i = 0; i < numberOfSlashes; i++) {
+                            ageDelta[i] = i * 3;
+                        }
+                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    }
+                }
+                if (this.slashTimer >= 72 && this.slashTimer < 90) {
+                    if (this.slashTimer % 2 == 0) {
+                        player.damage(RinveniumDamageSources.orchid(player), 0);
+                    }
+                    if (this.slashTimer == 72) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int numberOfSlashes = 9;
+                        int[] ageDelta = new int[numberOfSlashes];
+                        for (int i = 0; i < numberOfSlashes; i++) {
+                            ageDelta[i] = i * 2;
+                        }
+                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                        RinveniumPackets.sendImpactFrame(serverPlayerEntity, 10);
+                    }
+                }
+                if (this.slashTimer >= 90 && this.slashTimer < 110) {
+                    if (this.slashTimer % 2 == 0) {
+                        player.damage(RinveniumDamageSources.orchid(player), 0);
+                    }
+                    if (this.slashTimer == 90) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int numberOfSlashes = 10;
+                        int[] ageDelta = new int[numberOfSlashes];
+                        for (int i = 0; i < numberOfSlashes; i++) {
+                            ageDelta[i] = i * 2;
+                        }
+                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    }
+                }
+                if (this.slashTimer == 110) {
+                    if (playerList != null) {
+                        playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 60));
+                    }
+                }
+                if (this.slashTimer == 120) {
+                    if (player.getServer() != null) {
+                        DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
+                        deathSequenceState.shouldStartPostTick = true;
+                        deathSequenceState.markDirty();
+                    }
+                    if (slashRenders.size() > 1) {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        SlashRender.writeSingular(slashBuf, origin, 32f, 40, true);
+                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    } else {
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        SlashRender.writeSingular(slashBuf, origin, 16f, 40, true);
+                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                    }
+                    sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
+                    this.resetAll();
+                    player.damage(RinveniumDamageSources.orchid(player), 1000000);
+                }
             }
-            if (this.slashTimer >= 20 * 1.5 && this.slashTimer < 20 * 3 && this.slashTimer % 5 == 0) {
-                if (this.slashTimer % 10 == 0 && playerList != null) {
-                    //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
-                }
-                SlashRendererManager.add(slashRenders.get(0));
-            }
-            if (this.slashTimer >= 20 * 3 && this.slashTimer < 72 && this.slashTimer % 3 == 0) {
-                if (this.slashTimer % 6 == 0 && playerList != null) {
-                    //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
-                }
-                SlashRendererManager.add(slashRenders.get(0));
-            }
-            if (this.slashTimer >= 76 && this.slashTimer < 90 && this.slashTimer % 2 == 0) {
-                if (this.slashTimer % 4 == 0 && playerList != null) {
-                    //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
-                }
-                SlashRendererManager.add(slashRenders.get(0));
-            }
-            if (this.slashTimer >= 90 && this.slashTimer < 110 && this.slashTimer % 2 == 0) {
-                if (this.slashTimer % 2 == 0 && playerList != null) {
-                    //playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 8));
-                }
-                SlashRendererManager.add(slashRenders.get(0));
-            }
-            if (this.slashTimer == 110) {
-                if (playerList != null) {
-                    playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 40));
-                }
-            }
-            if (this.slashTimer == 120) {
-                if (player.getServer() != null) {
-                    DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
-                    deathSequenceState.shouldStartPostTick = true;
-                    deathSequenceState.markDirty();
-                }
-                if (slashRenders.size() > 1) {
-                    SlashRendererManager.add(slashRenders.get(1));
-                } else {
-                    SlashRendererManager.add(slashRenders.get(0));
-                }
-                if (playerList != null) {
-                    playerList.forEach(player -> RinveniumPackets.sendRedFlash(player, 30, 5, 0.1f));
-                }
-                sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
-                this.resetAll();
-                player.damage(RinveniumDamageSources.orchid(player), Integer.MAX_VALUE);
-                if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                    //serverPlayerEntity.networkHandler.disconnect(Text.literal("you died lol"));
-                }
-            }
-        }
+        });
         this.incrementTripleIntValue2();
     }
-*/
+
     public void resetTimes() {
         this.setTripleIntValue1(0);
         this.setTripleIntValue2(0);
