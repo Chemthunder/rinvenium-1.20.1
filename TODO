@@ -1,5 +1,4 @@
 //todo player takes damage on slashes -> THE DO NOT RENDER ON SERVER
-//todo first list of text lines are not broadcasted to all players
 //todo orchid skin
 //todo check if final impact frame works
 //todo add command config for whether individual clients should render impact frame
