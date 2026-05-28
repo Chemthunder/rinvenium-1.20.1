@@ -108,13 +108,6 @@ public class DebuggerItem extends Item {
                     buf.writeInt(5);
                     buf.writeFloat(0.8f);
                     //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SCREEN_FLASH, buf);
-                    PacketByteBuf slashBuf = PacketByteBufs.create();
-                    int[] ageDelta = new int[20];
-                    for (int i = 0; i < 20; i++) {
-                        ageDelta[i] = i * 4;
-                    }
-                    slashBuf = SlashRender.writeMultiple(slashBuf, origin, 16f, 60, true, 20, ageDelta);
-                    //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                 }
             }
         } else {
@@ -135,8 +128,17 @@ public class DebuggerItem extends Item {
                         buf.writeDouble(livingEntity.getY());
                         buf.writeDouble(livingEntity.getZ());
                         buf.writeUuid(livingEntity.getUuid());
-
                         //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_IMPACT_FRAME, buf);
+
+                        Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
+                        PacketByteBuf slashBuf = PacketByteBufs.create();
+                        int[] ageDelta = new int[1];
+                        for (int i = 0; i < 1; i++) {
+                            ageDelta[i] = 20;
+                        }
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, 16f, 60, true, 1, ageDelta);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+
                     }
                 }
 

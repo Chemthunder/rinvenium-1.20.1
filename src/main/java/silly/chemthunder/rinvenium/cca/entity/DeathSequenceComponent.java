@@ -265,13 +265,10 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             float roll = world.random.nextFloat() * 360.0F;
             SlashRender slashRender = new SlashRender(
                     origin,
-                    40
+                    60
             );
             slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(90));
             slashRender.addTransformation(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-            slashRender.addTransformation(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
-            slashRender.addTransformation(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
-            slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
             slashRender.setSize(20.0f);
 
             origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
@@ -285,7 +282,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             bigSlashRender.setSize(32.0f);
             if (player.getServer() != null) {
                 player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
-                    if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
+                    if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128 && !player.getWorld().isClient) {
                         addSlashes(
                                 player.getServer().getPlayerManager().getPlayerList(),
                                 slashRender,
@@ -295,8 +292,6 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 });
             }
         }
-
-
     }
 
     private void addSlashes(List<ServerPlayerEntity> playerList, SlashRender... slashes) {
@@ -313,9 +308,9 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         int numberOfSlashes = 3;
                         int[] ageDelta = new int[numberOfSlashes];
                         for (int i = 0; i < numberOfSlashes; i++) {
-                            ageDelta[i] = i * 10;
+                            ageDelta[i] = i * 15;
                         }
-                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
@@ -328,9 +323,9 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         int numberOfSlashes = 6;
                         int[] ageDelta = new int[numberOfSlashes];
                         for (int i = 0; i < numberOfSlashes; i++) {
-                            ageDelta[i] = i * 5;
+                            ageDelta[i] = i * 7;
                         }
-                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
@@ -343,9 +338,9 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         int numberOfSlashes = 4;
                         int[] ageDelta = new int[numberOfSlashes];
                         for (int i = 0; i < numberOfSlashes; i++) {
-                            ageDelta[i] = i * 3;
+                            ageDelta[i] = i * 5;
                         }
-                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
@@ -358,9 +353,9 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         int numberOfSlashes = 9;
                         int[] ageDelta = new int[numberOfSlashes];
                         for (int i = 0; i < numberOfSlashes; i++) {
-                            ageDelta[i] = i * 2;
+                            ageDelta[i] = i * 3;
                         }
-                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                         RinveniumPackets.sendImpactFrame(serverPlayerEntity, 10);
                     }
@@ -376,7 +371,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         for (int i = 0; i < numberOfSlashes; i++) {
                             ageDelta[i] = i * 2;
                         }
-                        SlashRender.writeMultiple(slashBuf, origin, 16f, 40, true, numberOfSlashes, ageDelta);
+                        slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
@@ -393,11 +388,11 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                     if (slashRenders.size() > 1) {
                         PacketByteBuf slashBuf = PacketByteBufs.create();
-                        SlashRender.writeSingular(slashBuf, origin, 32f, 40, true);
+                        SlashRender.writeSingular(slashBuf, origin, slashes[1].size, slashes[1].maxAge, true);
                         //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     } else {
                         PacketByteBuf slashBuf = PacketByteBufs.create();
-                        SlashRender.writeSingular(slashBuf, origin, 16f, 40, true);
+                        SlashRender.writeSingular(slashBuf, origin, slashes[0].size, slashes[0].maxAge, true);
                         //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                     sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));

@@ -2,8 +2,10 @@ package silly.chemthunder.rinvenium.render.manager.client;
 
 import net.minecraft.client.gl.VertexBuffer;
 import org.jetbrains.annotations.Nullable;
+import silly.chemthunder.rinvenium.Rinvenium;
 import silly.chemthunder.rinvenium.render.SlashRender;
 
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SlashRendererManager {
@@ -16,13 +18,16 @@ public class SlashRendererManager {
     }
 
     public void tick() {
-        SLASH_RENDERS.removeIf(slashRender -> {
+        SLASH_RENDERS.forEach(slashRender -> {
             if (slashRender.ageDelta > 0) {
                 slashRender.ageDelta--;
+                slashRender.age = 0;
             } else {
-                return slashRender.maxAge != -1 && ++slashRender.age >= slashRender.maxAge;
+                slashRender.age++;
             }
-            return false;
+            if (slashRender.maxAge != -1 && slashRender.age >= slashRender.maxAge) {
+                SLASH_RENDERS.remove(slashRender);
+            }
         });
     }
 

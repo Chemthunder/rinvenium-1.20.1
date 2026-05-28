@@ -27,9 +27,11 @@ import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WorldRendererListener {
+    public static int time = 0;
     public static void execute() {
         WorldRenderEvents.LAST.register(context -> {
             MinecraftClient client = MinecraftClient.getInstance();
@@ -42,6 +44,7 @@ public class WorldRendererListener {
                     RenderContainer renderContainer = ((RenderContainer) player);
                     SlashRendererManager slashRendererManager = renderContainer.getSlashRendererManager();
                     slashRendererManager.tick();
+                    time++;
                     slashRendererManager.get().forEach(slashRender -> renderSlashes(context, client, world, camera, slashRender));
                     renderContainer.getFakePlayerRendererManager().tick();
                     FakePlayerRendererManager fakePlayerRendererManager = renderContainer.getFakePlayerRendererManager();
@@ -205,6 +208,7 @@ public class WorldRendererListener {
         double camZ = camera.getPos().getZ();
 
         float ageDelta = (float) slash.age / slash.maxAge;
+        Rinvenium.LOGGER.info("ageDelta: {}   age: {}   delay: {}   global: {}", ageDelta, slash.age, slash.ageDelta, time);
         float yDelta;
         float zDelta;
         float red;

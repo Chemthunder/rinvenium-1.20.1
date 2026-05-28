@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.render;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
+import silly.chemthunder.rinvenium.Rinvenium;
 
 import java.util.ArrayList;
 import java.util.Arrays;

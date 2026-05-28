@@ -46,11 +46,6 @@ public class ServerTickListener {
                 deathSequenceState.markDirty();
             }
         });
-        ServerTickEvents.END_SERVER_TICK.register(serverWorld -> {
-            //SlashRendererManager.tick();
-            CustomFogManager.tick();
-            //FakePlayerRendererManager.tick();
-        });
     }
 
     private static void sendServerMessageT(MutableText literal, ServerWorld serverWorld) {

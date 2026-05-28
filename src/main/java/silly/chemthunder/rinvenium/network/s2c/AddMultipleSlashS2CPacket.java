@@ -59,12 +59,13 @@ public class AddMultipleSlashS2CPacket {
                         slashRender.addTransformation(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
                     }
                     slashRender.setSize(size);
-                    if (groupIndex.length > 0 && i == groupIndex[0]) {
+                    /*if (groupIndex.length > 0 && i == groupIndex[0]) {
                         slashRender.setAgeDelta(ageDelta[i]);
                         if (groupIndex.length > 1) {
                             groupIndex = Arrays.copyOfRange(groupIndex, 1, groupIndex.length);
                         }
-                    }
+                    }*/
+                    slashRender.setAgeDelta(ageDelta[i] * 4);
                     ((RenderContainer) client.player).getSlashRendererManager().add(slashRender);
                 }
             }
