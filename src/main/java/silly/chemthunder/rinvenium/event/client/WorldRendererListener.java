@@ -198,7 +198,7 @@ public class WorldRendererListener {
         RenderSystem.enableBlend();
     }
 
-    private static void renderSlashes(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, SlashRender slash) {
+    public static void renderSlashes(WorldRenderContext context, MinecraftClient client, ClientWorld world, Camera camera, SlashRender slash) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         double viewDistance = client.options.getClampedViewDistance() * 16;
@@ -208,7 +208,6 @@ public class WorldRendererListener {
         double camZ = camera.getPos().getZ();
 
         float ageDelta = (float) slash.age / slash.maxAge;
-        Rinvenium.LOGGER.info("ageDelta: {}   age: {}   delay: {}   global: {}", ageDelta, slash.age, slash.ageDelta, time);
         float yDelta;
         float zDelta;
         float red;

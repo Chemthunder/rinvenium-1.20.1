@@ -1,12 +1,15 @@
 package silly.chemthunder.rinvenium.render;
 
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
-import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.event.client.WorldRendererListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SlashRender {
@@ -17,6 +20,10 @@ public class SlashRender {
     public final int maxAge;
     public final List<VertexColorSet> vertexColorSets;
     public float size = 1.0f;
+    /**Not to be confused with {@link WorldRendererListener#renderSlashes(WorldRenderContext, MinecraftClient, ClientWorld, Camera, SlashRender)#ageDelta} in {@link WorldRendererListener#renderSlashes(WorldRenderContext, MinecraftClient, ClientWorld, Camera, SlashRender)}.
+     * <br>
+     * <br>
+     * {@link SlashRender#ageDelta} is the offset/delay before a slash is rendered. This allows for mini sequences per packet, reducing server load.*/
     public int ageDelta = 0;
     public int age;
     public List<Quaternionf> TRANSFORMATION = new ArrayList<>();
