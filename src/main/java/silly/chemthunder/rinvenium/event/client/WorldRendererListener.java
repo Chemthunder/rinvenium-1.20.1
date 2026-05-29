@@ -138,21 +138,31 @@ public class WorldRendererListener {
                         float ageDelta = (float) slash.age / slash.maxAge;
                         float yDelta;
                         float zDelta;
-                        // yDelta
-                        if (ageDelta <= 0.29f) {
-                            yDelta = (float) (9.2 * ageDelta * Math.exp(-3.4 * (ageDelta)));
-                        } else if (ageDelta > 0.29f && ageDelta <= 0.33f) {
+                        //yDelta
+                        float A1 = -6.06f;
+                        float k1 = 0.16f;
+                        float b1 = 4.76f;
+                        float ageYDelta = ageDelta;
+                        if (ageDelta <= 0.19f) {
+                            yDelta = (float) (-A1 * ageYDelta * Math.exp(-b1 * (ageYDelta - k1)));
+                        } else if (ageDelta > 0.19f && ageDelta <= 0.48f) {
                             yDelta = 1f;
                         } else {
-                            yDelta = 1f;
+                            ageYDelta = ageYDelta - 0.25f;
+                            yDelta = (float) (-A1 * ageYDelta * Math.exp(-b1 * (ageYDelta - k1)));
                         }
                         // zDelta
-                        if (ageDelta <= 0.19f) {
-                            zDelta = (float) (ageDelta * Math.exp(-Math.pow(3.6034, 2) * (Math.pow(ageDelta, 2) - 0.164)));
-                        } else if (ageDelta > 0.19f && ageDelta <= 0.35f) {
+                        float A2 = 1.68f;
+                        float k2 = 0.056f;
+                        float b2 = 6.2f;
+                        float ageZDelta = ageDelta;
+                        if (ageDelta <= 0.11f) {
+                            zDelta = (float) (-A2 * ageZDelta * Math.exp(-Math.pow(b2, 2) * (Math.pow(ageZDelta, 2) - k2)));
+                        } else if (ageDelta > 0.11f && ageDelta <= 0.35f) {
                             zDelta = 1;
                         } else {
-                            zDelta = (float) ((ageDelta - 0.1475) * Math.exp(-Math.pow(3.6034, 2) * (Math.pow(ageDelta - 0.1475, 2) - 0.164)));
+                            ageZDelta = ageZDelta - 0.234f;
+                            zDelta = (float) (-A2 * ageZDelta * Math.exp(-Math.pow(b2, 2) * (Math.pow(ageZDelta, 2) - k2)));
                         }
                         double endY = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize()).y);
                         double endYMid = MathHelper.lerp(yDelta, slash.origin.y, slash.origin.add(slash.direction.normalize().multiply(0.5f)).y);

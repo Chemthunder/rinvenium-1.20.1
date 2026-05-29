@@ -3,6 +3,7 @@ package silly.chemthunder.rinvenium.index;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -24,6 +25,7 @@ public class RinveniumPackets {
     public static final Identifier ADD_CUSTOM_FOG = createS2CId("add_custom_fog");
     public static final Identifier ADD_SLASH = createS2CId("add_slash");
     public static final Identifier ADD_MULTIPLE_SLASHES = createS2CId("add_multiple_slashes");
+    public static final Identifier ADD_SINGULAR_SLASH = createS2CId("add_singular_slash");
     public static final Identifier ADD_FAKE_PLAYER = createS2CId("add_fake_player");
 
     public static void registerS2CPackets() {
@@ -32,6 +34,7 @@ public class RinveniumPackets {
         ClientPlayNetworking.registerGlobalReceiver(ADD_IMPACT_FRAME, AddImpactFrameS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_CUSTOM_FOG, AddCustomFogS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ADD_MULTIPLE_SLASHES, AddMultipleSlashS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(ADD_SINGULAR_SLASH, AddSingularSlashS2CPacket::receive);
     }
 
     public static Identifier createC2SId(String name) {
@@ -46,7 +49,7 @@ public class RinveniumPackets {
         Rinvenium.LOGGER.info("Registering Rinvenium Packets");
     }
 
-    public static void sendImpactFrame(ServerPlayerEntity player, int time) {
+    public static void sendImpactFrame(ServerPlayerEntity player, int time, LivingEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(time);
         buf.writeInt(0xFFFFFF);
@@ -55,7 +58,7 @@ public class RinveniumPackets {
         buf.writeDouble(player.getX());
         buf.writeDouble(player.getY());
         buf.writeDouble(player.getZ());
-        buf.writeUuid(player.getUuid());
+        buf.writeUuid(target.getUuid());
 
         ServerPlayNetworking.send(player, RinveniumPackets.ADD_IMPACT_FRAME, buf);
     }

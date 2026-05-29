@@ -331,4 +331,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     /*@Inject(method = "attackLivingEntity", at = @At("HEAD"))
     private void rinvenium$riptideAttack(LivingEntity target, CallbackInfo ci) {
     }*/
+
+    @Inject(method = "damage", at = @At(value = "RETURN", ordinal = 3), cancellable = true)
+    private void rinvenium$damageTickOrchidSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (source.isOf(RinveniumDamageSources.ORCHID) && amount == 0) {
+            cir.setReturnValue(super.damage(source, amount));
+        }
+    }
 }

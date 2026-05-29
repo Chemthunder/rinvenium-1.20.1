@@ -30,20 +30,26 @@ public class ImpactFrameManager {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null && client.world != null) {
             if (!FRAMES.isEmpty()) {
-                for (Entity entity : client.world.getEntities()) {
-                    for (ImpactFrame impactFrame : FRAMES) {
-                        if (entity.getUuid().equals(impactFrame.uuid)) {
-                            Vec3d vec3d = client.player.getRotationVec(1.0F).normalize();
-                            Vec3d vec3d2 = new Vec3d(entity.getX() - client.player.getX(), entity.getEyeY() - client.player.getEyeY(), entity.getZ() - client.player.getZ());
-                            double d = vec3d2.length();
-                            vec3d2 = vec3d2.normalize();
-                            double e = vec3d.dotProduct(vec3d2);
-                            return e > 0.2 / d && client.player.canSee(entity);
-                        }
-                    }
-                }
+                return canSeeImpactTarget();
             } else {
                 return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean canSeeImpactTarget() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        for (Entity entity : client.world.getEntities()) {
+            for (ImpactFrame impactFrame : FRAMES) {
+                if (entity.getUuid().equals(impactFrame.uuid)) {
+                    Vec3d vec3d = client.player.getRotationVec(1.0F).normalize();
+                    Vec3d vec3d2 = new Vec3d(entity.getX() - client.player.getX(), entity.getEyeY() - client.player.getEyeY(), entity.getZ() - client.player.getZ());
+                    double d = vec3d2.length();
+                    vec3d2 = vec3d2.normalize();
+                    double e = vec3d.dotProduct(vec3d2);
+                    return e > 0.2 / d && client.player.canSee(entity);
+                }
             }
         }
         return false;

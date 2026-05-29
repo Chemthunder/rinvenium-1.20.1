@@ -1,11 +1,9 @@
 package silly.chemthunder.rinvenium.cca.entity;
 
-import com.mojang.authlib.GameProfile;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
@@ -32,14 +30,10 @@ import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
 import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
-import silly.chemthunder.rinvenium.render.FakePlayerRender;
 import silly.chemthunder.rinvenium.render.SlashRender;
-import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
-import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DeathSequenceComponent implements TripleIntComponent, BoolComponent, AutoSyncedComponent, CommonTickingComponent {
     /* List of timers:
@@ -218,7 +212,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                 player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
                     if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
                         this.bossBar.addPlayer(serverPlayerEntity);
-                        serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, MAIN_TOTAL_TIME - 80, 0, false, false, false));
+                        serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, MAIN_TOTAL_TIME - 300, 0, false, false, false));
                         if (serverPlayerEntity.currentScreenHandler != null) {
                             serverPlayerEntity.closeHandledScreen();
                         }
@@ -300,7 +294,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         playerList.forEach(serverPlayerEntity -> {
             if (!slashRenders.isEmpty()) {
                 if (this.slashTimer >= 0 && this.slashTimer < 20 * 1.5) {
-                    if (this.slashTimer % 10 == 0) {
+                    if (this.slashTimer % 15 == 0) {
                         player.damage(RinveniumDamageSources.orchid(player), 0);
                     }
                     if (this.slashTimer == 0) {
@@ -315,7 +309,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                 }
                 if (this.slashTimer >= 20 * 1.5 && this.slashTimer < 20 * 3) {
-                    if (this.slashTimer % 5 == 0) {
+                    if (this.slashTimer % 7 == 0) {
                         player.damage(RinveniumDamageSources.orchid(player), 0);
                     }
                     if (this.slashTimer == 20 * 1.5) {
@@ -330,7 +324,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                 }
                 if (this.slashTimer >= 20 * 3 && this.slashTimer < 72) {
-                    if (this.slashTimer % 3 == 0) {
+                    if (this.slashTimer % 5 == 0) {
                         player.damage(RinveniumDamageSources.orchid(player), 0);
                     }
                     if (this.slashTimer == 20 * 3) {
@@ -345,7 +339,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                 }
                 if (this.slashTimer >= 72 && this.slashTimer < 90) {
-                    if (this.slashTimer % 2 == 0) {
+                    if (this.slashTimer % 3 == 0) {
                         player.damage(RinveniumDamageSources.orchid(player), 0);
                     }
                     if (this.slashTimer == 72) {
@@ -357,7 +351,7 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         }
                         slashBuf = SlashRender.writeMultiple(slashBuf, origin, slashes[0].maxAge, slashes[0].maxAge, true, numberOfSlashes, ageDelta);
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
-                        RinveniumPackets.sendImpactFrame(serverPlayerEntity, 10);
+                        //RinveniumPackets.sendImpactFrame(serverPlayerEntity, 10, this.player);
                     }
                 }
                 if (this.slashTimer >= 90 && this.slashTimer < 110) {
@@ -375,12 +369,12 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
-                if (this.slashTimer == 110) {
-                    if (playerList != null) {
-                        playerList.forEach(player -> RinveniumPackets.sendImpactFrame(player, 60));
+                if (this.slashTimer == 125) {
+                    if (serverPlayerEntity.squaredDistanceTo(this.player) <= 128 * 128) {
+                        RinveniumPackets.sendImpactFrame(serverPlayerEntity, 60, this.player);
                     }
                 }
-                if (this.slashTimer == 120) {
+                if (this.slashTimer == 130) {
                     if (player.getServer() != null) {
                         DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                         deathSequenceState.shouldStartPostTick = true;
@@ -388,14 +382,14 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                     }
                     if (slashRenders.size() > 1) {
                         PacketByteBuf slashBuf = PacketByteBufs.create();
-                        SlashRender.writeSingular(slashBuf, origin, slashes[1].size, slashes[1].maxAge, true);
-                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                        slashBuf = SlashRender.writeSingular(slashBuf, origin, slashes[1].size, slashes[1].maxAge, false);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SINGULAR_SLASH, slashBuf);
                     } else {
                         PacketByteBuf slashBuf = PacketByteBufs.create();
-                        SlashRender.writeSingular(slashBuf, origin, slashes[0].size, slashes[0].maxAge, true);
-                        //ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
+                        slashBuf = SlashRender.writeSingular(slashBuf, origin, slashes[0].size, slashes[0].maxAge, true);
+                        ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_SINGULAR_SLASH, slashBuf);
                     }
-                    sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
+                    //sendServerMessageT(player.getDisplayName().copy().formatted(Formatting.YELLOW).append(Text.literal(" was executed").formatted(Formatting.YELLOW)));
                     this.resetAll();
                     player.damage(RinveniumDamageSources.orchid(player), 1000000);
                 }
