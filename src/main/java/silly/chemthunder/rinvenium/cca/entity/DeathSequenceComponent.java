@@ -193,7 +193,6 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         if (this.shouldStart) {
             incrementTripleIntValue1();
         }
-        player.sendMessage(Text.literal("Global Tick: " + this.globalTimer), true);
         if (this.globalTimer == 20 * 1) {
             playSound(RinveniumSoundEvents.BELL, 1.0f, 1.0f);
         }
