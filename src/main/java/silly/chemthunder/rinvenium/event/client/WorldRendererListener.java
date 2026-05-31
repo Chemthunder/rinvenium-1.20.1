@@ -21,13 +21,12 @@ import silly.chemthunder.rinvenium.render.FakePlayerRender;
 import silly.chemthunder.rinvenium.render.ImpactFrame;
 import silly.chemthunder.rinvenium.render.SlashRender;
 import silly.chemthunder.rinvenium.render.manager.client.ImpactFrameManager;
-import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.FakePlayerRendererManager;
 import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
 import silly.chemthunder.rinvenium.util.RinveniumTextureUtils;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class WorldRendererListener {

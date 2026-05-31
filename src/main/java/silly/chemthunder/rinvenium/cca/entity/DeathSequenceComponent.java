@@ -215,10 +215,11 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         if (serverPlayerEntity.currentScreenHandler != null) {
                             serverPlayerEntity.closeHandledScreen();
                         }
+
+                        RinveniumPackets.spawnFakePlayerPosPitchYawAge(serverPlayerEntity, "orchidpuppy", spawnPos, pitch, yaw, -1);
                     }
                 });
             }
-            //FakePlayerRendererManager.add(new FakePlayerRender(new GameProfile(UUID.randomUUID(), "orchidpuppy"), spawnPos, pitch, yaw, -1, "orchidpuppy"));
         }
         if (this.globalTimer == 20 * 5) {
             sendServerMessageS("<orchidpuppy> oh.");
@@ -238,9 +239,13 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
             sendServerMessageS("<orchidpuppy> how about we speed up the process?");
         }
         if (this.globalTimer == 20 * 16.5) {
-            /*if (!FakePlayerRendererManager.get().isEmpty()) {
-                //FakePlayerRendererManager.get().peek().fakePlayer.swingHand(Hand.MAIN_HAND, true);
-            }*/
+            if (player.getServer() != null) {
+                player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                    if (serverPlayerEntity.squaredDistanceTo(player) <= 128 * 128) {
+                        RinveniumPackets.sendFakePlayerArmSwing(serverPlayerEntity, "orchidpuppy");
+                    }
+                });
+            }
         }
         if (this.globalTimer >= 20 * 17 && this.globalTimer <= 20 * 28) {
             Vec3d origin = player.getPos().add(0, (player.getBoundingBox().maxY - player.getBoundingBox().minY) / 2, 0);
@@ -368,12 +373,12 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
-                if (this.slashTimer == 125) {
+                if (this.slashTimer == 175) {
                     if (serverPlayerEntity.squaredDistanceTo(this.player) <= 128 * 128) {
-                        RinveniumPackets.sendImpactFrame(serverPlayerEntity, 60, this.player);
+                        RinveniumPackets.sendImpactFrame(serverPlayerEntity, 40, this.player);
                     }
                 }
-                if (this.slashTimer == 130) {
+                if (this.slashTimer == 180) {
                     if (player.getServer() != null) {
                         DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                         deathSequenceState.shouldStartPostTick = true;

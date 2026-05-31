@@ -1,15 +1,14 @@
 package silly.chemthunder.rinvenium.event.server;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import silly.chemthunder.rinvenium.render.manager.server.CustomFogManager;
-import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
-import silly.chemthunder.rinvenium.render.manager.client.SlashRendererManager;
+import silly.chemthunder.rinvenium.index.RinveniumPackets;
 import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 public class ServerTickListener {
@@ -35,7 +34,9 @@ public class ServerTickListener {
                     }
                 }
                 if (deathSequenceState.postTick == 20 * 16) {
-                    //FakePlayerRendererManager.remove("orchidpuppy");
+                    serverWorld.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                        RinveniumPackets.removeFakePlayer(serverPlayerEntity, "orchidpuppy");
+                    });
                 }
                 if (deathSequenceState.postTick >= 20 * 16 + 20 * 120) {
                     deathSequenceState.shouldStartPostTick = false;

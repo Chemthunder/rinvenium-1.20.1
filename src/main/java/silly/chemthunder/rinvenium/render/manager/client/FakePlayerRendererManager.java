@@ -1,4 +1,4 @@
-package silly.chemthunder.rinvenium.render.manager.server;
+package silly.chemthunder.rinvenium.render.manager.client;
 
 import silly.chemthunder.rinvenium.render.FakePlayerRender;
 

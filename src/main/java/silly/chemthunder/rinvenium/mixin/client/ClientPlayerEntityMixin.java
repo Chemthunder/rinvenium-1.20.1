@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.render.manager.client.*;
-import silly.chemthunder.rinvenium.render.manager.server.FakePlayerRendererManager;
+import silly.chemthunder.rinvenium.render.manager.client.FakePlayerRendererManager;
 import silly.chemthunder.rinvenium.util.inject.RenderContainer;
 
 @Mixin(ClientPlayerEntity.class)

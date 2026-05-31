@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class FakePlayerRender {
     public final GameProfile gameProfile;
-    public final Vec3d origin;
+    public Vec3d origin;
     public final int maxAge;
     public final String skinTexture;
     public int age;
