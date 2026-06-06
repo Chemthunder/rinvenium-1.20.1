@@ -283,5 +283,10 @@ public class EnviniumSpearItem extends SwordItem {
         public String asString() {
             return this.name;
         }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
     }
 }
