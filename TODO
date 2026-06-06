@@ -1,2 +1,2 @@
 //todo add command config for whether individual clients should render impact frame
-//todo add to existing command -> add player uuid to permit list when locked crafting is enabled
+//todo add to existing command -> add player uuid to permit list when locked crafting is enabled -> via persistent state
