@@ -1,6 +1,2 @@
-//todo orchid skin
-//todo check if final impact frame works
-//todo final big slash
-//todo make the damage tick work via mixin and check for armor break
 //todo add command config for whether individual clients should render impact frame
 //todo add to existing command -> add player uuid to permit list when locked crafting is enabled

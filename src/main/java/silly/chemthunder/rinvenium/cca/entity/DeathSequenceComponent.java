@@ -229,11 +229,11 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
         }
         if (this.globalTimer == 20 * 8) {
             sendServerMessageS("<orchidpuppy> on the verge of death, aren't you?");
-            playSound(RinveniumSoundEvents.HEARTBEAT, 1.0f, 0.75f);
+            //playSound(RinveniumSoundEvents.HEARTBEAT, 1.0f, 0.75f);
         }
         if (this.globalTimer == 20 * 10) {
             sendServerMessageS("<orchidpuppy> good. we enjoy that fear.");
-            playSound(RinveniumSoundEvents.HEARTBEAT, 1.0f, 1.5f);
+            //playSound(RinveniumSoundEvents.HEARTBEAT, 1.0f, 1.5f);
         }
         if (this.globalTimer == 20 * 15) {
             sendServerMessageS("<orchidpuppy> how about we speed up the process?");
@@ -373,12 +373,12 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
-                if (this.slashTimer == 175) {
+                if (this.slashTimer == 165) {
                     if (serverPlayerEntity.squaredDistanceTo(this.player) <= 128 * 128) {
                         RinveniumPackets.sendImpactFrame(serverPlayerEntity, 40, this.player);
                     }
                 }
-                if (this.slashTimer == 180) {
+                if (this.slashTimer == 170) {
                     if (player.getServer() != null) {
                         DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                         deathSequenceState.shouldStartPostTick = true;

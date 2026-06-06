@@ -42,5 +42,9 @@
   "plate_formed": {
     "subtitle": "sound.rinvenium.plate_formed",
     "sounds": ["rinvenium:ion_cell_formed"]
+  },
+  "bell": {
+    "subtitle": "sound.rinvenium.bell",
+    "sounds": ["rinvenium:bell"]
   }
 }

@@ -53,10 +53,10 @@ public class WorldRendererListener {
                     impactFrameManager.tick();
                     impactFrameManager.get().forEach(impactFrame -> {
                         if (impactFrameManager.shouldShow()) {
-                            client.options.hudHidden = true;
+                            //client.options.hudHidden = true;
                             renderImpactFrame(context, client, world, camera, impactFrame, slashRendererManager);
                         } else {
-                            client.options.hudHidden = false;
+                            //client.options.hudHidden = false;
                         }
                     });
                 }
