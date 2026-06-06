@@ -16,8 +16,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -31,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import silly.chemthunder.rinvenium.Rinvenium;
+import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.index.RinveniumDamageSources;
@@ -39,14 +42,16 @@ import silly.chemthunder.rinvenium.index.RinveniumItems;
 import silly.chemthunder.rinvenium.index.RinveniumSoundEvents;
 import silly.chemthunder.rinvenium.index.RinveniumStatusEffects;
 import silly.chemthunder.rinvenium.item.EnvixiaArmorItem;
-
-import java.util.List;
+import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable {
     @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
     @Shadow protected int roll;
+
+    @Shadow
+    public abstract void setHealth(float health);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -208,5 +213,29 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
                 cir.setReturnValue(amount * 0.25f);
             }
         }
+    }
+
+    @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V"))
+    private boolean rinvenium$envixiaDeath(LivingEntity instance, DamageSource damageSource) {
+        if (instance instanceof PlayerEntity player && !damageSource.isOf(RinveniumDamageSources.ORCHID)) {
+            if (player.getServer() != null) {
+                DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
+                ServerPlayerEntity storedPlayer = player.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
+                if (deathSequenceState.canSequence) {
+                    if (storedPlayer != null && player.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
+                        DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(storedPlayer);
+                        deathSequenceComponent.setBool(true);
+                        player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                            if (serverPlayerEntity.squaredDistanceTo(storedPlayer) <= 128 * 128 && !serverPlayerEntity.equals(storedPlayer)) {
+                                serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, 20 * 38, 0, false, false, false));
+                            }
+                        });
+                        this.setHealth(0.1f);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

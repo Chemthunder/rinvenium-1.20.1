@@ -373,12 +373,12 @@ public class DeathSequenceComponent implements TripleIntComponent, BoolComponent
                         ServerPlayNetworking.send(serverPlayerEntity, RinveniumPackets.ADD_MULTIPLE_SLASHES, slashBuf);
                     }
                 }
-                if (this.slashTimer == 165) {
+                if (this.slashTimer == 155) {
                     if (serverPlayerEntity.squaredDistanceTo(this.player) <= 128 * 128) {
                         RinveniumPackets.sendImpactFrame(serverPlayerEntity, 40, this.player);
                     }
                 }
-                if (this.slashTimer == 170) {
+                if (this.slashTimer == 160) {
                     if (player.getServer() != null) {
                         DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(player.getServer());
                         deathSequenceState.shouldStartPostTick = true;

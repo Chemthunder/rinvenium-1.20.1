@@ -36,12 +36,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import silly.chemthunder.rinvenium.cca.entity.DeathSequenceComponent;
 import silly.chemthunder.rinvenium.cca.entity.EnvixiaFormComponent;
 import silly.chemthunder.rinvenium.cca.entity.SpearParryComponent;
 import silly.chemthunder.rinvenium.cca.entity.riva.SpearHealComponent;
 import silly.chemthunder.rinvenium.datagen.RinveniumItemTagProvider;
 import silly.chemthunder.rinvenium.index.*;
 import silly.chemthunder.rinvenium.util.inject.HungerDecrement;
+import silly.chemthunder.rinvenium.util.persistent.DeathSequenceState;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -336,6 +338,27 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void rinvenium$damageTickOrchidSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (source.isOf(RinveniumDamageSources.ORCHID) && amount == 0) {
             cir.setReturnValue(super.damage(source, amount));
+        }
+    }
+
+    @Inject(method = "onDeath", at = @At("HEAD"), cancellable = true)
+    private void rinvenium$startDeathSequence(DamageSource source, CallbackInfo ci) {
+        if (this.getServer() != null && !source.isOf(RinveniumDamageSources.ORCHID)) {
+            DeathSequenceState deathSequenceState = DeathSequenceState.getServerState(this.getServer());
+            ServerPlayerEntity storedPlayer = this.getServer().getPlayerManager().getPlayer(deathSequenceState.playerUuid);
+            if (deathSequenceState.canSequence) {
+                if (storedPlayer != null && this.getServer().getPlayerManager().getPlayerList().contains(storedPlayer)) {
+                    DeathSequenceComponent deathSequenceComponent = DeathSequenceComponent.get(storedPlayer);
+                    deathSequenceComponent.setBool(true);
+                    this.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                        if (serverPlayerEntity.squaredDistanceTo(storedPlayer) <= 128 * 128 && !serverPlayerEntity.equals(storedPlayer)) {
+                            serverPlayerEntity.addStatusEffect(new StatusEffectInstance(RinveniumStatusEffects.WATCHED, 20 * 38, 0, false, false, false));
+                        }
+                    });
+                    ci.cancel();
+                    return;
+                }
+            }
         }
     }
 }
